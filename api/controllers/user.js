@@ -24,7 +24,7 @@ exports.signup = (req, res, next) => {
                             role: 'Employee'
                         })
                             .then(function (user) {
-                                res.json(user)
+                                res.json({ message: "Création de l'utilisateur", userId: user.id })
                             })
                             .catch((error) => {
                                 res.status(500).json({ error })
