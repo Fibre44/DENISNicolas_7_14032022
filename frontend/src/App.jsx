@@ -1,12 +1,12 @@
 import './style/body.sass';
-import React, { useState, useEffect } from 'react';
-import { Login } from './components/Login'
+import React, { useState } from 'react';
+import { Login } from './components/users/Login'
 import { Site } from './components/Site'
 
 export default function App() {
-  const [tocken, setTocken] = useState(null)
+  const [token, setToken] = useState(null)
 
   return (
-    tocken ? <Site /> : <Login />
+    token ? <Site /> : <Login onConnect={setToken} />
   );
 }

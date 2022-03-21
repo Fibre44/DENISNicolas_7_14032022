@@ -1,61 +1,23 @@
 import React, { useState } from 'react';
-import { register } from '../api/api';
-import './../style/form.sass'
+import { register } from '../../api/api';
+import './../../style/form.sass'
 
-export function Login() {
+export function Register({ onClick }) {
 
-    const [page, setPage] = useState('login')
-
-    let content = null
-
-    if (page === 'login') {
-        content = <LoginForm onClick={setPage} />
-
-    } else {
-
-        content = <Register connexion={setPage} />
-    }
-
-    return <>
-        {content}
-    </>
-
-}
-
-function LoginForm({ onClick }) {
-
-    return <form action="" id="login" className='form'>
-        <h2>Formulaire de connexion</h2>
-
-        <div className='form__field'>
-            <label htmlFor="email" >Email</label>
-            <input type="email" name="email" id="email" required></input>
-        </div>
-        <div className='form__field'>
-            <label htmlFor="password" >Mot de passe</label>
-            <input type="password" name="password" id="password" required></input>
-        </div>
-        <button type="submit">Se connecter</button>
-
-        <a href="#register" onClick={() => onClick('register')}>Pas de compte inscrivez vous ici</a>
-
-    </form>
-
-}
-
-function Register({ connexion }) {
-
-    const [error, setError] = useState(null)
+    const [errorAPI, setErrorAPI] = useState(null)
     const [errorPassword, setErrorPassword] = useState(null)
 
     const handleSubmit = async function (e) {
+
+        setErrorPassword(null)
+        setErrorAPI(null)
+
         e.preventDefault()
+
         //Ko à revoir const
         //const data2 = new FormData(e.target)
-        console.log(e.target.password.value + ' ' + e.target.passwordConfirm.value)
         if (e.target.password.value == e.target.passwordConfirm.value) {
 
-            console.log("mot de passe ok")
 
             const data = {
                 email: e.target.email.value,
@@ -71,12 +33,11 @@ function Register({ connexion }) {
 
                 if (status == "200") {
 
-                    connexion('login')
+                    onClick('login')
 
                 } else {
 
-                    setError(status)
-                    console.log("Problème avec l'API")
+                    setErrorAPI("L'email existe déjà si vous avez déjà un compte vous pouvez utiliser la fonction mot de passe oublié")
                 }
 
             }
@@ -86,7 +47,6 @@ function Register({ connexion }) {
             }
         } else {
 
-            console.log("erreur mot de passe")
             setErrorPassword("Le mot de passe et la confirmation sont different")
         }
 
@@ -125,16 +85,17 @@ function Register({ connexion }) {
 
         </form>
 
-        {errorPassword && <AlertPassword>{errorPassword}</AlertPassword>}
+        {errorPassword && <Alert>{errorPassword}</Alert>}
+        {errorAPI && <Alert>{errorAPI}</Alert>}
+
     </>
 
 
 }
 
-function AlertPassword({ children }) {
+function Alert({ children }) {
 
     return <p className='form__field--error'>
         {children}
     </p>
 }
-

@@ -1,5 +1,7 @@
 const db = require('./../lib/models/index.js');
 const bcrypt = require('bcrypt');
+const env = require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 
 exports.signup = (req, res, next) => {
@@ -46,8 +48,67 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
 
-    console.log(JSON.stringify(req.body))
+    db.User.count({
+        where: ({
+            email: req.body.email
+        })
+    })
+        .then((user) => {
 
-    res.status(200).json({ message: "ok" })
+            if (user == 0) {
+
+                return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+
+            } else {
+
+                db.User.findAll({
+                    attributes: ['id', 'password'],
+                    where: ({
+                        email: req.body.email
+                    })
+                })
+
+                    .then((user) => {
+
+                        const userIdDB = user[0].dataValues.id
+                        const passwordDB = user[0].dataValues.password
+
+                        bcrypt.compare(req.body.password, passwordDB)
+                            .then(valid => {
+
+                                if (valid) {
+
+                                    console.log("ici")
+
+                                    res.status(200).json({
+                                        userId: userIdDB,
+                                        token: jwt.sign(
+                                            { userId: userIdDB },
+                                            //process.env.TOKEN,
+                                            "RANDOM_TOKEN_SECRET",
+                                            { expiresIn: '24h' }
+                                        )
+                                    });
+
+                                } else {
+
+                                    return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                                }
+
+                            })
+                            .catch((error) => {
+                                res.status(500).json({ error })
+                            })
+
+                    })
+                    .catch((error) => {
+                        res.status(500).json({ error })
+
+                    })
+
+            }
+
+
+        })
 
 }
