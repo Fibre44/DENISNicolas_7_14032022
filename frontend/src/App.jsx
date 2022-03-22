@@ -4,9 +4,9 @@ import { Login } from './components/users/Login'
 import { Site } from './components/Site'
 
 export default function App() {
-  const [token, setToken] = useState(null)
+  const [credentials, setCredentials] = useState(null)
 
   return (
-    token ? <Site /> : <Login onConnect={setToken} />
+    credentials ? <Site credentials={credentials} /> : <Login onConnect={setCredentials} />
   );
 }

@@ -1,8 +1,8 @@
 const urlServer = 'http://localhost:3001'
 
-export async function register(data) {
+export async function userPost(data, endpoint) {
 
-    const response = await fetch(urlServer + '/users/signup', {
+    const response = await fetch(urlServer + endpoint, {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -19,22 +19,23 @@ export async function register(data) {
     }
 }
 
-export async function login(data) {
+/**
+ * 
+ * @param {string} endpoint Indiquer le chemin à joindre
+ * @param {string} token fournir le token
+ * @returns 
+ */
 
-    const response = await fetch(urlServer + '/users/login', {
-        method: "POST",
+export async function userGet(endpoint, token) {
+    const response = await fetch(urlServer + endpoint, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
     });
-
-    const responseData = await response.json()
     if (response.ok) {
-        return { data: responseData, status: response.status };
-    } else {
         return response
     }
-
 }

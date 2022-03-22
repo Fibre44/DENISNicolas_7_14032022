@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { login } from '../../api/api';
+import { userPost } from '../../api/api';
 import './../../style/form.sass'
 
 
@@ -15,11 +15,11 @@ export function LoginForm({ onConnect, onClick }) {
 
         try {
 
-            const response = await login(data)
+            const response = await userPost(data, '/users/login')
             const status = await response.status
 
             if (status == "200") {
-                onConnect(response)
+                onConnect(response.data)
 
             }
         }

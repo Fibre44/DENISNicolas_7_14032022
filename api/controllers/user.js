@@ -78,14 +78,12 @@ exports.login = (req, res, next) => {
 
                                 if (valid) {
 
-                                    console.log("ici")
-
                                     res.status(200).json({
                                         userId: userIdDB,
                                         token: jwt.sign(
                                             { userId: userIdDB },
                                             //process.env.TOKEN,
-                                            "RANDOM_TOKEN_SECRET",
+                                            'RANDOM_TOKEN_SECRET',
                                             { expiresIn: '24h' }
                                         )
                                     });
@@ -111,4 +109,26 @@ exports.login = (req, res, next) => {
 
         })
 
+}
+
+
+exports.user = (req, res, next) => {
+    attributes: ['firstname', 'lastname'],
+
+        db.User.findAll({
+
+            where: {
+                id: req.params.id
+            }
+        })
+            .then((user) => {
+
+                const firstname = user[0].dataValues.firstname
+                const lastname = user[0].dataValues.lastname
+
+                res.status(200).json({ firstname: firstname, lastname: lastname })
+            })
+            .catch((errro) => {
+                res.status(404).json({ message: 'La ressource n existe pas' })
+            })
 }

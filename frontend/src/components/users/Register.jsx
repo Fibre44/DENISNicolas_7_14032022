@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { register } from '../../api/api';
+import { userPost } from '../../api/api';
 import './../../style/form.sass'
 
 export function Register({ onClick }) {
@@ -27,7 +27,7 @@ export function Register({ onClick }) {
             }
 
             try {
-                const userRegister = await register(data)
+                const userRegister = await userPost(data, '/users/signup')
 
                 const status = await userRegister.status
 
@@ -83,11 +83,11 @@ export function Register({ onClick }) {
 
             </div>
 
+
         </form>
 
         {errorPassword && <Alert>{errorPassword}</Alert>}
         {errorAPI && <Alert>{errorAPI}</Alert>}
-
     </>
 
 
@@ -95,7 +95,7 @@ export function Register({ onClick }) {
 
 function Alert({ children }) {
 
-    return <p className='form__field--error'>
-        {children}
-    </p>
+    return <div className='alert'>
+        <p>{children}</p>
+    </div>
 }

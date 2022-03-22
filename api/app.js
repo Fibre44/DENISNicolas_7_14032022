@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const userRoute = require('./routes/users');
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 
 // parse various different custom JSON types as JSON
 app.use(bodyParser.json({ type: 'application/*+json' }))
