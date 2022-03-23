@@ -14,6 +14,9 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 router.post('/signup', urlencodedParser, userCtrl.signup);
 router.post('/login', urlencodedParser, userCtrl.login);
 
-router.get('/:id/data', auth, userCtrl.user)
+router.get('/:id/identity', auth, userCtrl.user)
+
+router.delete('/:id/delete', auth, userCtrl.delete)
+
 
 module.exports = router;

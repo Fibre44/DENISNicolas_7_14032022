@@ -11,11 +11,12 @@ export async function userPost(data, endpoint) {
         body: JSON.stringify(data)
     });
 
-    const responseData = await response.json()
     if (response.ok) {
+        const responseData = await response.json()
+
         return { data: responseData, status: response.status };
     } else {
-        return response
+        return { message: "Identifiant ou mot de passe invalide" }
     }
 }
 
@@ -26,7 +27,7 @@ export async function userPost(data, endpoint) {
  * @returns 
  */
 
-export async function userGet(endpoint, token) {
+export async function getData(endpoint, token) {
     const response = await fetch(urlServer + endpoint, {
         method: 'GET',
         headers: {
@@ -36,6 +37,29 @@ export async function userGet(endpoint, token) {
         }
     });
     if (response.ok) {
-        return response
+
+        return response.json()
+    }
+}
+
+/**
+ * 
+ * @param {string} endpoint Indiquer le chemin à joindre
+ * @param {string} token fournir le token
+ * @returns 
+ */
+
+export async function deleteData(endpoint, token) {
+    const response = await fetch(urlServer + endpoint, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+    });
+    if (response.ok) {
+
+        return response.json()
     }
 }

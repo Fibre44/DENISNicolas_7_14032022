@@ -132,3 +132,15 @@ exports.user = (req, res, next) => {
                 res.status(404).json({ message: 'La ressource n existe pas' })
             })
 }
+
+exports.delete = (req, res, next) => {
+
+    db.User.destroy({
+        where: {
+            id: req.params.id
+        }
+    }).then((user) => user ? res.status(200).json({ message: "L utilisateur a été supprimé" }) : res.status(404).json({ error: "L'utilisateur n'existe pas" }))
+        .catch((error) => {
+            res.status(500).json({ error })
+        })
+}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { userPost } from '../../api/api';
 import './../../style/form.sass'
+import { Alert } from './Alert';
 
 export function Register({ onClick }) {
 
@@ -54,48 +55,50 @@ export function Register({ onClick }) {
     }
 
     return <>
-        <form action="" id="register" className='form' onSubmit={handleSubmit}>
-            <h2>Formulaire d'enregistrement</h2>
 
-            <div className='form__field'>
-                <label htmlFor="email" >Email</label>
-                <input type="email" name="email" id="email" required></input>
-            </div>
-            <div className='form__field'>
-                <label htmlFor="password" >Mot de passe</label>
-                <input type="password" name="password" id="password" required></input>
-            </div>
-            <div className='form__field'>
-                <label htmlFor="passwordConfirm" >Confirmer le mot de passe</label>
-                <input type="password" name="passwordConfirm" id="passwordConfirm" required></input>
-            </div>
-            <div className='form__field'>
-                <label htmlFor="firstname" >Prénom </label>
-                <input type="text" name="firstname" id="firstname" required></input>
+        <div className='conteneur'>
+            <form action="" id="register" className='form' onSubmit={handleSubmit}>
+                <h2>Formulaire d'enregistrement</h2>
+
+                <div className='form__field'>
+                    <label htmlFor="email" >Email</label>
+                    <input type="email" name="email" id="email" required></input>
+                </div>
+                <div className='form__field'>
+                    <label htmlFor="password" >Mot de passe</label>
+                    <input type="password" name="password" id="password" required></input>
+                </div>
+                <div className='form__field'>
+                    <label htmlFor="passwordConfirm" >Confirmer le mot de passe</label>
+                    <input type="password" name="passwordConfirm" id="passwordConfirm" required></input>
+                </div>
+                <div className='form__field'>
+                    <label htmlFor="firstname" >Prénom </label>
+                    <input type="text" name="firstname" id="firstname" required></input>
+                </div>
+
+                <div className='form__field'>
+                    <label htmlFor="lastname" >Nom de famille</label>
+                    <input type="text" name="lastname" id="lastname" required></input>
+                </div>
+                <div className='form__field'>
+                    <button type="submit">Inscription</button>
+
+                </div>
+
+
+            </form>
+
+            <div className='alert'>
+
+                {errorPassword && <Alert>{errorPassword}</Alert>}
+                {errorAPI && <Alert>{errorAPI}</Alert>}
             </div>
 
-            <div className='form__field'>
-                <label htmlFor="lastname" >Nom de famille</label>
-                <input type="text" name="lastname" id="lastname" required></input>
-            </div>
-            <div className='form__field'>
-                <button type="submit">Inscription</button>
+        </div>
 
-            </div>
-
-
-        </form>
-
-        {errorPassword && <Alert>{errorPassword}</Alert>}
-        {errorAPI && <Alert>{errorAPI}</Alert>}
     </>
 
 
 }
 
-function Alert({ children }) {
-
-    return <div className='alert'>
-        <p>{children}</p>
-    </div>
-}
