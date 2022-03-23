@@ -11,9 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.User.belongsToMany(models.Groupe, { through: 'User_Groupe' })
+
     }
   }
   User.init({
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
+    },
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     firstname: DataTypes.STRING,
