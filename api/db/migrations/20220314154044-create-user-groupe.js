@@ -13,11 +13,11 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
                 UserId: {
-                    type: Sequelize.INTEGER,
+                    type: Sequelize.UUID,
                     primaryKey: true,
                 },
                 GroupeId: {
-                    type: Sequelize.INTEGER,
+                    type: Sequelize.UUID,
                     primaryKey: true,
                 },
             }

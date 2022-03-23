@@ -16,6 +16,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Groupe.init({
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      autoIncrement: false,
+    },
     titre: {
       type: DataTypes.STRING,
       allowNull: false,
