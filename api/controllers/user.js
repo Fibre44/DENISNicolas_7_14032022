@@ -70,6 +70,7 @@ exports.login = (req, res, next) => {
 
                     .then((user) => {
 
+
                         const userIdDB = user[0].dataValues.id
                         const passwordDB = user[0].dataValues.password
 
@@ -128,7 +129,7 @@ exports.user = (req, res, next) => {
 
                 res.status(200).json({ firstname: firstname, lastname: lastname })
             })
-            .catch((errro) => {
+            .catch((errror) => {
                 res.status(404).json({ message: 'La ressource n existe pas' })
             })
 }
@@ -142,5 +143,63 @@ exports.delete = (req, res, next) => {
     }).then((user) => user ? res.status(200).json({ message: "L utilisateur a été supprimé" }) : res.status(404).json({ error: "L'utilisateur n'existe pas" }))
         .catch((error) => {
             res.status(500).json({ error })
+        })
+}
+
+exports.updatPassword = (req, res, next) => {
+
+    db.User.findAll({
+        where: {
+            id: req.params.id
+        }
+    })
+        .then((user) => {
+
+            if (req.body.password == undefined) {
+                res.status(400).json({ message: 'Il manque le password' })
+            }
+
+
+            const passwordDB = user[0].dataValues.password
+
+            //on verifie le mot de passe avant la MAJ
+
+            bcrypt.compare(req.body.password, passwordDB)
+                .then(valid => {
+
+                    if (valid) {
+
+
+                        bcrypt.hash(req.body.password, 10)
+                            .then(hash => {
+                                console.log(hash)
+
+                                db.User.update(
+                                    { password: hash },
+                                    {
+                                        where:
+                                            { id: req.params.id }
+                                    }
+                                )
+                                    .then(function (user) {
+                                        res.status(200).json({ message: "Mise à jour du password", userId: user.id })
+                                    })
+                                    .catch((error) => {
+                                        res.status(500).json({ error })
+                                    })
+                            })
+
+
+
+                    } else {
+
+                        return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                    }
+
+                })
+
+        })
+        .catch((error) => {
+            res.status(500).json({ message: "Erreur serveur ", error })
         })
 }
