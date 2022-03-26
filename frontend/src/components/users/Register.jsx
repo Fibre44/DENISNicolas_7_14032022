@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { userPost } from '../../api/api';
 import './../../style/form.sass'
-import { Alert } from './Alert';
+import { Alert } from './../ui/Alert';
 
 export function Register({ onClick }) {
 

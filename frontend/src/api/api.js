@@ -63,3 +63,27 @@ export async function deleteData(endpoint, token) {
         return response.json()
     }
 }
+/**
+ * 
+ * @param {string} endpoint 
+ * @param {string} token 
+ * @param {string} method POST/PUT 
+ */
+export async function setData(endpoint, token, method, data) {
+    const response = await fetch(urlServer + endpoint, {
+        method: method,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(data)
+
+    });
+
+    if (response.ok) {
+
+        return response.json()
+    }
+
+}

@@ -170,7 +170,7 @@ exports.updatPassword = (req, res, next) => {
                     if (valid) {
 
 
-                        bcrypt.hash(req.body.password, 10)
+                        bcrypt.hash(req.body.newPassword, 10)
                             .then(hash => {
                                 console.log(hash)
 

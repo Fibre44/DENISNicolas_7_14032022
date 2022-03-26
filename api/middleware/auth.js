@@ -20,14 +20,15 @@ module.exports = (req, res, next) => {
       if (userId == req.params.id) {
         next();
 
+        //Si l'id dans le token dans est différent de l'id dans l'url alors token non valide
 
       } else {
         throw 'Invalid user ID';
 
       }
     })
+      //Erreur le where ne trouve rien
       .catch((error) => {
-        //Si l'id dans le token dans est différent de l'id dans l'url alors token non valide
         res.status(403).json({ message: 'Token non valide' })
       })
 

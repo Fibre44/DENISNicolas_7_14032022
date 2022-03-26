@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import { getData } from '../api/api';
 import './../style/nav.sass';
 import { Profil } from './users/Profil';
