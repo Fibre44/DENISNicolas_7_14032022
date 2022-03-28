@@ -16,7 +16,10 @@ export function Register({ onClick }) {
         e.preventDefault()
 
         //Ko à revoir const
-        //const data2 = new FormData(e.target)
+        const data2 = new FormData(e.target)
+
+        console.log(e.target)
+
         if (e.target.password.value == e.target.passwordConfirm.value) {
 
 
@@ -57,7 +60,7 @@ export function Register({ onClick }) {
     return <>
 
         <div className='conteneur'>
-            <form action="" id="register" className='form' onSubmit={handleSubmit}>
+            <form id="register" className='form' onSubmit={handleSubmit}>
                 <h2>Formulaire d'enregistrement</h2>
 
                 <div className='form__field'>

@@ -16,7 +16,7 @@ router.post('/login', urlencodedParser, userCtrl.login);
 
 router.put('/:id/password', auth, urlencodedParser, userCtrl.updatPassword)
 
-router.get('/:id/identity', auth, userCtrl.user)
+router.get('/:id/identity', auth, userCtrl.identity)
 
 router.delete('/:id/delete', auth, userCtrl.delete)
 

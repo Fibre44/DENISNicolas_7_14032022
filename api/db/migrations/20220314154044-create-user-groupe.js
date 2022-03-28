@@ -15,10 +15,18 @@ module.exports = {
                 UserId: {
                     type: Sequelize.UUID,
                     primaryKey: true,
+                    references: {
+                        model: 'User',
+                        key: 'id'
+                    }
                 },
                 GroupeId: {
                     type: Sequelize.UUID,
                     primaryKey: true,
+                    references: {
+                        model: 'Groupe',
+                        key: 'id'
+                    }
                 },
             }
         );

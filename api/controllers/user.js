@@ -113,32 +113,32 @@ exports.login = (req, res, next) => {
 }
 
 
-exports.user = (req, res, next) => {
-    attributes: ['firstname', 'lastname'],
+exports.identity = (req, res, next) => {
 
-        db.User.findAll({
+    db.User.findAll({
+        attributes: ['firstname', 'lastname'],
 
-            where: {
-                id: req.params.id
-            }
+        where: {
+            id: req.userId
+        }
+    })
+        .then((user) => {
+
+            const firstname = user[0].dataValues.firstname
+            const lastname = user[0].dataValues.lastname
+
+            res.status(200).json({ firstname: firstname, lastname: lastname })
         })
-            .then((user) => {
-
-                const firstname = user[0].dataValues.firstname
-                const lastname = user[0].dataValues.lastname
-
-                res.status(200).json({ firstname: firstname, lastname: lastname })
-            })
-            .catch((errror) => {
-                res.status(404).json({ message: 'La ressource n existe pas' })
-            })
+        .catch((errror) => {
+            res.status(404).json({ message: 'La ressource n existe pas' })
+        })
 }
 
 exports.delete = (req, res, next) => {
 
     db.User.destroy({
         where: {
-            id: req.params.id
+            id: req.userId
         }
     }).then((user) => user ? res.status(200).json({ message: "L utilisateur a été supprimé" }) : res.status(404).json({ error: "L'utilisateur n'existe pas" }))
         .catch((error) => {
@@ -150,7 +150,7 @@ exports.updatPassword = (req, res, next) => {
 
     db.User.findAll({
         where: {
-            id: req.params.id
+            id: req.userId
         }
     })
         .then((user) => {
@@ -169,10 +169,8 @@ exports.updatPassword = (req, res, next) => {
 
                     if (valid) {
 
-
                         bcrypt.hash(req.body.newPassword, 10)
                             .then(hash => {
-                                console.log(hash)
 
                                 db.User.update(
                                     { password: hash },
@@ -188,8 +186,6 @@ exports.updatPassword = (req, res, next) => {
                                         res.status(500).json({ error })
                                     })
                             })
-
-
 
                     } else {
 

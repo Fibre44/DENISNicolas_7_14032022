@@ -8,6 +8,7 @@ export function Site({ credentials, onDisconnect }) {
     const [firstName, setFirstName] = useState(null)
     const [lastName, setLastName] = useState(null)
 
+
     useEffect(async function () {
         const response = await getData('/users/' + credentials.userId + '/identity', credentials.token)
         const userIdentity = await response

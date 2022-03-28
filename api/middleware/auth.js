@@ -10,32 +10,32 @@ module.exports = (req, res, next) => {
     req.auth = { userId };
 
     db.User.findAll({
+      attributes: ['id'],
       where: {
         id: userId
       }
     }).then((user) => {
-      const userId = user[0].dataValues.id
 
-      // Si l'utilisateur dans le token = le user de l'URL alors on continue
-      if (userId == req.params.id) {
+      if (user != []) {
+        /* On passe l'utilisateur dans la requete afin que celui-ci soit disponible pour les prochains middlewares */
+        req.userId = userId
         next();
-
-        //Si l'id dans le token dans est différent de l'id dans l'url alors token non valide
 
       } else {
         throw 'Invalid user ID';
-
       }
+
     })
       //Erreur le where ne trouve rien
       .catch((error) => {
-        res.status(403).json({ message: 'Token non valide' })
+        res.status(500).json({ message: 'Erreur de connexion à la base' })
       })
 
   } catch {
     res.status(401).json({
       error: new Error('Invalid request!'),
-      message: 'L utilisateur n existe pas '
+      message: 'Token non valide ',
+
     });
   }
 };
