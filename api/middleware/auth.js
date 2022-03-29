@@ -9,14 +9,15 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     req.auth = { userId };
 
-    db.User.findAll({
+    db.User.count({
       attributes: ['id'],
       where: {
         id: userId
       }
     }).then((user) => {
 
-      if (user != []) {
+      if (user == 1) {
+
         /* On passe l'utilisateur dans la requete afin que celui-ci soit disponible pour les prochains middlewares */
         req.userId = userId
         next();
@@ -28,7 +29,7 @@ module.exports = (req, res, next) => {
     })
       //Erreur le where ne trouve rien
       .catch((error) => {
-        res.status(500).json({ message: 'Erreur de connexion à la base' })
+        res.status(500).json({ message: 'token non valide' })
       })
 
   } catch {

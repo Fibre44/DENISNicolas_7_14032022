@@ -24,7 +24,7 @@ export function Profil({ credentials }) {
             }
 
             try {
-                const response = await setData('/users/' + credentials.userId + '/password', credentials.token, 'PUT', data)
+                const response = await setData('/users/password', credentials.token, 'PUT', data)
                 const status = await response.status
 
                 if (status == "200") {

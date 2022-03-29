@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: false,
     },
-    titre: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -35,8 +35,11 @@ module.exports = (sequelize, DataTypes) => {
     private: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+    },
+    createBy: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
-
 
   },
 

@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID
       },
-      titre: {
+      title: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -20,6 +20,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN
       },
+      createBy: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -14,11 +14,11 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 router.post('/signup', urlencodedParser, userCtrl.signup);
 router.post('/login', urlencodedParser, userCtrl.login);
 
-router.put('/:id/password', auth, urlencodedParser, userCtrl.updatPassword)
+router.put('/password', auth, urlencodedParser, userCtrl.updatPassword)
 
-router.get('/:id/identity', auth, userCtrl.identity)
+router.get('/identity', auth, userCtrl.identity)
 
-router.delete('/:id/delete', auth, userCtrl.delete)
+router.delete('/delete', auth, userCtrl.delete)
 
 
 module.exports = router;
