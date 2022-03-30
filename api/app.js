@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 
 const userRoute = require('./routes/users');
 const groupRoute = require('./routes/groups');
+const group_userRoute=require('./routes/groups_users')
 
 // parse various different custom JSON types as JSON
 app.use(bodyParser.json({ type: 'application/*+json' }))
@@ -27,5 +28,6 @@ app.use(express.json());
 
 app.use('/users', userRoute);
 app.use('/groups', groupRoute);
+app.use('/groups_users',group_userRoute);
 
 module.exports = app;

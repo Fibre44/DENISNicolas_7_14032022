@@ -22,7 +22,10 @@ exports.create = (req, res, next) => {
 exports.groups = (req, res, net) => {
 
     db.Groupe.findAll({
-        attributes: ['id', 'title', 'description', 'private']
+        attributes: ['id', 'title', 'description'],
+        where : {
+            private:false
+        }
 
     })
         .then((groups) => {

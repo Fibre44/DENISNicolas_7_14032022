@@ -9,14 +9,14 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     req.auth = { userId };
 
-    db.User.count({
+    db.User.findOne({
       attributes: ['id'],
       where: {
         id: userId
       }
     }).then((user) => {
 
-      if (user == 1) {
+      if (user) {
 
         /* On passe l'utilisateur dans la requete afin que celui-ci soit disponible pour les prochains middlewares */
         req.userId = userId

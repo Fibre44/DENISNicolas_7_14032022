@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getData } from '../api/api';
 import './../style/nav.sass';
 import { Groups } from './groupes/groups';
@@ -16,7 +16,7 @@ export function Site({ credentials, onDisconnect }) {
         const userIdentity = await response
         setFirstName(userIdentity.firstname)
         setLastName(userIdentity.lastname)
-    }, [])
+    }, [page])
 
 
     useEffect(async function () {

@@ -112,10 +112,9 @@ exports.login = (req, res, next) => {
 
 }
 
-
 exports.identity = (req, res, next) => {
 
-    db.User.findAll({
+    db.User.findOne({
         attributes: ['firstname', 'lastname'],
 
         where: {
@@ -124,8 +123,8 @@ exports.identity = (req, res, next) => {
     })
         .then((user) => {
 
-            const firstname = user[0].dataValues.firstname
-            const lastname = user[0].dataValues.lastname
+            const firstname = user.dataValues.firstname
+            const lastname = user.dataValues.lastname
 
             res.status(200).json({ firstname: firstname, lastname: lastname })
         })
@@ -148,51 +147,52 @@ exports.delete = (req, res, next) => {
 
 exports.updatPassword = (req, res, next) => {
 
-    db.User.findAll({
+    db.User.findOne({
         where: {
             id: req.userId
         }
     })
         .then((user) => {
 
-            if (req.body.password == undefined) {
-                res.status(400).json({ message: 'Il manque le password' })
-            }
-
-
-            const passwordDB = user[0].dataValues.password
+            if (user) {
 
             //on verifie le mot de passe avant la MAJ
+            const passwordDB = user.dataValues.password
 
             bcrypt.compare(req.body.password, passwordDB)
-                .then(valid => {
+            .then(valid => {
 
-                    if (valid) {
+                if (valid) {
 
-                        bcrypt.hash(req.body.newPassword, 10)
-                            .then(hash => {
+                    bcrypt.hash(req.body.newPassword, 10)
+                        .then(hash => {
 
-                                db.User.update(
-                                    { password: hash },
-                                    {
-                                        where:
-                                            { id: req.params.id }
-                                    }
-                                )
-                                    .then(function (user) {
-                                        res.status(200).json({ message: "Mise à jour du password", userId: user.id })
-                                    })
-                                    .catch((error) => {
-                                        res.status(500).json({ error })
-                                    })
-                            })
+                            db.User.update(
+                                { password: hash },
+                                {
+                                    where:
+                                        { id: req.userId }
+                                }
+                            )
+                                .then(function (user) {
+                                    res.status(200).json({ message: "Mise à jour du password", userId: user.id })
+                                })
+                                .catch((error) => {
+                                    res.status(500).json({ error })
+                                })
+                        })
 
-                    } else {
+                } else {
 
-                        return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
-                    }
+                    return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                }
 
-                })
+            })
+
+            }else {
+                res.status(400).json({ message: 'Il manque le password' })
+
+            }
 
         })
         .catch((error) => {
