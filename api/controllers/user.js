@@ -47,67 +47,57 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
+    console.log(req.body)
 
-    db.User.count({
+    db.User.findOne({
         where: ({
             email: req.body.email
         })
     })
         .then((user) => {
 
-            if (user == 0) {
+            if (user) {
 
-                return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                const userIdDB = user.dataValues.id
+                const passwordDB = user.dataValues.password
 
-            } else {
+                bcrypt.compare(req.body.password, passwordDB)
+                    .then(valid => {
 
-                db.User.findAll({
-                    attributes: ['id', 'password'],
-                    where: ({
-                        email: req.body.email
-                    })
-                })
+                        if (valid) {
 
-                    .then((user) => {
+                            res.status(200).json({
+                                userId: userIdDB,
+                                token: jwt.sign(
+                                    { userId: userIdDB },
+                                    //process.env.TOKEN,
+                                    'RANDOM_TOKEN_SECRET',
+                                    { expiresIn: '24h' }
+                                )
+                            });
 
+                        } else {
 
-                        const userIdDB = user[0].dataValues.id
-                        const passwordDB = user[0].dataValues.password
-
-                        bcrypt.compare(req.body.password, passwordDB)
-                            .then(valid => {
-
-                                if (valid) {
-
-                                    res.status(200).json({
-                                        userId: userIdDB,
-                                        token: jwt.sign(
-                                            { userId: userIdDB },
-                                            //process.env.TOKEN,
-                                            'RANDOM_TOKEN_SECRET',
-                                            { expiresIn: '24h' }
-                                        )
-                                    });
-
-                                } else {
-
-                                    return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
-                                }
-
-                            })
-                            .catch((error) => {
-                                res.status(500).json({ error })
-                            })
+                            return res.status(403).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                        }
 
                     })
                     .catch((error) => {
                         res.status(500).json({ error })
-
                     })
+
+
+
+            } else {
+
+                res.status(404).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' })
 
             }
 
 
+        })
+        .catch((error) => {
+            res.status(500).json(error)
         })
 
 }

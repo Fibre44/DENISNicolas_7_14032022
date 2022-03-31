@@ -9,10 +9,10 @@ const auth = require('./../middleware/auth');
 const jsonParser = bodyParser.json()
 
 // create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: true })
 
 router.post('/signup', urlencodedParser, userCtrl.signup);
-router.post('/login', urlencodedParser, userCtrl.login);
+router.post('/login',urlencodedParser, userCtrl.login);
 
 router.put('/password', auth, urlencodedParser, userCtrl.updatPassword)
 

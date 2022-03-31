@@ -3,6 +3,8 @@ import { getData } from '../api/api';
 import './../style/nav.sass';
 import { Groups } from './groupes/groups';
 import { Profil } from './users/Profil';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 export function Site({ credentials, onDisconnect }) {
 
@@ -38,8 +40,10 @@ export function Site({ credentials, onDisconnect }) {
         content = <h1>Fil d'actualité</h1>
     }
     return <>
+
         <NavBar firstname={firstName} lastname={lastName} onClick={setPage} onDisconnect={onDisconnect} />
         {content}
+        <FontAwesomeIcon icon={faCoffee} />
 
 
     </>
@@ -51,6 +55,7 @@ function NavBar({ firstname, lastname, onClick, onDisconnect }) {
             <h1 className='nav__titre'>Bonjour {firstname} {lastname}</h1>
 
             <ul className='nav__items'>
+
                 <li className='nav__item'><a href="#groups" onClick={() => onClick('home')}>Accueil</a></li>
                 <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}>Groupes</a></li>
                 <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Mon profil</a></li>
