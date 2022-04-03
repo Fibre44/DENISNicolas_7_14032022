@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.Groupe.belongsToMany(models.User, { through: 'User_Groupe' })
+      Groupe.hasMany(models.Message)
 
     }
   }

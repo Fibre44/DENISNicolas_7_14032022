@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './../../style/form.sass'
+import './../../style/alert.sass'
 import { Register } from './Register.jsx';
 import { LoginForm } from './LoginForm';
 

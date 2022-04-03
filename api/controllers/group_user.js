@@ -11,7 +11,7 @@ exports.create = (req,res,next) => {
 
         if (group) {
             group.addUser(req.userId, { through: { selfGranted: false } })
-            res.status(200).json({message : "ok"})
+            res.status(200).json({message : "Création de l'association"})
 
         }else {
             res.status(404).json({message : "Le groupe n'existe pas"})

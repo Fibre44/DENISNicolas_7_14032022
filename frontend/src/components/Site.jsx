@@ -4,14 +4,16 @@ import './../style/nav.sass';
 import { Groups } from './groupes/groups';
 import { Profil } from './users/Profil';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faPeopleGroup, faUser, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { Disconnect } from './Disconnect';
 
 export function Site({ credentials, onDisconnect }) {
 
     const [firstName, setFirstName] = useState(null)
     const [lastName, setLastName] = useState(null)
     const [groups, setGroups] = useState([])
-    const [page, setPage] = useState('profil')
+    const [page, setPage] = useState('home')
+    const [myGroups, setMyGroups]=useState(null)
 
     useEffect(async function () {
         const response = await getData('/users/identity', credentials.token)
@@ -20,11 +22,16 @@ export function Site({ credentials, onDisconnect }) {
         setLastName(userIdentity.lastname)
     }, [page])
 
-
     useEffect(async function () {
         const response = await getData('/groups/all', credentials.token)
         const groups = await response
         setGroups(groups)
+    }, [page])// si l'élement page change on doit recharger les groupes
+
+    useEffect(async function () {
+        const response = await getData('/groups_users/groups', credentials.token)
+        const myGroups = await response
+        setMyGroups(myGroups)
     }, [page])// si l'élement page change on doit recharger les groupes
 
     let content = null
@@ -34,17 +41,19 @@ export function Site({ credentials, onDisconnect }) {
     }
 
     if (page === 'groups') {
-        content = <Groups groups={groups} />
+        content = <Groups groups={groups} token = {credentials.token} />
     }
     if (page === 'home') {
         content = <h1>Fil d'actualité</h1>
+    }
+
+    if (credentials.token == null){
+        content = <Disconnect/>
     }
     return <>
 
         <NavBar firstname={firstName} lastname={lastName} onClick={setPage} onDisconnect={onDisconnect} />
         {content}
-        <FontAwesomeIcon icon={faCoffee} />
-
 
     </>
 }
@@ -56,10 +65,10 @@ function NavBar({ firstname, lastname, onClick, onDisconnect }) {
 
             <ul className='nav__items'>
 
-                <li className='nav__item'><a href="#groups" onClick={() => onClick('home')}>Accueil</a></li>
-                <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}>Groupes</a></li>
-                <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Mon profil</a></li>
-                <li className='nav__item'><a href='#login' onClick={() => onDisconnect('null')}>Déconnexion</a></li>
+                <li className='nav__item'><a href="#home" onClick={() => onClick('home')}><FontAwesomeIcon icon={faHouse}/></a></li>
+                <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}><FontAwesomeIcon icon={faPeopleGroup}/></a></li>
+                <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser}/></a></li>
+                <li className='nav__item'><a href='#login' onClick={() => onDisconnect('null')}><FontAwesomeIcon icon={faPowerOff}/></a></li>
 
             </ul>
         </nav>

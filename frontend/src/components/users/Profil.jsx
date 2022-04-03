@@ -1,20 +1,23 @@
-import react, { useState } from 'react';
+import React, { useState } from 'react';
 import { deleteData } from './../../api/api'
 //import { FormChangePassword } from './FormChangePassword';
 import { Alert } from '../ui/Alert';
+import { Confirmation } from '../ui/Confirmation';
+
 import { setData } from './../../api/api';
 
 export function Profil({ credentials }) {
 
     const [error, setError] = useState(null)
     const [errorApi, setErrorAPI] = useState(null)
-
-
+    const [succes, setSucces] = useState(null)
+    
     const handleSubmit = async function (e) {
         e.preventDefault()
 
         setError(null)
         setErrorAPI(null)
+        setSucces(null)
 
         if (e.target.newPassword.value == e.target.newPasswordConfirm.value) {
 
@@ -28,15 +31,17 @@ export function Profil({ credentials }) {
                 const status = await response.status
 
                 if (status == "200") {
+                    setSucces("Le mot de passe a été changé avec succès")
+
 
                 } else {
 
-                    setErrorAPI("Mot de passe incorrect")
+                    setError("Mot de passe incorrect")
                 }
             }
             catch {
 
-                setErrorAPI("Erreur de connexion au serveur")
+                setError("Erreur de connexion au serveur")
 
             }
 
@@ -51,13 +56,13 @@ export function Profil({ credentials }) {
     async function deleteUser() {
         const deleteUser = await deleteData('/users/' + credentials.userId + '/delete', credentials.token)
         const deleteResponse = await deleteUser
-        console.log(deleteResponse)
     }
 
     return <>
         <h1>Mon profil</h1>
-        <button onClick={deleteUser}>Suppression du compte</button>
+
         <form className='form--witch' onSubmit={handleSubmit} >
+            <h2>Changer mon mot de passe</h2>
             <div className='form__field'>
                 <label htmlFor='password'>Mot de passe actuel</label>
                 <input id='password' name='password' type='password' placeholder='Saisir votre mot de passe'></input>
@@ -72,11 +77,15 @@ export function Profil({ credentials }) {
             </div>
             <button type="submit">Mettre à jour le mot de passe</button>
             <div className='alert'>
-
+                {succes && <Confirmation>{succes}</Confirmation>}
                 {error && <Alert>{error}</Alert>}
             </div>
+
+            <h2>Supprimer mon compte</h2>
+            <button onClick={deleteUser}>Suppression du compte</button>
 
 
         </form>
     </>
 }
+

@@ -83,7 +83,7 @@ export async function setData(endpoint, token, method, data) {
 
     if (response.ok) {
 
-        return response.json()
+        return response
     }
-
+    
 }
