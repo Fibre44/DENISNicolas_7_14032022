@@ -11,6 +11,8 @@ const jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-router.post('/create',auth,urlencodedParser,messageCtrl.create)
+router.get('/:id/comments', auth, messageCtrl.comments)
+
+router.post('/', auth, urlencodedParser, messageCtrl.create)
 
 module.exports = router; 

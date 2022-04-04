@@ -12,8 +12,8 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.get('/all', auth, groupCtrl.groups)
-router.get('/:id/messages',auth,groupCtrl.groupMessages)
+router.get('/:id/messages', auth, groupCtrl.groupMessages)
 
-router.post('/create', auth, urlencodedParser, groupCtrl.create)
+router.post('/', auth, urlencodedParser, groupCtrl.create)
 
 module.exports = router;

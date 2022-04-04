@@ -3,8 +3,9 @@ const app = express();
 
 const userRoute = require('./routes/users');
 const groupRoute = require('./routes/groups');
-const group_userRoute=require('./routes/groups_users');
+const group_userRoute = require('./routes/groups_users');
 const messageRoute = require('./routes/message');
+const commentRoute = require('./routes/comments');
 
 
 app.use((req, res, next) => {
@@ -20,7 +21,8 @@ app.use(express.json());
 
 app.use('/users', userRoute);
 app.use('/groups', groupRoute);
-app.use('/groups_users',group_userRoute);
-app.use('/message',messageRoute);
+app.use('/groups_users', group_userRoute);
+app.use('/message', messageRoute);
+app.use('/comment', commentRoute);
 
 module.exports = app;
