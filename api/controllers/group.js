@@ -15,16 +15,14 @@ exports.create = (req, res, next) => {
         .catch((error) => {
             res.status(500).json({ error })
         })
-
-
 }
 
 exports.groups = (req, res, next) => {
 
     db.Groupe.findAll({
         attributes: ['id', 'title', 'description'],
-        where : {
-            private:false
+        where: {
+            private: false
         }
 
     })
@@ -37,35 +35,102 @@ exports.groups = (req, res, next) => {
 
 }
 
-exports.groupMessages = (req,res,next) => {
+exports.groupMessages = (req, res, next) => {
 
     db.Groupe.findOne({
-        where : {
-            id : req.params.id
+        where: {
+            id: req.params.id
         }
     })
-    .then((group) => {
+        .then((group) => {
 
-        if (group) {
+            if (group) {
 
-            group.getMessages()
+                group.getMessages()
 
-            .then((messages)=> {
-    
-                res.status(200).json({messages})
-    
-            })
-            .catch((error)=>{
-                res.status(500).json({error})
-    
-            })
-        }else{
-            res.status(404).json({message : 'Le goupe n existe pas'})
+                    .then((messages) => {
+
+                        res.status(200).json({ messages })
+
+                    })
+                    .catch((error) => {
+                        res.status(500).json({ error })
+
+                    })
+            } else {
+                res.status(404).json({ message: 'Le goupe n existe pas' })
+            }
+
+        })
+        .catch((error) => {
+            res.status(500).json({ error })
+        })
+
+}
+
+exports.groupComments = (req, res, next) => {
+
+    //on repart du groupe
+    db.Groupe.findOne({
+        where: {
+            id: req.params.id
         }
+    })
+        .then((group) => {
 
-    })
-    .catch((error) => {
-        res.status(500).json({error})
-    })
+            if (group) {
+                //on récupére l'ensemble des messages du groupe
+                group.getMessages()
+                    .then((messages) => {
+                        //On verifie que l'id du message existe bien dans le groupe
+                        const searchMessage = messages.find(message => message.id === req.params.idMessage)
+
+                        if (searchMessage) {
+                            searchMessage.getComments()
+                                // on récupere les commentaires
+                                .then((comments) => {
+                                    if (comments) {
+                                        res.status(200).json({ comments })
+                                    } else {
+                                        res.status(404).json({ message: 'L\'id message n\'existe pas' })
+                                    }
+                                })
+                                .catch((error) => {
+                                    res.status(500).json({ error })
+                                })
+                        } else {
+                            //on verifie si le message existe. Si il existe alors erreur 403 car il n'est pas dans le groupe sinon 404 
+
+                            db.Message.findOne({
+                                where: {
+                                    id: req.params.idMessage
+                                }
+                            })
+                                .then((message) => {
+
+                                    if (message) {
+                                        res.status(403).json({ message: 'Le commentaire n\'est pas associé à ce message' })
+
+                                    } else {
+                                        res.status(404).json({ message: 'Le message n\'existe pas' })
+
+                                    }
+                                })
+                        }
+                    })
+                    .catch((error) => {
+                        res.status(500).json({ error })
+                    })
+
+            } else {
+                res.status(403).json({ message: 'Le message n\'appartient pas à ce groupe' })
+            }
+
+
+        })
+
+        .catch((error) => {
+            res.status(404).json({ message: 'Le groupe n\(existe pas' })
+        })
 
 }

@@ -1,8 +1,8 @@
 const db = require('./../lib/models/index.js');
 const bcrypt = require('bcrypt');
-const env = require('dotenv').config();
 const jwt = require('jsonwebtoken');
-
+const env = require('dotenv').config()
+const token = process.env.TOKEN
 
 exports.signup = (req, res, next) => {
 
@@ -70,8 +70,7 @@ exports.login = (req, res, next) => {
                                 userId: userIdDB,
                                 token: jwt.sign(
                                     { userId: userIdDB },
-                                    //process.env.TOKEN,
-                                    'RANDOM_TOKEN_SECRET',
+                                    token,
                                     { expiresIn: '24h' }
                                 )
                             });
@@ -146,40 +145,40 @@ exports.updatPassword = (req, res, next) => {
 
             if (user) {
 
-            //on verifie le mot de passe avant la MAJ
-            const passwordDB = user.dataValues.password
+                //on verifie le mot de passe avant la MAJ
+                const passwordDB = user.dataValues.password
 
-            bcrypt.compare(req.body.password, passwordDB)
-            .then(valid => {
+                bcrypt.compare(req.body.password, passwordDB)
+                    .then(valid => {
 
-                if (valid) {
+                        if (valid) {
 
-                    bcrypt.hash(req.body.newPassword, 10)
-                        .then(hash => {
+                            bcrypt.hash(req.body.newPassword, 10)
+                                .then(hash => {
 
-                            db.User.update(
-                                { password: hash },
-                                {
-                                    where:
-                                        { id: req.userId }
-                                }
-                            )
-                                .then(function (user) {
-                                    res.status(200).json({ message: "Mise à jour du password", userId: user.id })
+                                    db.User.update(
+                                        { password: hash },
+                                        {
+                                            where:
+                                                { id: req.userId }
+                                        }
+                                    )
+                                        .then(function (user) {
+                                            res.status(200).json({ message: "Mise à jour du password", userId: user.id })
+                                        })
+                                        .catch((error) => {
+                                            res.status(500).json({ error })
+                                        })
                                 })
-                                .catch((error) => {
-                                    res.status(500).json({ error })
-                                })
-                        })
 
-                } else {
+                        } else {
 
-                    return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
-                }
+                            return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
+                        }
 
-            })
+                    })
 
-            }else {
+            } else {
                 res.status(400).json({ message: 'Il manque le password' })
 
             }

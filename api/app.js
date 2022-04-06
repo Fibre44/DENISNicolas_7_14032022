@@ -6,6 +6,7 @@ const groupRoute = require('./routes/groups');
 const group_userRoute = require('./routes/groups_users');
 const messageRoute = require('./routes/message');
 const commentRoute = require('./routes/comments');
+const adminRoute = require('./routes/admin');
 
 
 app.use((req, res, next) => {
@@ -24,5 +25,6 @@ app.use('/groups', groupRoute);
 app.use('/groups_users', group_userRoute);
 app.use('/message', messageRoute);
 app.use('/comment', commentRoute);
+app.use('/admin', adminRoute);
 
 module.exports = app;

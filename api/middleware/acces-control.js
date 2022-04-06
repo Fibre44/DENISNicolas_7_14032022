@@ -18,16 +18,22 @@ module.exports = (req, res, next) => {
 
                         const searchGroup = groups.find(group => group.id === req.params.id || req.body.groupId)
 
+                        console.log(searchGroup)
                         if (searchGroup) {
 
                             next()
 
                         } else {
                             //Sinon 2 possibilités le groupe n'existe pas / l'ulilisateur ne peut pas accéder à ce groupe
-
+                            let idGroup = null
+                            if (req.params.id) {
+                                idGroup = req.params.id
+                            } else {
+                                idGroup = req.body.groupId
+                            }
                             db.Groupe.findOne({
                                 where: {
-                                    id: req.params.id
+                                    id: idGroup
                                 }
                             })
                                 .then((group) => {
@@ -37,6 +43,10 @@ module.exports = (req, res, next) => {
                                     } else {
                                         res.status(404).json({ message: "Gestion des accès la ressource n'existe pas" })
                                     }
+                                })
+                                .catch((error) => {
+                                    res.status(404).json({ message: "Gestion des accès la ressource n'existe pas" })
+
                                 })
                         }
                     })
