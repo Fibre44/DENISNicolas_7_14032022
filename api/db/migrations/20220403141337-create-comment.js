@@ -20,6 +20,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID
       },
+      autor: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       likes: {
         allowNull: false,
         type: Sequelize.INTEGER

@@ -46,9 +46,13 @@ exports.groupMessages = (req, res, next) => {
 
             if (group) {
 
-                group.getMessages()
+                group.getMessages({
+                    attributes: ['id', 'message', 'autor', 'GroupeId']
+                })
 
                     .then((messages) => {
+
+                        console.log(messages)
 
                         res.status(200).json({ messages })
 

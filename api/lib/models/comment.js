@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     comments: DataTypes.TEXT,
     userId: DataTypes.UUID,
     MessageId: DataTypes.UUID,
+    autor: DataTypes.STRING,
     likes: DataTypes.INTEGER,
     dislikes: DataTypes.INTEGER
   }, {

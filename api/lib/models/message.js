@@ -25,8 +25,9 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: false,
     },
     message: DataTypes.TEXT,
-    GroupeId:DataTypes.STRING,
-    userId: DataTypes.STRING
+    GroupeId: DataTypes.STRING,
+    userId: DataTypes.STRING,
+    autor: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Message',

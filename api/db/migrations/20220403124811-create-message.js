@@ -12,11 +12,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      groupeId:{
+      groupeId: {
         allowNull: false,
         type: Sequelize.STRING
       },
       userId: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      autor: {
         allowNull: false,
         type: Sequelize.STRING
       },

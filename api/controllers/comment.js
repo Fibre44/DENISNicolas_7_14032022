@@ -12,6 +12,7 @@ exports.create = (req, res, next) => {
                 message.createComment({
                     userId: req.userId,
                     comments: req.body.comments,
+                    autor: req.body.autor,
                     likes: 0,
                     dislikes: 0
                 })

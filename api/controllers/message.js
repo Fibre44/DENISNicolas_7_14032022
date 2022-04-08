@@ -11,7 +11,8 @@ exports.create = (req, res, next) => {
 
             group.createMessage({
                 userId: req.userId,
-                message: req.body.message
+                message: req.body.message,
+                autor: req.body.autor
             })
 
             res.status(200).json({ message: "ok" })

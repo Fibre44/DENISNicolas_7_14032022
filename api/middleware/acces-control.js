@@ -16,11 +16,19 @@ module.exports = (req, res, next) => {
 
                         //on controle que l'utilisateur possede bien une association avec la table Groupe via la table USER_GROUPE
 
-                        const searchGroup = groups.find(group => group.id === req.params.id || req.body.groupId)
+                        let searchGroupId = null
 
-                        console.log(searchGroup)
+                        if (req.params.id) {
+                            searchGroupId = req.params.id
+
+                        }
+                        else {
+                            searchGroupId = req.body.groupId
+                        }
+
+                        const searchGroup = groups.find(group => group.id === searchGroupId)
+
                         if (searchGroup) {
-
                             next()
 
                         } else {

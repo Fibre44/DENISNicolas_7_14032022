@@ -38,7 +38,7 @@ export async function getData(endpoint, token) {
     });
     if (response.ok) {
 
-        return response.json()
+        return response
     }
 }
 
@@ -68,6 +68,7 @@ export async function deleteData(endpoint, token) {
  * @param {string} endpoint 
  * @param {string} token 
  * @param {string} method POST/PUT 
+ * @param {JSON} data
  */
 export async function setData(endpoint, token, method, data) {
     const response = await fetch(urlServer + endpoint, {
@@ -85,5 +86,5 @@ export async function setData(endpoint, token, method, data) {
 
         return response
     }
-    
+
 }

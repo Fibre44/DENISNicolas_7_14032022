@@ -10,8 +10,6 @@ export function FormChangePassword() {
             password: e.target.password.value,
             newPassword: e.target.newPassword.value
         }
-
-        console.log(data)
     }
     return <>
         <form className='form' onSubmit={handleSubmit} >
