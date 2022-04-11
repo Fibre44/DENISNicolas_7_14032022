@@ -37,7 +37,13 @@ exports.groupsByUser = (req, res, next) => {
 
     })
         .then((user) => {
-            res.status(200).json({ user })
+
+            user.getGroupes()
+                .then((groups) => {
+                    res.status(200).json({ groups })
+
+                })
+
         })
         .catch((error) => {
             res.status(500).json({ error })

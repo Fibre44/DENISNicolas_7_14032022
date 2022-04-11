@@ -40,14 +40,18 @@ exports.groupMessages = (req, res, next) => {
     db.Groupe.findOne({
         where: {
             id: req.params.id
-        }
+        },
+
     })
         .then((group) => {
 
             if (group) {
 
                 group.getMessages({
-                    attributes: ['id', 'message', 'autor', 'GroupeId']
+                    attributes: ['id', 'message', 'autor', 'GroupeId', 'createdAt'],
+                    order: [
+                        ['createdAt', 'DESC'],
+                    ],
                 })
 
                     .then((messages) => {

@@ -14,8 +14,10 @@ exports.create = (req, res, next) => {
                 message: req.body.message,
                 autor: req.body.autor
             })
+                .then((message) => {
+                    res.status(200).json({ uuidMessage: message.id })
 
-            res.status(200).json({ message: "ok" })
+                })
 
         })
         .catch((error) => {

@@ -12,7 +12,7 @@ const jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-router.get('/all', auth, groupCtrl.groups)
+router.get('/', auth, groupCtrl.groups)
 router.get('/:id/messages', auth, accessControl, groupCtrl.groupMessages)
 router.get('/:id/message/:idMessage/comments', auth, accessControl, groupCtrl.groupComments)
 
