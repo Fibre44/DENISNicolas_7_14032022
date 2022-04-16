@@ -41,39 +41,28 @@ exports.groupMessages = (req, res, next) => {
         where: {
             id: req.params.id
         },
-
     })
         .then((group) => {
-
             if (group) {
-
                 group.getMessages({
                     attributes: ['id', 'message', 'autor', 'GroupeId', 'createdAt'],
                     order: [
                         ['createdAt', 'DESC'],
                     ],
                 })
-
                     .then((messages) => {
-
-                        console.log(messages)
-
                         res.status(200).json({ messages })
-
                     })
                     .catch((error) => {
                         res.status(500).json({ error })
-
                     })
             } else {
                 res.status(404).json({ message: 'Le goupe n existe pas' })
             }
-
         })
         .catch((error) => {
             res.status(500).json({ error })
         })
-
 }
 
 exports.groupComments = (req, res, next) => {
@@ -121,7 +110,6 @@ exports.groupComments = (req, res, next) => {
 
                                     } else {
                                         res.status(404).json({ message: 'Le message n\'existe pas' })
-
                                     }
                                 })
                         }

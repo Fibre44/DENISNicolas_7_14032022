@@ -3,34 +3,25 @@ const db = require('../lib/models/index.js');
 module.exports = (req, res, next) => {
 
     try {
-
         db.User.findOne({
             where: {
                 id: req.userId
             }
         })
             .then((user) => {
-
                 user.getGroupes()
                     .then((groups) => {
-
                         //on controle que l'utilisateur possede bien une association avec la table Groupe via la table USER_GROUPE
-
                         let searchGroupId = null
-
                         if (req.params.id) {
                             searchGroupId = req.params.id
-
                         }
                         else {
                             searchGroupId = req.body.groupId
                         }
-
                         const searchGroup = groups.find(group => group.id === searchGroupId)
-
                         if (searchGroup) {
                             next()
-
                         } else {
                             //Sinon 2 possibilités le groupe n'existe pas / l'ulilisateur ne peut pas accéder à ce groupe
                             let idGroup = null
@@ -54,7 +45,6 @@ module.exports = (req, res, next) => {
                                 })
                                 .catch((error) => {
                                     res.status(404).json({ message: "Gestion des accès la ressource n'existe pas" })
-
                                 })
                         }
                     })

@@ -14,4 +14,8 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.post('/', auth, urlencodedParser, accessControl, messageCtrl.create)
 
+router.put('/:idMessage', auth, urlencodedParser, accessControl, messageCtrl.edit)
+
+router.delete('/:idMessage', auth, urlencodedParser, accessControl, messageCtrl.delete)
+
 module.exports = router; 
