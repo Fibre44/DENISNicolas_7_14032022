@@ -6,7 +6,7 @@ import { Messages } from "./messages/Messages";
 export function Feed({ actifGroup, actifGroupName, token, firstName, lastName, myGroups, onChange, messages, refreshMessage }) {
     return <>
         <FormMessage actifGroup={actifGroup} actifGroupName={actifGroupName} token={token} firstName={firstName} lastName={lastName} refreshMessage={refreshMessage} />
-        <MyGroups myGroups={myGroups} onChange={onChange}></MyGroups>
+        <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={refreshMessage}></MyGroups>
         <Messages messages={messages} />
     </>
 }

@@ -1,15 +1,24 @@
 import React, { memo } from "react";
+import './../../style/message.sass';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-solid-svg-icons'
+
 
 export function Messages({ messages }) {
 
     if (messages) {
-        return <div className='messages'>
-            {messages.messages.map(message => <div className='message__items' key={message.id}>
-                <Message key={message.id} message={message} />
-            </div>)}
-        </div>
+        if (messages.messages.length == 0) {
+            return <>
+                <p>Le groupe ne contient pas encore de message</p>
+            </>
+        } else {
+            return <div className='messages'>
+                {messages.messages.map(message => <div className='messages__items' key={message.id}>
+                    <Message key={message.id} message={message} />
+                </div>)}
+            </div>
+        }
     } else {
-
         return <>
         </>
     }
@@ -18,7 +27,23 @@ export function Messages({ messages }) {
 const Message = memo(function ({ message }) {
 
     return <>
-        <p>{message.message} date de création {message.createdAt}</p>
+        <div className='messages__head'>
+            <p className='messages__autor'>Auteur {message.autor}</p>
+            <div className='messages__head__icons'>
+                <FontAwesomeIcon icon={faPencil} className='messages__edit' />
+                <FontAwesomeIcon icon={faTrash} className='messages__trash' />
+            </div>
+
+        </div>
+        <p className='messages__message'>{message.message} </p>
+        <div className='messages__footer'>
+            <div className='messages__date'>Publié : {message.createdAt}</div>
+            <div className='messages__footer__icons'>
+                <FontAwesomeIcon icon={faThumbsUp} />
+                <FontAwesomeIcon icon={faComments} />
+            </div>
+
+        </div>
     </>
 
 })

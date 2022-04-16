@@ -32,7 +32,6 @@ const Group = memo(function ({ group, token }) {
             const status = await response.status
 
             if (status == '200') {
-                console.log("C'est ok")
             } else {
                 console.error("Erreur status")
             }
@@ -50,11 +49,13 @@ const Group = memo(function ({ group, token }) {
 
 })
 
-export function MyGroups({ myGroups, onChange }) {
+export function MyGroups({ myGroups, onChange, refreshMessage }) {
     if (myGroups) {
         const setActifGroup = function (e) {
             const uuid = e.target.value
             onChange(() => uuid)
+            refreshMessage(() => uuid)
+
         }
         return <select onChange={setActifGroup}>
             {myGroups.groups.map(group => <MyGroup key={group.id} group={group} />)}
