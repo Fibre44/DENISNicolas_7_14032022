@@ -1,19 +1,17 @@
 import React from "react";
 import { setData } from "./../../api/api"
-
-export function FormMessage({ actifGroup, actifGroupName, token, firstName, lastName, refreshMessage }) {
-
+import './../../style/formMessage.sass'
+export function FormMessage({ actifGroup, token, firstName, lastName, refreshMessage }) {
     const postMessage = async function (e) {
         e.preventDefault()
 
         const data = {
-            groupId: actifGroup,
+            groupId: actifGroup.uuid,
             message: e.target.message.value,
             autor: firstName + ' ' + lastName
         }
 
         try {
-
             const postMessage = await setData('/message', token, 'POST', data)
             const status = postMessage.status
             refreshMessage(() => data.message)
@@ -23,13 +21,10 @@ export function FormMessage({ actifGroup, actifGroupName, token, firstName, last
         }
     }
 
-    return <form onSubmit={postMessage}>
-
-        <label htmlFor="message" >Votre message</label>
+    return <form onSubmit={postMessage} className='formMessage'>
+        <label htmlFor="message" ></label>
         <input type="text" id="message" name="message" placeholder="Taper un message ici"></input>
-        <button type="submit">Poster votre message sur {actifGroupName}</button>
-
-
+        <button type="submit">Poster votre message sur {actifGroup.groupName}</button>
     </form>
 
 }

@@ -7,10 +7,8 @@ exports.create = (req, res, next) => {
         ...req.body
     })
         .then((group) => {
-
             group.addUser(req.userId, { through: { selfGranted: false } })
             res.status(200).json({ group })
-
         })
         .catch((error) => {
             res.status(500).json({ error })
@@ -24,7 +22,6 @@ exports.groups = (req, res, next) => {
         where: {
             private: false
         }
-
     })
         .then((groups) => {
             res.status(200).json({ groups })

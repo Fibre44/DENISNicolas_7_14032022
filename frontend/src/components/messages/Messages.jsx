@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-solid-svg-icons'
 
 
-export function Messages({ messages }) {
+export function Messages({ messages, refreshMessage }) {
 
     if (messages) {
         if (messages.messages.length == 0) {
@@ -14,7 +14,7 @@ export function Messages({ messages }) {
         } else {
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id}>
-                    <Message key={message.id} message={message} />
+                    <Message key={message.id} message={message} refreshMessage={refreshMessage} />
                 </div>)}
             </div>
         }
@@ -24,14 +24,20 @@ export function Messages({ messages }) {
     }
 }
 
-const Message = memo(function ({ message }) {
+const Message = memo(function ({ message, refreshMessage }) {
+
+    const deleteMessage = async function (e) {
+        e.preventDefault()
+        console.log(e)
+
+    }
 
     return <>
         <div className='messages__head'>
             <p className='messages__autor'>Auteur {message.autor}</p>
             <div className='messages__head__icons'>
                 <FontAwesomeIcon icon={faPencil} className='messages__edit' />
-                <FontAwesomeIcon icon={faTrash} className='messages__trash' />
+                <FontAwesomeIcon icon={faTrash} className='messages__trash' onClick={deleteMessage} />
             </div>
 
         </div>

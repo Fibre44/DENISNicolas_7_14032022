@@ -8,7 +8,6 @@ exports.create = (req, res, next) => {
         }
     })
         .then((group) => {
-
             group.createMessage({
                 userId: req.userId,
                 message: req.body.message,
@@ -18,12 +17,10 @@ exports.create = (req, res, next) => {
                     res.status(200).json({ uuidMessage: message.id })
 
                 })
-
         })
         .catch((error) => {
             res.status(500).json({ error })
         })
-
 }
 
 exports.edit = (req, res, next) => {
@@ -41,19 +38,18 @@ exports.edit = (req, res, next) => {
                 }
             })
                 .then((message) => {
-                    if (message) {
+                    if (message[0].dataValues.userId == req.userId) {
                         db.Message.update({ message: req.body.message }, {
                             where: {
                                 id: req.params.idMessage
                             }
-                        }).then((message) => {
-                            res.status(200).json({ message })
+                        }).then(() => {
+                            res.status(200).json({ message: 'Mise à jour du message' })
                         })
-                            .catch((error) => {
-                                res.status(500).json({ error })
-                            })
-                    } else {
+                    } else if (message == []) {
                         res.status(404).json({ message: 'le message n\'existe pas' })
+                    } else {
+                        res.status(403).json({ message: 'Vous ne pouvez pas modifier ce message' })
                     }
                 })
                 .catch((error) => {
@@ -77,7 +73,7 @@ exports.delete = (req, res, next) => {
                 }
             })
                 .then((message) => {
-                    if (message) {
+                    if (message[0].dataValues.userId == req.userId) {
                         db.Message.destroy({
                             where: {
                                 id: req.params.idMessage
@@ -86,8 +82,10 @@ exports.delete = (req, res, next) => {
                             .then(() => {
                                 res.status(200).json({ message: 'Le message a été supprimé' })
                             })
+                    } else if (message == []) {
+                        res.status(404).json({ message: 'le message n\'existe pas' })
                     } else {
-                        res.status(404).json({ message: 'Le message n\'existe pas' })
+                        res.status(403).json({ message: 'Vous ne pouvez pas supprimer ce message' })
                     }
                 })
                 .catch((error) => {

@@ -44,7 +44,6 @@ const Group = memo(function ({ group, token }) {
         <p>{group.title}</p>
         <p>{group.description}</p>
         <button type='button' className='groups__items__button' uuid={group.id} onClick={handleClick}>Rejoindre le groupe</button>
-
     </>
 
 })
@@ -52,9 +51,15 @@ const Group = memo(function ({ group, token }) {
 export function MyGroups({ myGroups, onChange, refreshMessage }) {
     if (myGroups) {
         const setActifGroup = function (e) {
-            const uuid = e.target.value
-            onChange(() => uuid)
-            refreshMessage(() => uuid)
+            const target = e.target.value.split('--')
+            const uuid = target[0]
+            const groupName = target[1]
+            const group = {
+                uuid: uuid,
+                groupName: groupName
+            }
+            onChange(() => group)
+            refreshMessage(() => group)
 
         }
         return <select onChange={setActifGroup}>
@@ -67,7 +72,7 @@ export function MyGroups({ myGroups, onChange, refreshMessage }) {
 
 const MyGroup = memo(function ({ group }) {
     return <>
-        <option value={group.id}>{group.title} </option>
+        <option value={group.id + '--' + group.title}>{group.title} </option>
     </>
 
 })

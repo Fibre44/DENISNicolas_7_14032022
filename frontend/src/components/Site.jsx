@@ -16,8 +16,10 @@ export function Site({ credentials, onDisconnect }) {
     const [groups, setGroups] = useState([])
     const [page, setPage] = useState('home')
     const [myGroups, setMyGroups] = useState(null)
-    const [actifGroup, setActifGroup] = useState('Goupomania')
-    const [actifGroupName, setActifGroupName] = useState('Goupomania')
+    const [actifGroup, setActifGroup] = useState({
+        uuid: 'Goupomania',
+        groupName: 'Goupomania'
+    })
     const [messages, setMessages] = useState(null)
     const [refreshMessage, setRefreshMessage] = useState(null)
 
@@ -45,7 +47,7 @@ export function Site({ credentials, onDisconnect }) {
     //Récupération des messages
 
     useEffect(async function () {
-        const response = await getData('/groups/' + actifGroup + '/messages', credentials.token)
+        const response = await getData('/groups/' + actifGroup.uuid + '/messages', credentials.token)
         const groupMessages = await response.json()
         setMessages(groupMessages)
 
@@ -62,7 +64,7 @@ export function Site({ credentials, onDisconnect }) {
         content = <Groups groups={groups} token={credentials.token} />
     }
     if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} actifGroupName={actifGroupName} token={credentials.token} firstName={firstName} lastName={lastName} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} />
+        content = <Feed actifGroup={actifGroup} token={credentials.token} firstName={firstName} lastName={lastName} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} />
     }
     if (page === 'error') {
         content = <Error />
