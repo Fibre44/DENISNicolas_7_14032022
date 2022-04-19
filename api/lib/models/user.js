@@ -27,7 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING,
-    role: DataTypes.STRING
+    role: DataTypes.STRING,
+    picture: {
+      type: DataTypes.BLOB,
+      allowNull: true
+
+    }
   }, {
     sequelize,
     modelName: 'User',

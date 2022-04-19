@@ -23,7 +23,8 @@ exports.signup = (req, res, next) => {
                             password: hash,
                             firstname: req.body.firstname,
                             lastname: req.body.lastname,
-                            role: 'Employee'
+                            role: 'Employee',
+                            picture: ''
                         })
                             .then(function (user) {
 
