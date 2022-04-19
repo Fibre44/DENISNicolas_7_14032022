@@ -45,18 +45,20 @@ export async function getData(endpoint, token) {
 /**
  * 
  * @param {string} endpoint Indiquer le chemin à joindre
+ * @param {string} fournir les data du body
  * @param {string} token fournir le token
  * @returns 
  */
 
-export async function deleteData(endpoint, token) {
+export async function deleteData(endpoint, data, token) {
     const response = await fetch(urlServer + endpoint, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
-        }
+        },
+        body: JSON.stringify(data)
     });
     if (response.ok) {
 

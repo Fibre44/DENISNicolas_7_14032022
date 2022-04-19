@@ -11,6 +11,6 @@ export function Feed({ actifGroup, token, firstName, lastName, myGroups, onChang
             <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={refreshMessage}></MyGroups>
         </div>
 
-        <Messages messages={messages} refreshMessage={refreshMessage} />
+        <Messages messages={messages} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} />
     </>
 }
