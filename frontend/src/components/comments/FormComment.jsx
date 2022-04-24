@@ -1,22 +1,23 @@
 import React from "react";
 import { setData } from "./../../api/api"
 
-
-export function FormComment({ messageId, token, fistName, lastName, refreshMessage }) {
+export function FormComment({ messageId, token, firstName, lastName, refreshMessage, actifGroup, setCommentPost }) {
 
     const postComments = async function (e) {
         e.preventDefault()
 
         const data = {
+            groupId: actifGroup,
             messageId: messageId,
-            comments: e.target.message.value,
+            comments: e.target.comment.value,
             autor: firstName + ' ' + lastName
         }
 
         try {
             const postMessage = await setData('/comment', token, 'POST', data)
             const status = postMessage.status
-            refreshMessage(() => data.message)
+            refreshMessage(() => data.messageId + Date.now())
+            setCommentPost(() => false)
         } catch {
 
             console.error("echec")

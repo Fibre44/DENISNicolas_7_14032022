@@ -42,9 +42,9 @@ exports.groupMessages = (req, res, next) => {
         .then((group) => {
             if (group) {
                 group.getMessages({
-                    attributes: ['id', 'message', 'autor', 'GroupeId', 'createdAt'],
+                    attributes: ['id', 'message', 'autor', 'GroupeId', 'updatedAt'],
                     order: [
-                        ['createdAt', 'DESC'],
+                        ['updatedAt', 'DESC'],
                     ],
                 })
                     .then((messages) => {
@@ -80,7 +80,11 @@ exports.groupComments = (req, res, next) => {
                         const searchMessage = messages.find(message => message.id === req.params.idMessage)
 
                         if (searchMessage) {
-                            searchMessage.getComments()
+                            searchMessage.getComments({
+                                order: [
+                                    ['updatedAt', 'DESC'],
+                                ]
+                            })
                                 // on récupere les commentaires
                                 .then((comments) => {
                                     if (comments) {
@@ -118,8 +122,6 @@ exports.groupComments = (req, res, next) => {
             } else {
                 res.status(403).json({ message: 'Le message n\'appartient pas à ce groupe' })
             }
-
-
         })
 
         .catch((error) => {

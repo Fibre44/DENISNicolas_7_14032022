@@ -38,16 +38,17 @@ exports.edit = (req, res, next) => {
                 }
             })
                 .then((message) => {
-                    if (message[0].dataValues.userId == req.userId) {
+                    if (message === []) {
+                        res.status(404).json({ message: 'le message n\'existe pas' })
+                    } else if (message[0].dataValues.userId == req.userId) {
                         db.Message.update({ message: req.body.message }, {
                             where: {
                                 id: req.params.idMessage
                             }
                         }).then(() => {
+                            console.log(message.id)
                             res.status(200).json({ message: 'Mise à jour du message' })
                         })
-                    } else if (message == []) {
-                        res.status(404).json({ message: 'le message n\'existe pas' })
                     } else {
                         res.status(403).json({ message: 'Vous ne pouvez pas modifier ce message' })
                     }
@@ -56,7 +57,6 @@ exports.edit = (req, res, next) => {
                     res.status((500).json({ error }))
                 })
         })
-
 }
 
 exports.delete = (req, res, next) => {
@@ -78,8 +78,15 @@ exports.delete = (req, res, next) => {
                             where: {
                                 id: req.params.idMessage
                             }
+                        }).then(() => {
+                            db.Comment.destroy({
+                                where: {
+                                    messageId: req.params.idMessage
+                                }
+                            })
                         })
                             .then(() => {
+
                                 res.status(200).json({ message: 'Le message a été supprimé' })
                             })
                     } else if (message == []) {

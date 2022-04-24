@@ -29,12 +29,9 @@ exports.signup = (req, res, next) => {
                             .then(function (user) {
 
                                 user.addGroupe('Goupomania', { through: { selfGranted: false } })
-
                                     .then((user) => {
                                         res.json({ message: "Création de l'utilisateur", userId: user.id })
-
                                     })
-
                             })
                             .catch((error) => {
                                 res.status(500).json({ error })
@@ -45,8 +42,6 @@ exports.signup = (req, res, next) => {
             } else {
                 res.status(403).json({ error: "L'email existe déjà dans la base" })
             }
-
-
         })
         .catch((error) => {
             res.status(500).json({ error })
@@ -63,12 +58,9 @@ exports.login = (req, res, next) => {
         })
     })
         .then((user) => {
-
             if (user) {
-
                 const userIdDB = user.dataValues.id
                 const passwordDB = user.dataValues.password
-
                 bcrypt.compare(req.body.password, passwordDB)
                     .then(valid => {
 
@@ -92,16 +84,10 @@ exports.login = (req, res, next) => {
                     .catch((error) => {
                         res.status(500).json({ error })
                     })
-
-
-
             } else {
 
                 res.status(404).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' })
-
             }
-
-
         })
         .catch((error) => {
             res.status(500).json(error)

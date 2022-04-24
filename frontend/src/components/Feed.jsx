@@ -10,7 +10,6 @@ export function Feed({ actifGroup, token, firstName, lastName, myGroups, onChang
             <FormMessage actifGroup={actifGroup} token={token} firstName={firstName} lastName={lastName} refreshMessage={refreshMessage} />
             <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={refreshMessage}></MyGroups>
         </div>
-
         <Messages messages={messages} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} />
     </>
 }
