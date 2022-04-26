@@ -27,8 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.UUID,
     MessageId: DataTypes.UUID,
     autor: DataTypes.STRING,
-    likes: DataTypes.INTEGER,
-    dislikes: DataTypes.INTEGER
+    groupeId: DataTypes.UUID
   }, {
     sequelize,
     modelName: 'Comment',

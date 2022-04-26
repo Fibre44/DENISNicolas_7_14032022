@@ -13,6 +13,7 @@ const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.get('/', auth, groupCtrl.groups)
+router.get('/:id', auth, accessControl, groupCtrl.getGroupeDescription)
 router.get('/:id/messages', auth, accessControl, groupCtrl.groupMessages)
 router.get('/:id/message/:idMessage/comments', auth, accessControl, groupCtrl.groupComments)
 

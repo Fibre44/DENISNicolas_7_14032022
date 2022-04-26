@@ -11,8 +11,7 @@ import { Error } from './ui/Error';
 
 export function Site({ credentials, onDisconnect }) {
 
-    const [firstName, setFirstName] = useState(null)
-    const [lastName, setLastName] = useState(null)
+    const [identity, setIdentity] = useState({})
     const [groups, setGroups] = useState([])
     const [page, setPage] = useState('home')
     const [myGroups, setMyGroups] = useState(null)
@@ -23,13 +22,15 @@ export function Site({ credentials, onDisconnect }) {
     const [messages, setMessages] = useState(null)
     const [refreshMessage, setRefreshMessage] = useState(null)
 
+    //récupération de l'identité
+
     useEffect(async function () {
         const response = await getData('/users/identity', credentials.token)
         const userIdentity = await response.json()
-        setFirstName(userIdentity.firstname)
-        setLastName(userIdentity.lastname)
+        setIdentity(userIdentity.user)
     }, [])
 
+    //récupération de l'ensemble des groupes
     useEffect(async function () {
         const response = await getData('/groups', credentials.token)
         const groups = await response.json()
@@ -53,7 +54,6 @@ export function Site({ credentials, onDisconnect }) {
 
     }, [refreshMessage])
 
-
     let content = null
 
     if (page === 'profil') {
@@ -64,7 +64,7 @@ export function Site({ credentials, onDisconnect }) {
         content = <Groups groups={groups} token={credentials.token} />
     }
     if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} token={credentials.token} firstName={firstName} lastName={lastName} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} />
+        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} />
     }
     if (page === 'error') {
         content = <Error />
@@ -75,16 +75,17 @@ export function Site({ credentials, onDisconnect }) {
     }
     return <>
 
-        <NavBar firstname={firstName} lastname={lastName} onClick={setPage} onDisconnect={onDisconnect} />
+        <NavBar identity={identity} onClick={setPage} onDisconnect={onDisconnect} />
         {content}
 
     </>
 }
 
-function NavBar({ firstname, lastname, onClick, onDisconnect }) {
+function NavBar({ identity, onClick, onDisconnect }) {
+
     return <>
         <nav className='nav'>
-            <h1 className='nav__titre'>Bonjour {firstname} {lastname}</h1>
+            <h1 className='nav__titre'>Bonjour {identity.firstname} {identity.lastname}</h1>
 
             <ul className='nav__items'>
 
@@ -96,7 +97,6 @@ function NavBar({ firstname, lastname, onClick, onDisconnect }) {
             </ul>
         </nav>
     </>
-
 
 }
 

@@ -98,7 +98,7 @@ exports.login = (req, res, next) => {
 exports.identity = (req, res, next) => {
 
     db.User.findOne({
-        attributes: ['firstname', 'lastname'],
+        attributes: ['id', 'firstname', 'lastname'],
 
         where: {
             id: req.userId
@@ -109,7 +109,7 @@ exports.identity = (req, res, next) => {
             const firstname = user.dataValues.firstname
             const lastname = user.dataValues.lastname
 
-            res.status(200).json({ firstname: firstname, lastname: lastname })
+            res.status(200).json({ user })
         })
         .catch((errror) => {
             res.status(404).json({ message: 'La ressource n existe pas' })

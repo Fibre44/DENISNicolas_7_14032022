@@ -10,7 +10,7 @@ import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-sol
 
 const items = [];
 
-export function Messages({ messages, refreshMessage, token, actifGroup }) {
+export function Messages({ messages, refreshMessage, token, actifGroup, identity }) {
 
     if (messages) {
         if (messages.messages.length == 0) {
@@ -18,14 +18,11 @@ export function Messages({ messages, refreshMessage, token, actifGroup }) {
                 <p>Le groupe ne contient pas encore de message</p>
             </>
         } else {
-            const length = items.length
-            items.splice(0, length)
+
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id} data-id={message.id} >
-                    <Message message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} />
+                    <Message message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} />
                 </div>)}
-                <PaginatedItems itemsPerPage={5} />,
-
             </div>
         }
     } else {
@@ -33,47 +30,21 @@ export function Messages({ messages, refreshMessage, token, actifGroup }) {
         </>
     }
 }
-const Message = memo(function ({ message, refreshMessage, token, actifGroup }) {
+const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity }) {
 
     const [editMode, setEditMode] = useState(false)
     const [commentPost, setCommentPost] = useState(false)
     let messageLayout = <p className='messages__message'>{message.message} </p>
     let formComment = null
     const [comments, setComments] = useState(null)
+    const [refreshComment, setRefreshComment] = useState(null)
 
     useEffect(async function () {
         const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments', token)
         const groupComments = await response.json()
         setComments(groupComments)
 
-    }, [refreshMessage])
-
-    const searchDataId = async function (localisation) {
-        if (localisation.getAttribute("data-id") != undefined) {
-            return localisation.getAttribute("data-id");
-        } else {
-            return searchDataId(localisation.parentElement);
-        }
-    }
-    const deleteMessage = async function (e) {
-        e.preventDefault()
-        try {
-            const uuidMessage = await searchDataId(e.target)
-            const data = {
-                groupId: actifGroup.uuid
-            }
-            try {
-                const deleteMessageAPI = await deleteData('/message/' + uuidMessage, data, token)
-                const status = await deleteMessageAPI.status
-                refreshMessage(() => uuidMessage)
-
-            } catch {
-                console.error('Erreur au niveau de l\'API')
-            }
-        } catch {
-            console.error('Impossible de trouver l\'id')
-        }
-    }
+    }, [refreshComment])
 
     if (editMode) {
         messageLayout = <EditFormMessage messageId={message.id} messsageText={message.message} actifGroup={actifGroup.uuid} token={token} refreshMessage={refreshMessage} editMode={setEditMode} />
@@ -82,20 +53,23 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup }) {
         messageLayout = <p className='messages__message'>{message.message} </p>
     }
     if (commentPost) {
-        formComment = <FormComment messageId={message.id} token={token} firstName="test" lastName="test" refreshMessage={refreshMessage} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost
-        } />
+        formComment = <FormComment messageId={message.id} token={token} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} />
     } else {
-        formComment = <Comments comments={comments} />
+        formComment = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} token={token} identityId={identity.id} />
+    }
+
+    let icons = null
+    if (message.userId === identity.id) {
+        icons = <MessageIcons setEditMode={setEditMode} messageId={message.id} actifGroup={actifGroup} token={token} refreshMessage={refreshMessage} />
+
+    } else {
+        icons = <div className='messages__head__icons'></div>
     }
 
     return <>
         <div className='messages__head'>
             <p className='messages__autor'>Auteur {message.autor}</p>
-            <div className='messages__head__icons'>
-                <FontAwesomeIcon icon={faPencil} className='messages__edit' onClick={() => setEditMode(true)} />
-                <FontAwesomeIcon icon={faTrash} className='messages__trash' onClick={deleteMessage} />
-            </div>
-
+            {icons}
         </div>
         {messageLayout}
         <div className='messages__footer'>
@@ -105,14 +79,40 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup }) {
                 <FontAwesomeIcon icon={faComments} onClick={() => setCommentPost(true)} />
             </div>
         </div>
-        <div className='messages__comment'>
+        <div className='messages__comments'>
             {formComment}
         </div>
 
     </>
-    //<FontAwesomeIcon icon={faComments} onClick={() => this.deleteMessage} /> fonctionne aussi
-
 })
+
+function MessageIcons({ setEditMode, messageId, actifGroup, token, refreshMessage }) {
+
+    const deleteMessage = async function (e) {
+        e.preventDefault()
+        try {
+            const data = {
+                groupId: actifGroup.uuid
+            }
+            try {
+                const deleteMessageAPI = await deleteData('/message/' + messageId, data, token)
+                const status = await deleteMessageAPI.status
+                refreshMessage(() => messageId + Date.now())
+
+            } catch {
+                console.error('Erreur au niveau de l\'API')
+            }
+        } catch {
+            console.error('Impossible de trouver l\'id')
+        }
+    }
+
+    return <div className='messages__head__icons'>
+        <FontAwesomeIcon icon={faPencil} className='messages__edit' onClick={() => setEditMode(true)} />
+        <FontAwesomeIcon icon={faTrash} className='messages__trash' onClick={deleteMessage} />
+    </div>
+
+}
 
 function Items({ currentItems }) {
     return (

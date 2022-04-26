@@ -42,7 +42,7 @@ exports.groupMessages = (req, res, next) => {
         .then((group) => {
             if (group) {
                 group.getMessages({
-                    attributes: ['id', 'message', 'autor', 'GroupeId', 'updatedAt'],
+                    attributes: ['id', 'message', 'userId', 'autor', 'GroupeId', 'updatedAt'],
                     order: [
                         ['updatedAt', 'DESC'],
                     ],
@@ -71,14 +71,12 @@ exports.groupComments = (req, res, next) => {
         }
     })
         .then((group) => {
-
             if (group) {
                 //on récupére l'ensemble des messages du groupe
                 group.getMessages()
                     .then((messages) => {
                         //On verifie que l'id du message existe bien dans le groupe
                         const searchMessage = messages.find(message => message.id === req.params.idMessage)
-
                         if (searchMessage) {
                             searchMessage.getComments({
                                 order: [
@@ -98,7 +96,6 @@ exports.groupComments = (req, res, next) => {
                                 })
                         } else {
                             //on verifie si le message existe. Si il existe alors erreur 403 car il n'est pas dans le groupe sinon 404 
-
                             db.Message.findOne({
                                 where: {
                                     id: req.params.idMessage
@@ -128,4 +125,17 @@ exports.groupComments = (req, res, next) => {
             res.status(404).json({ message: 'Le groupe n\(existe pas' })
         })
 
+}
+
+exports.getGroupeDescription = (req, res, next) => {
+    db.Groupe.findOne({
+        attributes: ['description'],
+        where: {
+            id: req.params.id
+        }
+    }).then((groupe) => {
+        res.status(200).json({ groupe })
+    }).catch((error) => {
+        res.status(500).json({ error })
+    })
 }

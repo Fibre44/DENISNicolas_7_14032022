@@ -7,17 +7,15 @@ exports.create = (req, res, next) => {
         }
     })
         .then((message) => {
-
             if (message) {
                 message.createComment({
                     userId: req.userId,
                     comments: req.body.comments,
                     autor: req.body.autor,
-                    likes: 0,
-                    dislikes: 0
-                })
+                    groupeId: req.body.groupId
 
-                res.status(200).json({ message: "ok" })
+                })
+                res.status(200).json({ message: 'ok' })
             } else {
                 res.status(404).json({ message: 'L id du message n existe pas' })
             }
@@ -28,5 +26,23 @@ exports.create = (req, res, next) => {
             res.status(500).json({ error })
         })
 
+}
+
+exports.delete = (req, res, next) => {
+    db.Comment.destroy({
+        where: {
+            id: req.params.idComment
+        }
+    })
+        .then((comment) => {
+            if (comment) {
+                res.status(200).json({ message: 'Suppression du commentaire' })
+            } else {
+                res.status(404).json({ message: 'Le commentaire n\'existe pas' })
+            }
+        })
+        .catch((error) => {
+            res.status(500).json({ error })
+        })
 }
 

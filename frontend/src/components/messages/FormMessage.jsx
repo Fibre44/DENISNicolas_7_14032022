@@ -1,14 +1,14 @@
 import React from "react";
 import { setData } from "./../../api/api"
 import './../../style/formMessage.sass'
-export function FormMessage({ actifGroup, token, firstName, lastName, refreshMessage }) {
+export function FormMessage({ actifGroup, token, identity, refreshMessage }) {
     const postMessage = async function (e) {
         e.preventDefault()
 
         const data = {
             groupId: actifGroup.uuid,
             message: e.target.message.value,
-            autor: firstName + ' ' + lastName
+            autor: identity.firstname + ' ' + identity.lastname
         }
 
         try {

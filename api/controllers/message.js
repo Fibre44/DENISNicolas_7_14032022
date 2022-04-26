@@ -76,7 +76,7 @@ exports.delete = (req, res, next) => {
                     if (message[0].dataValues.userId == req.userId) {
                         db.Message.destroy({
                             where: {
-                                id: req.params.idMessage
+                                id: req.params.idMessage,
                             }
                         }).then(() => {
                             db.Comment.destroy({
@@ -86,7 +86,6 @@ exports.delete = (req, res, next) => {
                             })
                         })
                             .then(() => {
-
                                 res.status(200).json({ message: 'Le message a été supprimé' })
                             })
                     } else if (message == []) {

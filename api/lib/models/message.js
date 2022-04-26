@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Message.belongsTo(models.Groupe)
-      Message.hasMany(models.Comment, { onDelete: 'RESTRICT' })
+      Message.hasMany(models.Comment, { onDelete: 'CASCADE' })
 
     }
   }

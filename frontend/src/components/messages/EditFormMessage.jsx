@@ -5,7 +5,6 @@ export function EditFormMessage({ messageId, messsageText, actifGroup, token, re
 
     const updateMessage = async function (e) {
         e.preventDefault()
-        console.log(e.target.value)
         const data = {
             groupId: actifGroup,
             message: e.target.editFormMessage.value

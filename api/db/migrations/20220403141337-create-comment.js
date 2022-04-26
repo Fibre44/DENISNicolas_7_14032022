@@ -24,13 +24,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      likes: {
+      groupeId: {
         allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      dislikes: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       createdAt: {
         allowNull: false,
