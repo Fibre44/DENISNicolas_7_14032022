@@ -12,10 +12,8 @@ exports.signup = (req, res, next) => {
         }
     })
         .then((user) => {
-
             //Si l'email n'existe pas
             if (user == 0) {
-
                 bcrypt.hash(req.body.password, 10)
                     .then(hash => {
                         db.User.create({
@@ -50,8 +48,6 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    console.log(req.body)
-
     db.User.findOne({
         where: ({
             email: req.body.email
@@ -63,9 +59,12 @@ exports.login = (req, res, next) => {
                 const passwordDB = user.dataValues.password
                 bcrypt.compare(req.body.password, passwordDB)
                     .then(valid => {
-
                         if (valid) {
-
+                            res.cookie('userId', userIdDB, 'sessionId', jwt.sign(
+                                { userId: userIdDB },
+                                token,
+                                { expiresIn: '24h' }
+                            ))
                             res.status(200).json({
                                 userId: userIdDB,
                                 token: jwt.sign(

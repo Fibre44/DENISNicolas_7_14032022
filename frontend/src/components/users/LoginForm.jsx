@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { userPost } from '../../api/api';
 import './../../style/form.sass'
 import { Alert } from './../ui/Alert';
-
-
+import { Footer } from '../footer/Footer';
 
 export function LoginForm({ onConnect, onClick }) {
 
@@ -18,10 +17,8 @@ export function LoginForm({ onConnect, onClick }) {
         }
 
         try {
-
             const response = await userPost(data, '/users/login')
             const status = await response.status
-
             if (status == "200") {
                 onConnect(response.data)
 
@@ -42,9 +39,11 @@ export function LoginForm({ onConnect, onClick }) {
 
     return <>
         <div className='conteneur'>
+            <div className='conteneur__logo'>
+                <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" />
+            </div>
             <form action="" id="login" className='form' onSubmit={handleSubmit}>
                 <h2>Formulaire de connexion</h2>
-
                 <div className='form__field'>
                     <label htmlFor="email" >Email</label>
                     <input type="email" name="email" id="email" required></input>
@@ -58,18 +57,13 @@ export function LoginForm({ onConnect, onClick }) {
                 <a href="#register" onClick={() => onClick('register')}>Pas de compte inscrivez vous ici</a>
                 <a href="passwordrecovery"> </a>
 
+                <div className='alert'>
+                    {errorConnexion && <Alert>{errorConnexion}</Alert>}
+                </div>
             </form>
 
-            <div className='alert'>
-
-                {errorConnexion && <Alert>{errorConnexion}</Alert>}
-            </div>
-
-
         </div>
+        <Footer />
 
     </>
-
-
-
 }

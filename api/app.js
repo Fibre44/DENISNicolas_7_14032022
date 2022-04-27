@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const cookieParser = require('cookie-parser')
 const userRoute = require('./routes/users');
 const groupRoute = require('./routes/groups');
 const group_userRoute = require('./routes/groups_users');
@@ -18,7 +18,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 app.use('/users', userRoute);
 app.use('/groups', groupRoute);

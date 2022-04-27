@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { setData } from '../../api/api';
 import './../../style/groups.sass'
+import { FormGroup } from './FormGroup';
 
 //Optimisation à prévoir revenir à deux composants
 
@@ -9,6 +10,7 @@ export function Groups({ groups, token }) {
         return <></>
     }
     return <div className='groups'>
+        <FormGroup method='POST' token={token} />
         {groups.groups.map(group => <div className='groups__items' key={group.id}>
             <Group group={group} token={token} />
         </div>)}
@@ -41,8 +43,9 @@ const Group = memo(function ({ group, token }) {
         }
     }
     return <>
-        <p>{group.title}</p>
-        <p>{group.description}</p>
+        <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" className='groups__items__img' />
+        <p>Nom du groupe: {group.title}</p>
+        <p>Description : {group.description}</p>
         <button type='button' className='groups__items__button' uuid={group.id} onClick={handleClick}>Rejoindre le groupe</button>
     </>
 

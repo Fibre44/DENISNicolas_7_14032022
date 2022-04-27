@@ -11,7 +11,7 @@ export function EditFormMessage({ messageId, messsageText, actifGroup, token, re
         }
         try {
             const putMessage = await setData('/message/' + messageId, token, 'PUT', data)
-            const status = await putMessage.status
+            const status = (await putMessage).status
             refreshMessage(() => messageId + Date.now())
             editMode(() => false)
 

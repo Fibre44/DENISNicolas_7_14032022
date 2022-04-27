@@ -8,6 +8,7 @@ import { faHouse, faPeopleGroup, faUser, faPowerOff } from '@fortawesome/free-so
 import { Disconnect } from './Disconnect';
 import { Feed } from './Feed';
 import { Error } from './ui/Error';
+import { Footer } from './footer/Footer';
 
 export function Site({ credentials, onDisconnect }) {
 
@@ -77,6 +78,7 @@ export function Site({ credentials, onDisconnect }) {
 
         <NavBar identity={identity} onClick={setPage} onDisconnect={onDisconnect} />
         {content}
+        <Footer />
 
     </>
 }

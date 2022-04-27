@@ -1,19 +1,26 @@
 .groups
-    display: flex
-    flex-direction: row
-    justify-content: space-between
-    flex-wrap: wrap
-    align-items: space-between
-    width: 75%
-    height: 90%
+    display: grid
+    grid-template-columns: repeat(2,1fr)
+    grid-column-gap: 10%
+    grid-row-gap: 15px
+    width: 90%
+
+    @media all and (max-width : 2560px) and (min-width: 768px)
+        grid-template-columns: repeat(5,1fr)
 
     &__items
         display: flex
         flex-direction: column
         justify-content: space-around
-        align-items: center
-        height: 150px
+        align-items: space-around
+        height: 200px
         border: 1px solid red
+        border-radius: 15px
+
+        &__img
+            margin-top: 2px
+            width: 80%
 
         &__button
-            width: 75%
+            width: 100%
+            border-radius: 15px
