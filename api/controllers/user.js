@@ -60,11 +60,11 @@ exports.login = (req, res, next) => {
                 bcrypt.compare(req.body.password, passwordDB)
                     .then(valid => {
                         if (valid) {
-                            res.cookie('userId', userIdDB, 'sessionId', jwt.sign(
+                            res.cookie('sessionId', jwt.sign(
                                 { userId: userIdDB },
                                 token,
                                 { expiresIn: '24h' }
-                            ))
+                            ), { httpOnly: true, secure: true, domain: 'localhost:3000' })
                             res.status(200).json({
                                 userId: userIdDB,
                                 token: jwt.sign(
@@ -104,10 +104,6 @@ exports.identity = (req, res, next) => {
         }
     })
         .then((user) => {
-
-            const firstname = user.dataValues.firstname
-            const lastname = user.dataValues.lastname
-
             res.status(200).json({ user })
         })
         .catch((errror) => {

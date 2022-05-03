@@ -36,6 +36,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     const [commentPost, setCommentPost] = useState(false)
     let messageLayout = <p className='messages__message'>{message.message} </p>
     let formComment = null
+    let commentsData = null
     const [comments, setComments] = useState(null)
     const [refreshComment, setRefreshComment] = useState(null)
 
@@ -52,11 +53,9 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     } else {
         messageLayout = <p className='messages__message'>{message.message} </p>
     }
-    if (commentPost) {
-        formComment = <FormComment messageId={message.id} token={token} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} />
-    } else {
-        formComment = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} token={token} identityId={identity.id} />
-    }
+    formComment = <FormComment messageId={message.id} token={token} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} method='POST' />
+    commentsData = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} token={token} identityId={identity.id} messageId={message.id} />
+
 
     let icons = null
     if (message.userId === identity.id) {
@@ -81,6 +80,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         </div>
         <div className='messages__comments'>
             {formComment}
+            {commentsData}
         </div>
 
     </>

@@ -1,4 +1,4 @@
-const urlServer = 'http://localhost:3001'
+const urlServer = '/api/v1'
 
 export async function userPost(data, endpoint) {
 

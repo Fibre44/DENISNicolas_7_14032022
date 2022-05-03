@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Comment.belongsTo(models.Message, { onDelete: 'RESTRICT' })
+      Comment.belongsTo(models.Message, { foreignKey: "messageId", onDelete: 'RESTRICT' })
 
     }
   }
@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     groupeId: DataTypes.UUID
   }, {
     sequelize,
+    tableName: "comments",
     modelName: 'Comment',
   });
   return Comment;

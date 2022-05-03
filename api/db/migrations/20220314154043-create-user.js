@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
 
       },
+      picture: {
+        type: Sequelize.BLOB,
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -35,7 +39,7 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {

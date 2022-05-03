@@ -6,5 +6,6 @@ const accessControl = require('../middleware/acces-control');
 
 router.post('/', auth, accessControl, commentCtrl.create)
 router.delete('/:idComment', auth, accessControl, commentCtrl.delete)
+router.put('/:idComment', auth, accessControl, commentCtrl.edit)
 
 module.exports = router;

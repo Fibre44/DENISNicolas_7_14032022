@@ -21,11 +21,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-app.use('/users', userRoute);
-app.use('/groups', groupRoute);
-app.use('/groups_users', group_userRoute);
-app.use('/message', messageRoute);
-app.use('/comment', commentRoute);
-app.use('/admin', adminRoute);
+app.use('/api/v1/users', userRoute);
+app.use('/api/v1/groups', groupRoute);
+app.use('/api/v1/groups_users', group_userRoute);
+app.use('/api/v1/message', messageRoute);
+app.use('/api/v1/comment', commentRoute);
+app.use('/api/v1/admin', adminRoute);
 
 module.exports = app;

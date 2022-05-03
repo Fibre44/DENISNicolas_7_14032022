@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Groupe.belongsToMany(models.User, { through: 'User_Groupe' })
       Groupe.hasMany(models.Message)
-
     }
   }
   Groupe.init({
@@ -46,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
 
     {
       sequelize,
+      tableName: "groupes",
       modelName: 'Groupe',
     });
   return Groupe;

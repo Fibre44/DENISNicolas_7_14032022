@@ -1,7 +1,6 @@
 const db = require('./../lib/models/index.js');
 
 exports.create = (req, res, next) => {
-
     db.Groupe.findOne({
         where: {
             id: req.body.groupId
@@ -24,7 +23,6 @@ exports.create = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-
     //On repart du groupe pour etre sur l'id du message est bien rattaché au groupe
     db.Groupe.findOne({
         where: {
@@ -46,7 +44,6 @@ exports.edit = (req, res, next) => {
                                 id: req.params.idMessage
                             }
                         }).then(() => {
-                            console.log(message.id)
                             res.status(200).json({ message: 'Mise à jour du message' })
                         })
                     } else {
@@ -60,44 +57,32 @@ exports.edit = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-
-    db.Groupe.findOne({
+    db.Message.findOne({
         where: {
-            id: req.body.groupId
+            id: req.params.idMessage,
+            groupeId: req.body.groupId,
+            userId: req.userId
+        }
+    }).then((message) => {
+        if (message) {
+            //On supprime les commentaires problème avec la gestion de la cascade de suppression de l'ORM
+            db.Comment.destroy({
+                where: {
+                    messageId: req.params.idMessage
+                }
+            }).then(() => {
+                db.Message.destroy({
+                    where: {
+                        id: req.params.idMessage,
+                        groupeId: req.body.groupId,
+                        userId: req.userId
+                    }
+                }).then(() => {
+                    res.status(200).json({ message: 'Le message a été supprimé et des commentaires' })
+                })
+            })
         }
     })
-        .then((group) => {
-            group.getMessages({
-                where: {
-                    id: req.params.idMessage
-                }
-            })
-                .then((message) => {
-                    if (message[0].dataValues.userId == req.userId) {
-                        db.Message.destroy({
-                            where: {
-                                id: req.params.idMessage,
-                            }
-                        }).then(() => {
-                            db.Comment.destroy({
-                                where: {
-                                    messageId: req.params.idMessage
-                                }
-                            })
-                        })
-                            .then(() => {
-                                res.status(200).json({ message: 'Le message a été supprimé' })
-                            })
-                    } else if (message == []) {
-                        res.status(404).json({ message: 'le message n\'existe pas' })
-                    } else {
-                        res.status(403).json({ message: 'Vous ne pouvez pas supprimer ce message' })
-                    }
-                })
-                .catch((error) => {
-                    res.status(500).json({ error })
-                })
 
-        })
 
 }

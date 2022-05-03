@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.belongsToMany(models.Groupe, { through: 'User_Groupe' })
-
     }
   }
   User.init({
@@ -31,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     picture: {
       type: DataTypes.BLOB,
       allowNull: true
-
     }
   }, {
     sequelize,
+    tableName: "users",
     modelName: 'User',
   });
   return User;

@@ -22,6 +22,7 @@ export function Site({ credentials, onDisconnect }) {
     })
     const [messages, setMessages] = useState(null)
     const [refreshMessage, setRefreshMessage] = useState(null)
+    const [refreshMyGroups, setRefreshMyGroups] = useState(null)
 
     //récupération de l'identité
 
@@ -44,7 +45,7 @@ export function Site({ credentials, onDisconnect }) {
         const response = await getData('/groups_users', credentials.token)
         const myGroups = await response.json()
         setMyGroups(myGroups)
-    }, [page])// si l'élement page change on doit recharger les groupes
+    }, [page, refreshMyGroups])// si l'élement page change on doit recharger les groupes
 
     //Récupération des messages
 
@@ -65,7 +66,7 @@ export function Site({ credentials, onDisconnect }) {
         content = <Groups groups={groups} token={credentials.token} />
     }
     if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} />
+        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} refreshMyGroups={setRefreshMyGroups} />
     }
     if (page === 'error') {
         content = <Error />
@@ -75,11 +76,9 @@ export function Site({ credentials, onDisconnect }) {
         content = <Disconnect />
     }
     return <>
-
         <NavBar identity={identity} onClick={setPage} onDisconnect={onDisconnect} />
         {content}
         <Footer />
-
     </>
 }
 
@@ -90,12 +89,10 @@ function NavBar({ identity, onClick, onDisconnect }) {
             <h1 className='nav__titre'>Bonjour {identity.firstname} {identity.lastname}</h1>
 
             <ul className='nav__items'>
-
                 <li className='nav__item'><a href="#home" onClick={() => onClick('home')}><FontAwesomeIcon icon={faHouse} /></a></li>
                 <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}><FontAwesomeIcon icon={faPeopleGroup} /></a></li>
                 <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser} /></a></li>
                 <li className='nav__item'><a href='#login' onClick={() => onDisconnect('null')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
-
             </ul>
         </nav>
     </>

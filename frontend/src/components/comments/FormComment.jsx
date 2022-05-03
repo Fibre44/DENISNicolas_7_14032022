@@ -1,20 +1,25 @@
 import React from "react";
 import { setData } from "./../../api/api"
 
-export function FormComment({ messageId, token, refreshComment, actifGroup, setCommentPost, identity }) {
+export function FormComment({ messageId, token, refreshComment, actifGroup, setCommentPost, identity, method, commentId }) {
 
+    let autor = null
+    if (method == 'POST') {
+        commentId = ''
+        autor = identity.firstname + ' ' + identity.lastname
+    } else {
+        autor = identity
+    }
     const postComments = async function (e) {
         e.preventDefault()
-
         const data = {
             groupId: actifGroup,
             messageId: messageId,
-            comments: e.target.comment.value,
-            autor: identity.firstname + ' ' + identity.lastname,
+            comment: e.target.comment.value,
+            autor: autor
         }
-
         try {
-            const postMessage = await setData('/comment', token, 'POST', data)
+            const postMessage = await setData('/comment' + '/' + commentId, token, method, data)
             const status = postMessage.status
             refreshComment(() => data.messageId + Date.now())
             setCommentPost(() => false)

@@ -27,9 +27,14 @@ module.exports = (sequelize, DataTypes) => {
     message: DataTypes.TEXT,
     GroupeId: DataTypes.STRING,
     userId: DataTypes.STRING,
-    autor: DataTypes.STRING
+    autor: DataTypes.STRING,
+    picture: {
+      type: DataTypes.BLOB,
+      allowNull: true
+    }
   }, {
     sequelize,
+    tableName: "messages",
     modelName: 'Message',
   });
   return Message;

@@ -4,7 +4,7 @@ const group_user = require('./../controllers/group_user');
 const auth = require('./../middleware/auth');
 
 router.post('/', auth, group_user.create)
-
 router.get('/', auth, group_user.groupsByUser)
+router.delete('/', auth, group_user.delete)
 
 module.exports = router;

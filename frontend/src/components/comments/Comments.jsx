@@ -1,16 +1,17 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import './../../style/comment.sass';
 import { deleteData } from "../../api/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-solid-svg-icons';
+import { FormComment } from "./FormComment";
 
-export function Comments({ comments, refreshComment, actifGroup, token, identityId }) {
+export function Comments({ comments, refreshComment, actifGroup, token, identityId, messageId }) {
 
     if (comments) {
         return <>
             <div className='comments'>
                 {comments.comments.map(comment => <div className='comments__items' key={comment.id} data-id={comment.id}>
-                    <Comment comment={comment} refreshComment={refreshComment} actifGroup={actifGroup} token={token} identityId={identityId} />
+                    <Comment comment={comment} refreshComment={refreshComment} actifGroup={actifGroup} token={token} identityId={identityId} messageId={messageId} />
                 </div>)}
             </div>
         </>
@@ -20,12 +21,20 @@ export function Comments({ comments, refreshComment, actifGroup, token, identity
     }
 }
 
-const Comment = memo(function ({ comment, refreshComment, actifGroup, token, identityId }) {
-
+const Comment = memo(function ({ comment, refreshComment, actifGroup, token, identityId, messageId }) {
+    const [editMode, setEditMode] = useState(false)
     let iconsComment = null
+    let commentData = <p className='comments__data'>{comment.comments}</p>
+
+    if (editMode) {
+        commentData = <FormComment messageId={messageId} token={token} refreshComment={refreshComment} actifGroup={actifGroup.uuid} identity={comment.autor} method='PUT' commentId={comment.id} />
+    } else {
+        let commentData = <p className='comments__data'>{comment.comments}</p>
+
+    }
 
     if (identityId == comment.userId) {
-        iconsComment = <CommentIcons commentId={comment.id} token={token} actifGroup={actifGroup} refreshComment={refreshComment} />
+        iconsComment = <CommentIcons commentId={comment.id} token={token} actifGroup={actifGroup} refreshComment={refreshComment} messageId={messageId} setEditMode={setEditMode} />
     } else {
         iconsComment = <div className='comments__head__icons'></div>
     }
@@ -34,22 +43,22 @@ const Comment = memo(function ({ comment, refreshComment, actifGroup, token, ide
         <div className='comments__head'>
             <p className='comments__autor'>Auteur {comment.autor}</p>
             {iconsComment}
-
         </div>
         <div>
-            <p className='comments__data'>{comment.comments}</p>
+            {commentData}
         </div>
 
     </>
 })
 
-function CommentIcons({ commentId, token, actifGroup, refreshComment }) {
+function CommentIcons({ commentId, token, actifGroup, refreshComment, messageId, setEditMode }) {
 
     const deleteComment = async function (e) {
         e.preventDefault()
         try {
             const data = {
-                groupId: actifGroup.uuid
+                groupId: actifGroup.uuid,
+                messageId: messageId
             }
             try {
                 const deleteCommentAPI = await deleteData('/comment/' + commentId, data, token)
@@ -65,7 +74,7 @@ function CommentIcons({ commentId, token, actifGroup, refreshComment }) {
     }
 
     return <div className='comments__head__icons'>
-        <FontAwesomeIcon icon={faPencil} className='comments__edit' />
+        <FontAwesomeIcon icon={faPencil} className='comments__edit' onClick={() => setEditMode(true)} />
         <FontAwesomeIcon icon={faTrash} className='comments__trash' onClick={deleteComment} />
     </div>
 }

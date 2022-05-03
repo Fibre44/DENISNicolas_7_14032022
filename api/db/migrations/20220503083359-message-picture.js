@@ -7,18 +7,17 @@ module.exports = {
      *
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     * 
-     * 
      */
 
     return queryInterface.sequelize.transaction(t => {
       return Promise.all([
-        queryInterface.addColumn('Users', 'picture', {
+        queryInterface.addColumn('Messages', 'picture', {
           type: Sequelize.DataTypes.BLOB,
-          allowNull: false,
+          allowNull: true,
         }, { transaction: t })
       ]);
     });
+
   },
 
   async down(queryInterface, Sequelize) {
