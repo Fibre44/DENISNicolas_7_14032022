@@ -20,10 +20,7 @@ export function Site({ credentials, onDisconnect }) {
         uuid: 'Goupomania',
         groupName: 'Goupomania'
     })
-    const [messages, setMessages] = useState(null)
-    const [refreshMessage, setRefreshMessage] = useState(null)
     const [refreshMyGroups, setRefreshMyGroups] = useState(null)
-
     //récupération de l'identité
 
     useEffect(async function () {
@@ -47,15 +44,6 @@ export function Site({ credentials, onDisconnect }) {
         setMyGroups(myGroups)
     }, [page, refreshMyGroups])// si l'élement page change on doit recharger les groupes
 
-    //Récupération des messages
-
-    useEffect(async function () {
-        const response = await getData('/groups/' + actifGroup.uuid + '/messages', credentials.token)
-        const groupMessages = await response.json()
-        setMessages(groupMessages)
-
-    }, [refreshMessage])
-
     let content = null
 
     if (page === 'profil') {
@@ -66,7 +54,7 @@ export function Site({ credentials, onDisconnect }) {
         content = <Groups groups={groups} token={credentials.token} />
     }
     if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} messages={messages} refreshMessage={setRefreshMessage} refreshMyGroups={setRefreshMyGroups} />
+        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} refreshMyGroups={setRefreshMyGroups} />
     }
     if (page === 'error') {
         content = <Error />

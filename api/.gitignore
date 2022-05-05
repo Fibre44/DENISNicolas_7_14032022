@@ -2,3 +2,4 @@
 /config
 /SQL
 .env
+sequelizeData.json

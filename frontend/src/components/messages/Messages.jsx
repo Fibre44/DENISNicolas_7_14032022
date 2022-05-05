@@ -10,8 +10,7 @@ import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-sol
 
 const items = [];
 
-export function Messages({ messages, refreshMessage, token, actifGroup, identity }) {
-
+export function Messages({ messages, refreshMessage, token, actifGroup, identity, messagesLikes }) {
     if (messages) {
         if (messages.messages.length == 0) {
             return <>
@@ -21,7 +20,7 @@ export function Messages({ messages, refreshMessage, token, actifGroup, identity
 
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id} data-id={message.id} >
-                    <Message message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} />
+                    <Message key={message.id} message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} />
                 </div>)}
             </div>
         }
@@ -30,8 +29,9 @@ export function Messages({ messages, refreshMessage, token, actifGroup, identity
         </>
     }
 }
-const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity }) {
+const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity, messsageLikes }) {
 
+    let like = null
     const [editMode, setEditMode] = useState(false)
     const [commentPost, setCommentPost] = useState(false)
     let messageLayout = <p className='messages__message'>{message.message} </p>
@@ -40,6 +40,9 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     const [comments, setComments] = useState(null)
     const [refreshComment, setRefreshComment] = useState(null)
 
+    if (messsageLikes) {
+        like = (messsageLikes.count)
+    }
     useEffect(async function () {
         const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments', token)
         const groupComments = await response.json()
@@ -55,8 +58,6 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     }
     formComment = <FormComment messageId={message.id} token={token} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} method='POST' />
     commentsData = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} token={token} identityId={identity.id} messageId={message.id} />
-
-
     let icons = null
     if (message.userId === identity.id) {
         icons = <MessageIcons setEditMode={setEditMode} messageId={message.id} actifGroup={actifGroup} token={token} refreshMessage={refreshMessage} />
@@ -74,8 +75,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>
-                <FontAwesomeIcon icon={faThumbsUp} />
-                <FontAwesomeIcon icon={faComments} onClick={() => setCommentPost(true)} />
+                <span>{like}</span><FontAwesomeIcon icon={faThumbsUp} />
             </div>
         </div>
         <div className='messages__comments'>
