@@ -25,7 +25,6 @@ export function FormMessage({ actifGroup, token, identity, refreshMessage }) {
             refreshMessage(() => data.message)
             setInputStr(() => '')
         } catch {
-
             console.error("echec")
         }
     }

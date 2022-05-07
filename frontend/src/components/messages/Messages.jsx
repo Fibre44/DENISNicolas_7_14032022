@@ -4,13 +4,13 @@ import './../../style/message.sass';
 import { EditFormMessage } from "./EditFormMessage";
 import { FormComment } from "../comments/FormComment";
 import { Comments } from "../comments/Comments";
-import { getData, deleteData } from './../../api/api'
+import { getData, deleteData, setData } from './../../api/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-solid-svg-icons'
+import { faPencil, faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 const items = [];
 
-export function Messages({ messages, refreshMessage, token, actifGroup, identity, messagesLikes }) {
+export function Messages({ messages, refreshMessage, token, actifGroup, identity, messagesLikes, likesUser }) {
     if (messages) {
         if (messages.messages.length == 0) {
             return <>
@@ -20,18 +20,16 @@ export function Messages({ messages, refreshMessage, token, actifGroup, identity
 
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id} data-id={message.id} >
-                    <Message key={message.id} message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} />
+                    <Message key={message.id} message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} likesUser={likesUser.find(like => like.idelement === message.id)} />
                 </div>)}
             </div>
         }
-    } else {
-        return <>
-        </>
     }
 }
-const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity, messsageLikes }) {
+const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity, messsageLikes, likesUser }) {
 
-    let like = null
+    let color = 'dark'
+    let countLike = null
     const [editMode, setEditMode] = useState(false)
     const [commentPost, setCommentPost] = useState(false)
     let messageLayout = <p className='messages__message'>{message.message} </p>
@@ -40,8 +38,11 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     const [comments, setComments] = useState(null)
     const [refreshComment, setRefreshComment] = useState(null)
 
+    if (likesUser) {
+        color = '#1877f2'
+    }
     if (messsageLikes) {
-        like = (messsageLikes.count)
+        countLike = messsageLikes.count
     }
     useEffect(async function () {
         const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments', token)
@@ -66,6 +67,25 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         icons = <div className='messages__head__icons'></div>
     }
 
+    const addLike = async function (e) {
+        e.preventDefault()
+        const data = {
+            groupId: actifGroup.uuid,
+            type: 'message',
+            idelement: message.id
+        }
+        try {
+            const postLike = await setData('/like', token, 'POST', data)
+            const status = await postLike.status
+            console.log(status)
+            if (status == '200') {
+                countLike += 1
+            }
+        } catch {
+            console.error("echec impossible de like")
+        }
+    }
+
     return <>
         <div className='messages__head'>
             <p className='messages__autor'>Auteur {message.autor}</p>
@@ -75,7 +95,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>
-                <span>{like}</span><FontAwesomeIcon icon={faThumbsUp} />
+                <span>{countLike}</span><FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
             </div>
         </div>
         <div className='messages__comments'>

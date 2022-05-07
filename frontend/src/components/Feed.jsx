@@ -10,6 +10,7 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
     const [refreshMessage, setRefreshMessage] = useState(null)
     const [messages, setMessages] = useState(null)
     const [messagesLikes, setMessagesLikes] = useState(null)
+    const [likesUser, setLikesUser] = useState(null)
 
     //Récupération des messages
 
@@ -30,13 +31,23 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
 
     }, [refreshMessage])
 
+    //Récupération des likes de l'utilisateur
+
+    useEffect(async function () {
+        const response = await getData('/like/message/' + actifGroup.uuid + '/user', token)
+        const likesUser = await response.json()
+        setLikesUser(likesUser.likes)
+
+    }, [refreshMessage])
+
+
     // on attend que la récupération des éléments pour afficher la page
-    if (messages && messagesLikes) {
+    if (messages && messagesLikes && likesUser) {
         return <main className='main'>
             <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
             <GroupDescription actifGroup={actifGroup} token={token} refreshMyGroups={refreshMyGroups} />
             <FormMessage actifGroup={actifGroup} token={token} identity={identity} refreshMessage={setRefreshMessage} />
-            <Messages messages={messages} refreshMessage={setRefreshMessage} token={token} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} />
+            <Messages messages={messages} refreshMessage={setRefreshMessage} token={token} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} />
         </main>
     } else {
         return null
