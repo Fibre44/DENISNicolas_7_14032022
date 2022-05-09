@@ -51,10 +51,10 @@ export function Site({ credentials, onDisconnect }) {
     }
 
     if (page === 'groups') {
-        content = <Groups groups={groups} token={credentials.token} />
+        content = <Groups groups={groups} />
     }
     if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} token={credentials.token} identity={identity} myGroups={myGroups} onChange={setActifGroup} refreshMyGroups={setRefreshMyGroups} />
+        content = <Feed actifGroup={actifGroup} identity={identity} myGroups={myGroups} onChange={setActifGroup} refreshMyGroups={setRefreshMyGroups} />
     }
     if (page === 'error') {
         content = <Error />

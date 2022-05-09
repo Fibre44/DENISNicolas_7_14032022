@@ -3,10 +3,9 @@ const db = require('./../lib/models/index.js');
 const env = require('dotenv').config()
 const tokenP = process.env.TOKEN
 
-
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.cookies.token;
     const decodedToken = jwt.verify(token, tokenP);
     const userId = decodedToken.userId;
     req.auth = { userId };

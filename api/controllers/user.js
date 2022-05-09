@@ -60,7 +60,7 @@ exports.login = (req, res, next) => {
                 bcrypt.compare(req.body.password, passwordDB)
                     .then(valid => {
                         if (valid) {
-                            res.cookie('sessionId', jwt.sign(
+                            res.cookie('token', jwt.sign(
                                 { userId: userIdDB },
                                 token,
                                 { expiresIn: '24h' }

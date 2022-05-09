@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { userPost } from '../../api/api';
 import './../../style/form.sass'
+import './../../style/button.sass'
 import { Alert } from './../ui/Alert';
 
 export function Register({ onClick }) {
@@ -64,7 +65,7 @@ export function Register({ onClick }) {
                     <input type="text" name="lastname" id="lastname" required></input>
                 </div>
                 <div className='form__field'>
-                    <button type="submit">Inscription</button>
+                    <button type="submit" className='button'>Inscription</button>
                 </div>
             </form>
             <div className='alert'>

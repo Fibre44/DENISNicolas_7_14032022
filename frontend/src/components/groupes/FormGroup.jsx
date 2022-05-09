@@ -3,7 +3,7 @@ import { setData } from "../../api/api";
 import './../../style/groups.sass'
 
 
-export function FormGroup({ method, token }) {
+export function FormGroup({ method }) {
 
     const onSubmit = async function (e) {
         e.preventDefault()
@@ -13,7 +13,7 @@ export function FormGroup({ method, token }) {
             private: false
         }
         try {
-            const postGroup = setData('/groups', token, method, data)
+            const postGroup = setData('/groups', method, data)
             const status = (await postGroup).status
             console.log(status)
         } catch {

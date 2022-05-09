@@ -1,7 +1,7 @@
 import React from "react";
 import { setData } from "./../../api/api"
 
-export function FormComment({ messageId, token, refreshComment, actifGroup, setCommentPost, identity, method, commentId }) {
+export function FormComment({ messageId, refreshComment, actifGroup, setCommentPost, identity, method, commentId }) {
 
     let autor = null
     if (method == 'POST') {
@@ -19,7 +19,7 @@ export function FormComment({ messageId, token, refreshComment, actifGroup, setC
             autor: autor
         }
         try {
-            const postMessage = await setData('/comment' + '/' + commentId, token, method, data)
+            const postMessage = await setData('/comment' + '/' + commentId, method, data)
             const status = postMessage.status
             refreshComment(() => data.messageId + Date.now())
             setCommentPost(() => false)

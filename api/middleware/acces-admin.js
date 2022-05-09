@@ -1,6 +1,5 @@
 const db = require('../lib/models/index.js');
 module.exports = (req, res, next) => {
-
     db.User.findOne({
         where: {
             id: req.userId

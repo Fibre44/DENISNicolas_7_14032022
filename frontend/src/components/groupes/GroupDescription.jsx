@@ -3,11 +3,11 @@ import { getData } from "../../api/api";
 import './../../style/groups.sass'
 import { setData } from "../../api/api";
 
-export function GroupDescription({ actifGroup, token, refreshMyGroups }) {
+export function GroupDescription({ actifGroup, refreshMyGroups }) {
 
     const [description, setDescription] = useState(null)
     useEffect(async function () {
-        const response = await getData('/groups/' + actifGroup.uuid, token)
+        const response = await getData('/groups/' + actifGroup.uuid)
         const description = await response.json()
         setDescription(() => description.groupe.description)
     }, [actifGroup])
@@ -17,7 +17,7 @@ export function GroupDescription({ actifGroup, token, refreshMyGroups }) {
         const data = {
             groupId: actifGroup.uuid
         }
-        const unfollowGroup = await setData('/groups_users', token, 'DELETE', data)
+        const unfollowGroup = await setData('/groups_users', 'DELETE', data)
         const status = (await unfollow).status
         refreshMyGroups(() => Date.now() + actifGroup)
     }

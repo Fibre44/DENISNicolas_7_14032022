@@ -10,7 +10,7 @@ import { faPencil, faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons
 
 const items = [];
 
-export function Messages({ messages, refreshMessage, token, actifGroup, identity, messagesLikes, likesUser }) {
+export function Messages({ messages, refreshMessage, actifGroup, identity, messagesLikes, likesUser }) {
     if (messages) {
         if (messages.messages.length == 0) {
             return <>
@@ -20,13 +20,13 @@ export function Messages({ messages, refreshMessage, token, actifGroup, identity
 
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id} data-id={message.id} >
-                    <Message key={message.id} message={message} refreshMessage={refreshMessage} token={token} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} likesUser={likesUser.find(like => like.idelement === message.id)} />
+                    <Message key={message.id} message={message} refreshMessage={refreshMessage} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} likesUser={likesUser.find(like => like.idelement === message.id)} />
                 </div>)}
             </div>
         }
     }
 }
-const Message = memo(function ({ message, refreshMessage, token, actifGroup, identity, messsageLikes, likesUser }) {
+const Message = memo(function ({ message, refreshMessage, actifGroup, identity, messsageLikes, likesUser }) {
 
     let color = 'dark'
     let countLike = null
@@ -45,23 +45,23 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         countLike = messsageLikes.count
     }
     useEffect(async function () {
-        const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments', token)
+        const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments')
         const groupComments = await response.json()
         setComments(groupComments)
 
     }, [refreshComment])
 
     if (editMode) {
-        messageLayout = <EditFormMessage messageId={message.id} messsageText={message.message} actifGroup={actifGroup.uuid} token={token} refreshMessage={refreshMessage} editMode={setEditMode} />
+        messageLayout = <EditFormMessage messageId={message.id} messsageText={message.message} actifGroup={actifGroup.uuid} refreshMessage={refreshMessage} editMode={setEditMode} />
 
     } else {
         messageLayout = <p className='messages__message'>{message.message} </p>
     }
-    formComment = <FormComment messageId={message.id} token={token} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} method='POST' />
-    commentsData = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} token={token} identityId={identity.id} messageId={message.id} />
+    formComment = <FormComment messageId={message.id} identity={identity} refreshComment={setRefreshComment} actifGroup={actifGroup.uuid} setCommentPost={setCommentPost} method='POST' />
+    commentsData = <Comments comments={comments} refreshComment={setRefreshComment} actifGroup={actifGroup} identityId={identity.id} messageId={message.id} />
     let icons = null
     if (message.userId === identity.id) {
-        icons = <MessageIcons setEditMode={setEditMode} messageId={message.id} actifGroup={actifGroup} token={token} refreshMessage={refreshMessage} />
+        icons = <MessageIcons setEditMode={setEditMode} messageId={message.id} actifGroup={actifGroup} refreshMessage={refreshMessage} />
 
     } else {
         icons = <div className='messages__head__icons'></div>
@@ -75,7 +75,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
             idelement: message.id
         }
         try {
-            const postLike = await setData('/like', token, 'POST', data)
+            const postLike = await setData('/like', 'POST', data)
             const status = await postLike.status
             console.log(status)
             if (status == '200') {
@@ -95,7 +95,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>
-                <span>{countLike}</span><FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
+                {likesUser ? (<span className='messages__like'>{countLike}</span>) : null}<FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
             </div>
         </div>
         <div className='messages__comments'>
@@ -106,7 +106,7 @@ const Message = memo(function ({ message, refreshMessage, token, actifGroup, ide
     </>
 })
 
-function MessageIcons({ setEditMode, messageId, actifGroup, token, refreshMessage }) {
+function MessageIcons({ setEditMode, messageId, actifGroup, refreshMessage }) {
 
     const deleteMessage = async function (e) {
         e.preventDefault()
@@ -115,7 +115,7 @@ function MessageIcons({ setEditMode, messageId, actifGroup, token, refreshMessag
                 groupId: actifGroup.uuid
             }
             try {
-                const deleteMessageAPI = await deleteData('/message/' + messageId, data, token)
+                const deleteMessageAPI = await deleteData('/message/' + messageId, data)
                 const status = await deleteMessageAPI.status
                 refreshMessage(() => messageId + Date.now())
 

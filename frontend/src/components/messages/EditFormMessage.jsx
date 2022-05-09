@@ -1,7 +1,7 @@
 import React from "react";
 import { setData } from "./../../api/api"
 
-export function EditFormMessage({ messageId, messsageText, actifGroup, token, refreshMessage, editMode }) {
+export function EditFormMessage({ messageId, messsageText, actifGroup, refreshMessage, editMode }) {
 
     const updateMessage = async function (e) {
         e.preventDefault()
@@ -10,7 +10,7 @@ export function EditFormMessage({ messageId, messsageText, actifGroup, token, re
             message: e.target.editFormMessage.value
         }
         try {
-            const putMessage = await setData('/message/' + messageId, token, 'PUT', data)
+            const putMessage = await setData('/message/' + messageId, 'PUT', data)
             const status = (await putMessage).status
             refreshMessage(() => messageId + Date.now())
             editMode(() => false)
