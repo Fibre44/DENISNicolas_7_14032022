@@ -64,7 +64,8 @@ exports.login = (req, res, next) => {
                                 { userId: userIdDB },
                                 token,
                                 { expiresIn: '24h' }
-                            ), { httpOnly: true, secure: true, domain: 'localhost' })
+                            ), { httpOnly: true, secure: false, domain: 'localhost' })
+                            //cookie secure passe sur false car ne fonctionne que sur HTTPS pour postman
                             res.status(200).json({
                                 message: 'connexion'
                             });
