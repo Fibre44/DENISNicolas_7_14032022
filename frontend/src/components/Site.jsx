@@ -60,7 +60,7 @@ export function Site({ credentials, onDisconnect }) {
         content = <Error />
     }
 
-    if (credentials.token == null) {
+    if (credentials == 'disconnect') {
         content = <Disconnect />
     }
     return <>
@@ -80,7 +80,7 @@ function NavBar({ identity, onClick, onDisconnect }) {
                 <li className='nav__item'><a href="#home" onClick={() => onClick('home')}><FontAwesomeIcon icon={faHouse} /></a></li>
                 <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}><FontAwesomeIcon icon={faPeopleGroup} /></a></li>
                 <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser} /></a></li>
-                <li className='nav__item'><a href='#login' onClick={() => onDisconnect('null')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
+                <li className='nav__item'><a href='#login' onClick={() => onDisconnect('disconnect')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
             </ul>
         </nav>
     </>

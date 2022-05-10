@@ -66,12 +66,7 @@ exports.login = (req, res, next) => {
                                 { expiresIn: '24h' }
                             ), { httpOnly: true, secure: true, domain: 'localhost' })
                             res.status(200).json({
-                                userId: userIdDB,
-                                token: jwt.sign(
-                                    { userId: userIdDB },
-                                    token,
-                                    { expiresIn: '24h' }
-                                )
+                                message: 'connexion'
                             });
 
                         } else {
