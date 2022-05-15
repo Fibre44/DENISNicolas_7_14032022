@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
 import './../../style/profil.sass'
-import { setData, deleteData, uploadImg } from './../../api/api';
+import { setData, uploadImg } from './../../api/api';
 
 export function Profil({ credentials }) {
 
@@ -40,7 +40,7 @@ export function Profil({ credentials }) {
         }
     }
     async function deleteUser() {
-        const deleteUser = await deleteData('/users/' + credentials.userId + '/delete')
+        const deleteUser = await setData('/users/' + credentials.userId + '/delete', 'DELETE')
         const deleteResponse = await deleteUser
     }
 

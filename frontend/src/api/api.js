@@ -41,33 +41,8 @@ export async function getData(endpoint) {
 
 /**
  * 
- * @param {string} endpoint Indiquer le chemin à joindre
- * @param {string} fournir les data du body
- * @returns 
- */
-
-export async function deleteData(endpoint, data) {
-    const response = await fetch(urlServer + endpoint, {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'credentials': 'include'
-        },
-        body: JSON.stringify(data)
-    });
-    if (response.ok) {
-
-        return response.json()
-    }
-    else {
-        return { error: true }
-    }
-}
-/**
- * 
  * @param {string} endpoint 
- * @param {string} method POST/PUT 
+ * @param {string} method POST/PUT/DELETE
  * @param {JSON} data
  */
 export async function setData(endpoint, method, data) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import { deleteData, getData } from './../../api/api';
+import { getData, setData } from './../../api/api';
 import { Error } from '../ui/Error';
 import './../../style/admin.sass'
 
@@ -58,7 +58,7 @@ function Table({ rows, type, refresh }) {
 
     const tableRow = []
     const handleClick = async function (e) {
-        const response = await deleteData('/admin/' + type + '/' + e.target.getAttribute('data-id'))
+        const response = await setData('/admin/' + type + '/' + e.target.getAttribute('data-id'), 'DELETE')
         const status = await response.status
         refresh(() => e.target.getAttribute('data-id'))
     }

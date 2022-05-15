@@ -4,7 +4,7 @@ import './../../style/message.sass';
 import { EditFormMessage } from "./EditFormMessage";
 import { FormComment } from "../comments/FormComment";
 import { Comments } from "../comments/Comments";
-import { getData, deleteData, setData } from './../../api/api'
+import { getData, setData } from './../../api/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
@@ -122,7 +122,7 @@ function MessageIcons({ setEditMode, messageId, actifGroup, refreshMessage }) {
                 groupId: actifGroup.uuid
             }
             try {
-                const deleteMessageAPI = await deleteData('/message/' + messageId, data)
+                const deleteMessageAPI = await setData('/message/' + messageId, 'DELETE', data)
                 const status = await deleteMessageAPI.status
                 refreshMessage(() => messageId + Date.now())
 

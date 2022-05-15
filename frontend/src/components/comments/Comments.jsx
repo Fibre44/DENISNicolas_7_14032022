@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import './../../style/comment.sass';
-import { deleteData } from "../../api/api";
+import { setData } from "../../api/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faTrash, faThumbsUp, faComments } from '@fortawesome/free-solid-svg-icons';
 import { FormComment } from "./FormComment";
@@ -61,7 +61,7 @@ function CommentIcons({ commentId, actifGroup, refreshComment, messageId, setEdi
                 messageId: messageId
             }
             try {
-                const deleteCommentAPI = await deleteData('/comment/' + commentId, data)
+                const deleteCommentAPI = await setData('/comment/' + commentId, 'DELETE', data)
                 const status = await deleteCommentAPI.status
                 refreshComment(() => commentId + Date.now())
 
