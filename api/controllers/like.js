@@ -8,33 +8,62 @@ exports.create = (req, res, next) => {
             idelement: req.body.idelement
         }
     })
-        .then((like) => {
-            //Si il existe on le supprime Sinon on ajoute un like
-            if (like) {
-                db.Like.destroy({
-                    where: {
-                        userId: req.userId,
-                        type: req.body.type,
-                        idelement: req.body.idelement
-                    }
-                }).then(() => {
-                    res.status(200).json({ message: "Suppression du like" })
+        .then(() => {
+            db.Like.create({
+                userId: req.userId,
+                ...req.body
+            })
+                .then(() => {
+                    res.status(200).json({ message: 'Like' })
+                }).catch((error) => {
+                    res.status(500).json({ error })
                 })
-            } else {
-                db.Like.create({
-                    userId: req.userId,
-                    ...req.body
-                })
-                    .then(() => {
-                        res.status(200).json({ message: 'Like' })
-                    }).catch((error) => {
-                        res.status(500).json({ error })
-                    })
-            }
+
         })
         .catch((error) => {
             res.status(500).json({ error })
         })
+}
+
+exports.delete = (req, res, next) => {
+    db.Like.findOne({
+        where: {
+            userId: req.userId,
+            type: req.body.type,
+            idelement: req.body.idelement
+        }
+    }).then((like) => {
+        if (like) {
+            db.Like.destroy({
+                where: {
+                    userId: req.userId,
+                    type: req.body.type,
+                    idelement: req.body.idelement
+                }
+            }).then(() => {
+                res.status(200).json({ message: "Suppression du like" })
+            }).catch((error) => {
+                res.status(500).json({ error })
+            })
+        } else {
+            db.Like.findOne({
+                where: {
+                    type: req.body.type,
+                    idelement: req.body.idelement
+                }
+            })
+                .then((like) => {
+                    if (like) {
+                        res.status(403).json({ message: 'Vous ne pouvez pas supprimer ce like' })
+                    } else {
+                        res.status(404).json({ message: 'Ce code n\'existe pas' })
+                    }
+                })
+                .catch((error) => {
+                    res.status(500).json({ error })
+                })
+        }
+    })
 }
 
 exports.userLike = (req, res, next) => {

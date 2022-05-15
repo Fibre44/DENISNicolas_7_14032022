@@ -75,7 +75,13 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
             idelement: message.id
         }
         try {
-            const postLike = await setData('/like', 'POST', data)
+            let action = null
+            if (likesUser) {
+                action = 'DELETE'
+            } else {
+                action = 'POST'
+            }
+            const postLike = await setData('/like', action, data)
             const status = await postLike.status
             console.log(status)
             if (status == '200') {
@@ -95,7 +101,8 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>
-                {likesUser ? (<span className='messages__like'>{countLike}</span>) : null}<FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
+                {likesUser ? (<span className='messages__like'>{countLike}</span>) : null}
+                <FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
             </div>
         </div>
         <div className='messages__comments'>

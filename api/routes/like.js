@@ -5,6 +5,7 @@ const auth = require('./../middleware/auth');
 const accessControl = require('../middleware/acces-control');
 
 router.post('/', auth, accessControl, likeCtrl.create)
+router.delete('/', auth, accessControl, likeCtrl.delete)
 router.get('/:type/:id/user', auth, accessControl, likeCtrl.userLike)
 router.get('/:type/:id', auth, accessControl, likeCtrl.groupLikes)
 
