@@ -1,65 +1,71 @@
 import React, { useState } from 'react';
-import { deleteData } from './../../api/api'
 //import { FormChangePassword } from './FormChangePassword';
 import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
-
-import { setData } from './../../api/api';
+import './../../style/profil.sass'
+import { setData, deleteData, uploadImg } from './../../api/api';
 
 export function Profil({ credentials }) {
 
     const [error, setError] = useState(null)
     const [errorApi, setErrorAPI] = useState(null)
     const [succes, setSucces] = useState(null)
-    
+    const [picture, setPicture] = useState(null)
+
     const handleSubmit = async function (e) {
         e.preventDefault()
-
         setError(null)
         setErrorAPI(null)
         setSucces(null)
-
         if (e.target.newPassword.value == e.target.newPasswordConfirm.value) {
-
             const data = {
                 password: e.target.password.value,
                 newPassword: e.target.newPassword.value
             }
-
             try {
-                const response = await setData('/users/password', credentials.token, 'PUT', data)
+                const response = await setData('/users/password', 'PUT', data)
                 const status = await response.status
-
                 if (status == "200") {
                     setSucces("Le mot de passe a été changé avec succès")
-
-
                 } else {
-
                     setError("Mot de passe incorrect")
                 }
             }
             catch {
-
                 setError("Erreur de connexion au serveur")
-
             }
 
         } else {
-
             setError("Mot de passe différent")
-
         }
-
     }
-
     async function deleteUser() {
-        const deleteUser = await deleteData('/users/' + credentials.userId + '/delete', credentials.token)
+        const deleteUser = await deleteData('/users/' + credentials.userId + '/delete')
         const deleteResponse = await deleteUser
     }
 
-    return <>
+    const handleChange = async function (e) {
+
+        setPicture(() => e.target.files[0])
+        const data = new FormData()
+        data.append('file', e.target.files[0])
+
+        try {
+            const response = await uploadImg('/users/picture', 'PUT', data)
+
+        } catch {
+            console.error('Erreur de mise à jour de la photo')
+        }
+    }
+
+    return <div className='profil'>
         <h1>Mon profil</h1>
+
+        <form action="">
+            <label htmlFor='picture'>Publier sa photo</label>
+            <input type="file" id='picture' name='picture' onChange={handleChange} />
+            <img src={picture} alt="" />
+        </form>
 
         <form className='form--witch' onSubmit={handleSubmit} >
             <h2>Changer mon mot de passe</h2>
@@ -80,12 +86,10 @@ export function Profil({ credentials }) {
                 {succes && <Confirmation>{succes}</Confirmation>}
                 {error && <Alert>{error}</Alert>}
             </div>
-
-            <h2>Supprimer mon compte</h2>
-            <button onClick={deleteUser}>Suppression du compte</button>
-
-
         </form>
-    </>
+
+        <h2>Supprimer mon compte</h2>
+        <button onClick={deleteUser}>Suppression du compte</button>
+    </div>
 }
 

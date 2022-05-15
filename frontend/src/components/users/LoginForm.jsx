@@ -20,7 +20,6 @@ export function LoginForm({ onConnect, onClick }) {
             const status = await response.status
             if (status == "200") {
                 onConnect(response.data)
-
             }
             else {
                 setErrorConnexion(response.message)

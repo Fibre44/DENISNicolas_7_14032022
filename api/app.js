@@ -8,6 +8,10 @@ const messageRoute = require('./routes/message');
 const commentRoute = require('./routes/comments');
 const adminRoute = require('./routes/admin');
 const likeRoute = require('./routes/like');
+const path = require('path');
+const multer = require('multer')
+const formData = multer()
+
 
 app.use((req, res, next) => {
 
@@ -18,8 +22,12 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+//Gestion des objets form data
+app.use(formData.array())
+app.use(express.static('images'));
+
 
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/groups', groupRoute);

@@ -127,20 +127,14 @@ exports.updatPassword = (req, res, next) => {
         }
     })
         .then((user) => {
-
             if (user) {
-
                 //on verifie le mot de passe avant la MAJ
                 const passwordDB = user.dataValues.password
-
                 bcrypt.compare(req.body.password, passwordDB)
                     .then(valid => {
-
                         if (valid) {
-
                             bcrypt.hash(req.body.newPassword, 10)
                                 .then(hash => {
-
                                     db.User.update(
                                         { password: hash },
                                         {
@@ -155,21 +149,22 @@ exports.updatPassword = (req, res, next) => {
                                             res.status(500).json({ error })
                                         })
                                 })
-
                         } else {
-
                             return res.status(401).json({ error: 'Utilisateur non trouvé ou mot de passe incorrect' });
                         }
-
                     })
-
             } else {
                 res.status(400).json({ message: 'Il manque le password' })
-
             }
-
         })
         .catch((error) => {
             res.status(500).json({ message: "Erreur serveur ", error })
         })
+}
+
+exports.picture = (req, res, next) => {
+    console.log(req)
+    res.status(200).json({ message: 'Mise à jour de la photo de profil' })
+
+
 }

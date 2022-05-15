@@ -9,10 +9,8 @@ export async function userPost(data, endpoint) {
         },
         body: JSON.stringify(data)
     });
-
     if (response.ok) {
         const responseData = await response.json()
-
         return { data: responseData, status: response.status };
     } else {
         return { message: "Identifiant ou mot de passe invalide" }
@@ -24,20 +22,20 @@ export async function userPost(data, endpoint) {
  * @param {string} endpoint Indiquer le chemin à joindre
  * @returns 
  */
-
-export async function getData(endpoint, token) {
+export async function getData(endpoint) {
     const response = await fetch(urlServer + endpoint, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'credentials': 'include'
-            //'Authorization': 'Bearer ' + token
         },
     });
     if (response.ok) {
-
         return response
+    }
+    else {
+        return { error: true }
     }
 }
 
@@ -62,6 +60,9 @@ export async function deleteData(endpoint, data) {
 
         return response.json()
     }
+    else {
+        return { error: true }
+    }
 }
 /**
  * 
@@ -82,5 +83,26 @@ export async function setData(endpoint, method, data) {
     if (response.ok) {
         return response
     }
+    else {
+        return { error: true }
+    }
 
+}
+
+export async function uploadImg(endpoint, method, data) {
+    const response = await fetch(urlServer + endpoint, {
+        method: method,
+        headers: {
+            'Accept': 'application/json',
+            'credentials': 'include',
+            "Content-Type": "form-data"
+        },
+        body: data
+    });
+    if (response.ok) {
+        return response
+    }
+    else {
+        return { error: true }
+    }
 }

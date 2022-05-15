@@ -3,10 +3,12 @@ const router = express.Router();
 const userCtrl = require('./../controllers/user');
 const auth = require('./../middleware/auth');
 
+
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 
 router.put('/password', auth, userCtrl.updatPassword)
+router.put('/picture', auth, userCtrl.picture)
 
 router.get('/identity', auth, userCtrl.identity)
 

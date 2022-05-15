@@ -1,6 +1,7 @@
 const db = require('./../lib/models/index.js');
 
 exports.create = (req, res, next) => {
+    console.log(req.body)
     db.Message.findOne({
         where: {
             id: req.body.messageId
