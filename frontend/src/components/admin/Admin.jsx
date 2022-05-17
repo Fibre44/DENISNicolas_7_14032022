@@ -39,7 +39,7 @@ export function Admin() {
 
     return <div className='admin'>
         {error ? <Error /> :
-            <div>
+            <div className='admin'>
                 <fieldset>
                     <legend>Choisir un élement à consulter</legend>
                     <label htmlFor='message'>Message</label>
@@ -66,7 +66,6 @@ function Table({ rows, type, refresh }) {
         if (type == 'message') {
             for (let row of rows.messages) {
                 tableRow.push(<tr key={row.id}>
-                    <td>{type}</td>
                     <td>{row.message}</td>
                     <td>{row.updatedAt}</td>
                     <td><button data-id={row.id} onClick={handleClick}>Supprimer</button></td>
@@ -75,7 +74,6 @@ function Table({ rows, type, refresh }) {
         } else {
             for (let row of rows.comments) {
                 tableRow.push(<tr key={row.id}>
-                    <td>{type}</td>
                     <td>{row.comments}</td>
                     <td>{row.updatedAt}</td>
                     <td><button data-id={row.id} onClick={handleClick}>Supprimer</button></td>
@@ -84,10 +82,12 @@ function Table({ rows, type, refresh }) {
         }
         return <table>
             <thead>
-                <th>Type</th>
-                <th>Contenu</th>
-                <th>Date de mise à jour</th>
-                <th>Supprimer</th>
+                <tr>
+                    <th>Contenu</th>
+                    <th>Date de mise à jour</th>
+                    <th>Supprimer</th>
+                </tr>
+
             </thead>
             <tbody>
                 {tableRow}

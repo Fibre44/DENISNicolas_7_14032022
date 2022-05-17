@@ -45,10 +45,15 @@ export function Profil({ credentials }) {
     }
 
     const handleChange = async function (e) {
+        e.preventDefault()
+        const form = e.target
+        const data = Object.fromEntries(new FormData(form))
 
-        setPicture(() => e.target.files[0])
-        const data = new FormData()
-        data.append('file', e.target.files[0])
+
+        //const data = Object.fromEntries(new FormData('picture', blob))
+        //setPicture(() => e.target.files[0])
+        //const data = new FormData()
+        //data.append('file', e.target.files[0])
 
         try {
             const response = await uploadImg('/users/picture', 'PUT', data)
@@ -61,9 +66,10 @@ export function Profil({ credentials }) {
     return <div className='profil'>
         <h1>Mon profil</h1>
 
-        <form action="">
+        <form action="" onSubmit={handleChange}>
             <label htmlFor='picture'>Publier sa photo</label>
-            <input type="file" id='picture' name='picture' onChange={handleChange} />
+            <input type="file" id='picture' name='picture' />
+            <input type="submit" className='button' value='Upload' />
             <img src={picture} alt="" />
         </form>
 

@@ -5,7 +5,6 @@ const env = require('dotenv').config()
 const token = process.env.TOKEN
 
 exports.signup = (req, res, next) => {
-
     db.User.count({
         where: {
             email: req.body.email
@@ -48,6 +47,7 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
+    console.log(req.body)
     db.User.findOne({
         where: ({
             email: req.body.email
@@ -163,8 +163,26 @@ exports.updatPassword = (req, res, next) => {
 }
 
 exports.picture = (req, res, next) => {
-    console.log(req)
-    res.status(200).json({ message: 'Mise à jour de la photo de profil' })
+    db.User.update(
+        { picture: req.body }, {
+        where: {
+            id: req.userId
+        }
+    }
+    ).then(() => {
+        res.status(200).json({ message: 'Mise à jour de la photo de profil' })
+    }).catch((error) => {
+        res.status(500).json({ error })
+    })
+}
 
-
+exports.getPicture = (req, res, next) => {
+    db.User.findOne({
+        attributes: ['picture'],
+        where: {
+            id: req.userId
+        }
+    }).then((picture) => {
+        res.status(200)
+    })
 }

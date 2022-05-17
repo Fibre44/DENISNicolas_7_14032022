@@ -12,7 +12,6 @@ export function FormMessage({ actifGroup, identity, refreshMessage }) {
     const [inputStr, setInputStr] = useState('');
     const postMessage = async function (e) {
         e.preventDefault()
-
         const data = {
             groupId: actifGroup.uuid,
             message: e.target.message.value,

@@ -5,9 +5,10 @@ export async function userPost(data, endpoint) {
         method: "POST",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
+
     });
     if (response.ok) {
         const responseData = await response.json()
@@ -50,10 +51,11 @@ export async function setData(endpoint, method, data) {
         method: method,
         headers: {
             'Accept': 'application/json',
+            'credentials': 'include',
             'Content-Type': 'application/json',
-            'credentials': 'include'
         },
         body: JSON.stringify(data)
+
     });
     if (response.ok) {
         return response
@@ -70,9 +72,9 @@ export async function uploadImg(endpoint, method, data) {
         headers: {
             'Accept': 'application/json',
             'credentials': 'include',
-            "Content-Type": "form-data"
+            'Content-Type': 'application/json',
         },
-        body: data
+        body: JSON.stringify(data)
     });
     if (response.ok) {
         return response

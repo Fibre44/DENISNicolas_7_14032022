@@ -11,15 +11,11 @@ export function Register({ onClick }) {
         setErrorPassword(null)
         setErrorAPI(null)
         e.preventDefault()
-        //Ko à revoir const
-        const data2 = new FormData(e.target)
+
         if (e.target.password.value == e.target.passwordConfirm.value) {
-            const data = {
-                email: e.target.email.value,
-                password: e.target.password.value,
-                firstname: e.target.firstname.value,
-                lastname: e.target.lastname.value
-            }
+            const form = e.target
+            const data = Object.fromEntries(new FormData(form))
+
             try {
                 const userRegister = await userPost(data, '/users/signup')
                 const status = await userRegister.status

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../../api/api";
 import './../../style/groups.sass'
+import './../../style/button.sass'
 import { setData } from "../../api/api";
 
 export function GroupDescription({ actifGroup, refreshMyGroups }) {
@@ -27,7 +28,9 @@ export function GroupDescription({ actifGroup, refreshMyGroups }) {
         return <div className='groups__description'>
             <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" className='groups__items__img' />
             <p>{description}</p>
-            <button name="unfollow" id="unfollow" onClick={unfollow} >Quitter le groupe</button>
+            <div className='groups__button'>
+                <button className='button' name="unfollow" id="unfollow" onClick={unfollow} >Quitter le groupe</button>
+            </div>
         </div>
     } else {
         return null

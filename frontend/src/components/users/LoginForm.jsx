@@ -11,10 +11,10 @@ export function LoginForm({ onConnect, onClick }) {
 
     const handleSubmit = async function (e) {
         e.preventDefault()
-        const data = {
-            email: e.target.email.value,
-            password: e.target.password.value
-        }
+
+        const form = e.target
+        const data = Object.fromEntries(new FormData(form))
+
         try {
             const response = await userPost(data, '/users/login')
             const status = await response.status
@@ -47,7 +47,7 @@ export function LoginForm({ onConnect, onClick }) {
                     <label htmlFor="password" >Mot de passe</label>
                     <input type="password" name="password" id="password" required></input>
                 </div>
-                <button type="submit" className='button'>Se connecter</button>
+                <input type="submit" className='button' value='Se connecter'></input>
                 <a href="#register" onClick={() => onClick('register')}>Pas de compte inscrivez vous ici</a>
                 <a href="passwordrecovery"> </a>
                 <div className='alert'>
