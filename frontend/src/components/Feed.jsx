@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FormMessage } from "./messages/FormMessage";
-import { MyGroups } from "./groupes/Groups";
+import { MyGroups, MyGroupsLaptop } from "./groupes/Groups";
 import { Messages } from "./messages/Messages";
 import { GroupDescription } from "./groupes/GroupDescription"
 import './../style/main.sass'
 import { getData } from '../api/api';
+import { useMediaQuery } from 'react-responsive'
+
 
 export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshMyGroups }) {
     const [refreshMessage, setRefreshMessage] = useState(null)
@@ -20,7 +22,6 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
         setMessages(groupMessages)
 
     }, [refreshMessage])
-
 
     //Récupération des likes messages
 
@@ -40,11 +41,25 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
 
     }, [refreshMessage])
 
-
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-width: 1224px)'
+    })
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
+    const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
+    const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
     // on attend que la récupération des éléments pour afficher la page
+    console.log(isBigScreen)
     if (messages && messagesLikes && likesUser) {
         return <main className='main'>
-            <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
+            {isDesktopOrLaptop &&
+
+                <MyGroupsLaptop myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroupsLaptop >
+            }
+            {isTabletOrMobile &&
+                <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
+
+            }
             <GroupDescription actifGroup={actifGroup} token={token} refreshMyGroups={refreshMyGroups} />
             <FormMessage actifGroup={actifGroup} token={token} identity={identity} refreshMessage={setRefreshMessage} />
             <Messages messages={messages} refreshMessage={setRefreshMessage} token={token} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} />

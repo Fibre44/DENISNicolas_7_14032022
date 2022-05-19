@@ -14,8 +14,8 @@ module.exports = {
     */
 
     return queryInterface.bulkInsert('Groupes', [{
-      id: 'Goupomania',
-      title: 'Goupomania',
+      id: 'Groupomania',
+      title: 'Groupomania',
       description: 'Le groupe de l\'entreprise',
       private: false,
       createBy: 'root',
