@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { setData } from '../../api/api';
 import './../../style/groups.sass'
+import './../../style/button.sass'
 import { FormGroup } from './FormGroup';
 
 
@@ -46,7 +47,7 @@ const Group = memo(function ({ group }) {
         <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" className='groups__items__img' />
         <p>Nom du groupe: {group.title}</p>
         <p>Description : {group.description}</p>
-        <button type='button' className='groups__items__button' uuid={group.id} onClick={handleClick}>Rejoindre le groupe</button>
+        <button type='button' className='button' uuid={group.id} onClick={handleClick}>Rejoindre le groupe</button>
     </>
 
 })
@@ -79,7 +80,7 @@ export function MyGroups({ myGroups, onChange, refreshMessage }) {
 
 const MyGroup = memo(function ({ group }) {
     //le groupe par default est Groupomania donc on l'indique par default
-    if (group.id === 'Goupomania') {
+    if (group.id === 'Groupomania') {
         return <>
             <option value={group.id + '--' + group.title} selected>{group.title} </option>
         </>
@@ -93,7 +94,7 @@ const MyGroup = memo(function ({ group }) {
 export function MyGroupsLaptop({ myGroups, onChange, refreshMessage }) {
     if (myGroups) {
         const setActifGroup = function (e) {
-            const target = e.target.value.split('--')
+            const target = e.target.getAttribute('value').split('--')
             const uuid = target[0]
             const groupName = target[1]
             const group = {
@@ -105,7 +106,7 @@ export function MyGroupsLaptop({ myGroups, onChange, refreshMessage }) {
         }
 
         return <>
-            <ul onChange={setActifGroup} className='groups__ul'>
+            <ul className='groups__ul' onClick={setActifGroup}>
                 {myGroups.groups.map(group => <MyGroupLaptop key={group.id} group={group} />)}
             </ul>
         </>
@@ -119,7 +120,7 @@ export function MyGroupsLaptop({ myGroups, onChange, refreshMessage }) {
 const MyGroupLaptop = memo(function ({ group }) {
 
     return <>
-        <li>{group.title}</li>
+        <li value={group.id + '--' + group.title} className='groups__li'>{group.title}</li>
     </>
 
 })

@@ -45,7 +45,7 @@ exports.delete = (req, res, next) => {
 
     //Controle on ne peut pas quitter le groupe par default
 
-    if (req.body.groupId == "Goupomania") {
+    if (req.body.groupId == "Groupomania") {
         res.status(403).json({ message: "Vous ne pouvez pas quitter le groupe Goupomania" })
     } else {
         db.Groupe.findOne({

@@ -49,7 +49,6 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
     const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
     const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
     // on attend que la récupération des éléments pour afficher la page
-    console.log(isBigScreen)
     if (messages && messagesLikes && likesUser) {
         return <main className='main'>
             {isDesktopOrLaptop &&

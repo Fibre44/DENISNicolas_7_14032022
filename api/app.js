@@ -8,6 +8,7 @@ const messageRoute = require('./routes/message');
 const commentRoute = require('./routes/comments');
 const adminRoute = require('./routes/admin');
 const likeRoute = require('./routes/like');
+const inviteRoute = require('./routes/invite')
 const path = require('path');
 const multer = require('multer')
 const formData = multer()
@@ -36,5 +37,6 @@ app.use('/api/v1/message', messageRoute);
 app.use('/api/v1/comment', commentRoute);
 app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/like', likeRoute);
+app.use('/api/v1/invite', inviteRoute);
 
 module.exports = app;

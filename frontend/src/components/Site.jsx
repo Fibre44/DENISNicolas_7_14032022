@@ -4,7 +4,7 @@ import './../style/nav.sass';
 import { Groups } from './groupes/Groups';
 import { Profil } from './users/Profil';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHouse, faPeopleGroup, faUser, faPowerOff, faGhost } from '@fortawesome/free-solid-svg-icons'
+import { faHouse, faPeopleGroup, faUser, faPowerOff, faGhost, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { Disconnect } from './Disconnect';
 import { Feed } from './Feed';
 import { Error } from './ui/Error';
@@ -19,9 +19,11 @@ export function Site({ credentials, onDisconnect }) {
     const [groups, setGroups] = useState([])
     const [page, setPage] = useState('home')
     const [myGroups, setMyGroups] = useState(null)
+    const [invitations, setInvitations] = useState(null)
+    const [countInvite, setCountInvite] = useState(null)
     const [actifGroup, setActifGroup] = useState({
-        uuid: 'Goupomania',
-        groupName: 'Goupomania'
+        uuid: 'Groupomania',
+        groupName: 'Groupomania'
     })
     const [refreshMyGroups, setRefreshMyGroups] = useState(null)
     //récupération de l'identité
@@ -47,6 +49,21 @@ export function Site({ credentials, onDisconnect }) {
         setMyGroups(myGroups)
     }, [page, refreshMyGroups])// si l'élement page change on doit recharger les groupes
 
+    //récupération des invitations
+
+    useEffect(async function () {
+        const response = await getData('/invite')
+        const myInvitation = await response.json()
+        setInvitations(myInvitation)
+    }, [page])
+
+    //récupération du nombre d'invitation
+    useEffect(async function () {
+        const response = await getData('/invite/count')
+        const count = await response.json()
+        setCountInvite(count)
+    }, [page])
+
     let content = null
 
     if (page === 'profil') {
@@ -71,13 +88,13 @@ export function Site({ credentials, onDisconnect }) {
         content = <Disconnect />
     }
     return <>
-        <NavBar identity={identity} onClick={setPage} onDisconnect={onDisconnect} />
+        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} onDisconnect={onDisconnect} />
         {content}
         <Footer />
     </>
 }
 
-function NavBar({ identity, onClick, onDisconnect }) {
+function NavBar({ identity, onClick, countInvite, onDisconnect }) {
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 1224px)'
     })
@@ -94,6 +111,7 @@ function NavBar({ identity, onClick, onDisconnect }) {
                     <ul className='nav__items'>
                         <li className='nav__item'><a href="#home" onClick={() => onClick('home')}>Accueil</a></li>
                         <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}>Groupes</a></li>
+                        <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}>Invitations</a></li>
                         <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Profil</a></li>
                         <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}>Espace admin</a></li>
                         <li className='nav__item'><a href='#login' onClick={() => onDisconnect('disconnect')}>Se déconnecter</a></li>
@@ -105,6 +123,7 @@ function NavBar({ identity, onClick, onDisconnect }) {
                 <ul className='nav__items'>
                     <li className='nav__item'><a href="#home" onClick={() => onClick('home')}><FontAwesomeIcon icon={faHouse} /></a></li>
                     <li className='nav__item'><a href="#groups" onClick={() => onClick('groups')}><FontAwesomeIcon icon={faPeopleGroup} /></a></li>
+                    <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}><FontAwesomeIcon icon={faEnvelope} /></a></li>
                     <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser} /></a></li>
                     <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}><FontAwesomeIcon icon={faGhost} /></a></li>
                     <li className='nav__item'><a href='#login' onClick={() => onDisconnect('disconnect')}><FontAwesomeIcon icon={faPowerOff} /></a></li>

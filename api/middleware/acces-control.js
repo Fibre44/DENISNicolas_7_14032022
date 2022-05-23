@@ -1,7 +1,6 @@
 const db = require('../lib/models/index.js');
 
 module.exports = (req, res, next) => {
-
     try {
         db.User.findOne({
             where: {
@@ -11,7 +10,7 @@ module.exports = (req, res, next) => {
             .then((user) => {
                 user.getGroupes()
                     .then((groups) => {
-                        //on controle que l'utilisateur possede bien une association avec la table Groupe via la table USER_GROUPE
+                        //on controle que l'utilisateur posséde bien une association avec la table Groupe via la table USER_GROUPE
                         let searchGroupId = null
                         if (req.params.id) {
                             searchGroupId = req.params.id
@@ -23,7 +22,7 @@ module.exports = (req, res, next) => {
                         if (searchGroup) {
                             next()
                         } else {
-                            //Sinon 2 possibilités le groupe n'existe pas / l'ulilisateur ne peut pas accéder à ce groupe
+                            //Sinon 2 possibilités le groupe n'existe pas / l'utilisateur ne peut pas accéder à ce groupe
                             let idGroup = null
                             if (req.params.id) {
                                 idGroup = req.params.id
@@ -36,7 +35,6 @@ module.exports = (req, res, next) => {
                                 }
                             })
                                 .then((group) => {
-
                                     if (group) {
                                         res.status(403).json({ message: "Gestion des accès vous ne pouvez pas consulter ce groupe" })
                                     } else {

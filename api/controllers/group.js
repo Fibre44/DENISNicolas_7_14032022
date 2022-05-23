@@ -1,10 +1,21 @@
 const db = require('./../lib/models/index.js');
 
 exports.create = (req, res, next) => {
-
+    //Si on n'active pas la coche sur le frontend alors le champ private est vide mais il est requis coté BDD
+    let group = null
+    if (req.body.private == undefined) {
+        group = {
+            ...req.body,
+            private: false
+        }
+    } else {
+        group = {
+            ...req.body
+        }
+    }
     db.Groupe.create({
         createBy: req.userId,
-        ...req.body
+        ...group
     })
         .then((group) => {
             group.addUser(req.userId, { through: { selfGranted: false } })

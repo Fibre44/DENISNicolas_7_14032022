@@ -25,7 +25,7 @@ exports.signup = (req, res, next) => {
                         })
                             .then(function (user) {
 
-                                user.addGroupe('Goupomania', { through: { selfGranted: false } })
+                                user.addGroupe('Groupomania', { through: { selfGranted: false } })
                                     .then((user) => {
                                         res.json({ message: "Création de l'utilisateur", userId: user.id })
                                     })

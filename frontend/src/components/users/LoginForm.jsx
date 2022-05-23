@@ -11,10 +11,8 @@ export function LoginForm({ onConnect, onClick }) {
 
     const handleSubmit = async function (e) {
         e.preventDefault()
-
         const form = e.target
         const data = Object.fromEntries(new FormData(form))
-
         try {
             const response = await userPost(data, '/users/login')
             const status = await response.status
