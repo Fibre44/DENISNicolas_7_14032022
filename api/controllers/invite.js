@@ -30,7 +30,7 @@ exports.getAll = (req, res, next) => {
             id: req.userId
         }
     }).then((user) => (
-        user.getInvites({ attributes: ['id'] })
+        user.getInvites()
             .then((invites) => {
                 res.status(200).json({ invites })
             })
@@ -54,7 +54,7 @@ exports.delete = (req, res, next) => {
 
 exports.accept = (req, res, next) => {
     db.Invite.findOne({
-        attributes: ['id'],
+        attributes: ['GroupId'],
         where: {
             UserId: req.userId,
             id: req.params.id
@@ -62,19 +62,29 @@ exports.accept = (req, res, next) => {
     }).then((invitation) => {
         db.Groupe.findOne({
             where: {
-                id: invitation.dataValues.id
+                id: invitation.dataValues.GroupId
             }
         })
             .then((group) => {
-
                 if (group) {
                     group.addUser(req.userId, { through: { selfGranted: false } })
-                    res.status(200).json({ message: "Création de l'association" })
-
                 } else {
                     res.status(404).json({ message: "Le groupe n'existe pas" })
                 }
+            }).then(() => {
+                //il faut encore supprimer l'invitation
+                db.Invite.destroy({
+                    where: {
+                        UserId: req.userId,
+                        id: req.params.id
+                    }
+                }).then(() => {
+                    res.status(200).json({ message: "Création de l'association et suppression de l'invitation" })
+                }).catch((error) => {
+                    res.status(500).json({ error })
+                })
             })
+
             .catch((error) => {
                 res.status(500).json({ error })
             })

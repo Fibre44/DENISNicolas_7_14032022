@@ -11,7 +11,7 @@ import { Error } from './ui/Error';
 import { Footer } from './footer/Footer';
 import { Admin } from './admin/Admin';
 import { useMediaQuery } from 'react-responsive'
-
+import { Invitations } from './invite/Invite';
 
 export function Site({ credentials, onDisconnect }) {
 
@@ -21,72 +21,92 @@ export function Site({ credentials, onDisconnect }) {
     const [myGroups, setMyGroups] = useState(null)
     const [invitations, setInvitations] = useState(null)
     const [countInvite, setCountInvite] = useState(null)
+    const [refreshInvite, setRefreshInvite] = useState(null)
     const [actifGroup, setActifGroup] = useState({
         uuid: 'Groupomania',
         groupName: 'Groupomania'
     })
     const [refreshMyGroups, setRefreshMyGroups] = useState(null)
     //récupération de l'identité
-
-    useEffect(async function () {
-        const response = await getData('/users/identity')
-        const userIdentity = await response.json()
-        setIdentity(userIdentity.user)
-    }, [])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/users/identity')
+            const userIdentity = await response.json()
+            setIdentity(userIdentity.user)
+        }
+        fetchData();
+    }, []);
 
     //récupération de l'ensemble des groupes
-    useEffect(async function () {
-        const response = await getData('/groups')
-        const groups = await response.json()
-        setGroups(groups)
-    }, [])// si l'élement page change on doit recharger les groupes
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/groups')
+            const groups = await response.json()
+            setGroups(groups)
+        }
+        fetchData();
+    }, []);
 
     //récupération des groupes de l'utilisateur
 
-    useEffect(async function () {
-        const response = await getData('/groups_users')
-        const myGroups = await response.json()
-        setMyGroups(myGroups)
-    }, [page, refreshMyGroups])// si l'élement page change on doit recharger les groupes
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/groups_users')
+            const myGroups = await response.json()
+            setMyGroups(myGroups)
+        }
+        fetchData();
+    }, [page, refreshMyGroups]);
 
     //récupération des invitations
 
-    useEffect(async function () {
-        const response = await getData('/invite')
-        const myInvitation = await response.json()
-        setInvitations(myInvitation)
-    }, [page])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/invite')
+            const myInvitation = await response.json()
+            setInvitations(myInvitation)
+        }
+        fetchData();
+    }, [page, refreshInvite]);
 
     //récupération du nombre d'invitation
-    useEffect(async function () {
-        const response = await getData('/invite/count')
-        const count = await response.json()
-        setCountInvite(count)
-    }, [page])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/invite/count')
+            const count = await response.json()
+            setCountInvite(count)
+            // ...
+        }
+        fetchData();
+    }, [page, refreshInvite]);
+
 
     let content = null
 
-    if (page === 'profil') {
-        content = <Profil credentials={credentials} />
+    switch (page) {
+        case 'profil':
+            content = <Profil credentials={credentials} />
+            break
+        case 'groups':
+            content = <Groups groups={groups} />
+            break
+        case 'home':
+            content = <Feed actifGroup={actifGroup} identity={identity} myGroups={myGroups} onChange={setActifGroup} refreshMyGroups={setRefreshMyGroups} />
+            break
+        case 'error':
+            content = <Error />
+            break
+        case 'admin':
+            content = <Admin />
+            break
+        case 'invite':
+            content = <Invitations invitations={invitations} refreshInvite={setRefreshInvite} />
+            break
+        case 'disconnect':
+            content = <Disconnect />
+            break
     }
 
-    if (page === 'groups') {
-        content = <Groups groups={groups} />
-    }
-    if (page === 'home') {
-        content = <Feed actifGroup={actifGroup} identity={identity} myGroups={myGroups} onChange={setActifGroup} refreshMyGroups={setRefreshMyGroups} />
-    }
-    if (page === 'error') {
-        content = <Error />
-    }
-
-    if (page === 'admin') {
-        content = <Admin />
-    }
-
-    if (credentials == 'disconnect') {
-        content = <Disconnect />
-    }
     return <>
         <NavBar identity={identity} onClick={setPage} countInvite={countInvite} onDisconnect={onDisconnect} />
         {content}

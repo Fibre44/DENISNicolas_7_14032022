@@ -6,40 +6,44 @@ import { GroupDescription } from "./groupes/GroupDescription"
 import './../style/main.sass'
 import { getData } from '../api/api';
 import { useMediaQuery } from 'react-responsive'
+import { InviteForm } from './invite/InviteForm';
 
 
-export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshMyGroups }) {
+export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups }) {
     const [refreshMessage, setRefreshMessage] = useState(null)
     const [messages, setMessages] = useState(null)
     const [messagesLikes, setMessagesLikes] = useState(null)
     const [likesUser, setLikesUser] = useState(null)
 
     //Récupération des messages
-
-    useEffect(async function () {
-        const response = await getData('/groups/' + actifGroup.uuid + '/messages', token)
-        const groupMessages = await response.json()
-        setMessages(groupMessages)
-
-    }, [refreshMessage])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/groups/' + actifGroup.uuid + '/messages')
+            const groupMessages = await response.json()
+            setMessages(groupMessages)
+        }
+        fetchData();
+    }, [refreshMessage]);
 
     //Récupération des likes messages
-
-    useEffect(async function () {
-        const response = await getData('/like/message/' + actifGroup.uuid, token)
-        const likes = await response.json()
-        setMessagesLikes(likes.likes)
-
-    }, [refreshMessage])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/like/message/' + actifGroup.uuid)
+            const likes = await response.json()
+            setMessagesLikes(likes.likes)
+        }
+        fetchData();
+    }, [refreshMessage]);
 
     //Récupération des likes de l'utilisateur
-
-    useEffect(async function () {
-        const response = await getData('/like/message/' + actifGroup.uuid + '/user', token)
-        const likesUser = await response.json()
-        setLikesUser(likesUser.likes)
-
-    }, [refreshMessage])
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/like/message/' + actifGroup.uuid + '/user')
+            const likesUser = await response.json()
+            setLikesUser(likesUser.likes)
+        }
+        fetchData();
+    }, [refreshMessage]);
 
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 1224px)'
@@ -59,9 +63,10 @@ export function Feed({ actifGroup, token, identity, myGroups, onChange, refreshM
                 <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
 
             }
-            <GroupDescription actifGroup={actifGroup} token={token} refreshMyGroups={refreshMyGroups} />
-            <FormMessage actifGroup={actifGroup} token={token} identity={identity} refreshMessage={setRefreshMessage} />
-            <Messages messages={messages} refreshMessage={setRefreshMessage} token={token} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} />
+            <GroupDescription actifGroup={actifGroup} refreshMyGroups={refreshMyGroups} />
+            <InviteForm identity={identity} actifGroup={actifGroup} />
+            <FormMessage actifGroup={actifGroup} identity={identity} refreshMessage={setRefreshMessage} />
+            <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} />
         </main>
     } else {
         return null

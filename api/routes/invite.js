@@ -4,10 +4,10 @@ const inviteCtrl = require('./../controllers/invite');
 const auth = require('./../middleware/auth');
 
 router.post('/', auth, inviteCtrl.create)
-router.post('/accept', auth, inviteCtrl.accept)
+router.post('/:id/accept', auth, inviteCtrl.accept)
 router.get('/', auth, inviteCtrl.getAll)
 router.get('/count', auth, inviteCtrl.count)
-router.delete('/', auth, inviteCtrl.delete)
+router.delete('/:id/refuse', auth, inviteCtrl.delete)
 
 
 module.exports = router; 

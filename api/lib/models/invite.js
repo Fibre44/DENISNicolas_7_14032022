@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     UserId: DataTypes.UUID,
     GroupId: DataTypes.UUID,
     groupName: DataTypes.STRING,
+    inviteBy: DataTypes.STRING
   }, {
     sequelize,
     tableName: "invites",
