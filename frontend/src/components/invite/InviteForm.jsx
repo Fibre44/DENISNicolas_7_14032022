@@ -2,6 +2,7 @@ import { Alert } from "../ui/Alert";
 import { Confirmation } from "../ui/Confirmation";
 import { setData } from "../../api/api";
 import { useState } from "react";
+import './../../style/formInvite.sass'
 export function InviteForm({ identity, actifGroup }) {
     const [error, setError] = useState(null)
     const [succes, setSucces] = useState(null)
@@ -26,7 +27,7 @@ export function InviteForm({ identity, actifGroup }) {
 
         }
     }
-    return < form action="" onSubmit={invite} >
+    return < form action="" className='formInvite' onSubmit={invite} >
         <label htmlFor="email">Inviter un utilisateur</label>
         <input type="email" name='email' id='email' required />
         <button type="submit" className="button">Inviter au groupe {actifGroup.groupName}</button>

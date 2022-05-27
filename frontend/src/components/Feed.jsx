@@ -56,12 +56,10 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     if (messages && messagesLikes && likesUser) {
         return <main className='main'>
             {isDesktopOrLaptop &&
-
                 <MyGroupsLaptop myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroupsLaptop >
             }
             {isTabletOrMobile &&
                 <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
-
             }
             <GroupDescription actifGroup={actifGroup} refreshMyGroups={refreshMyGroups} />
             <InviteForm identity={identity} actifGroup={actifGroup} />

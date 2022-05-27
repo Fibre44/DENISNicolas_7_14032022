@@ -24,13 +24,12 @@ export function Comments({ comments, refreshComment, actifGroup, identityId, mes
 const Comment = memo(function ({ comment, refreshComment, actifGroup, identityId, messageId }) {
     const [editMode, setEditMode] = useState(false)
     let iconsComment = null
-    let commentData = <p className='comments__data'>{comment.comments}</p>
+    let commentData = null
 
     if (editMode) {
-        commentData = <FormComment messageId={messageId} refreshComment={refreshComment} actifGroup={actifGroup.uuid} identity={comment.autor} method='PUT' commentId={comment.id} />
+        commentData = <FormComment messageId={messageId} refreshComment={refreshComment} actifGroup={actifGroup.uuid} identity={comment.autor} method='PUT' commentId={comment.id} comment={comment.comments} setEditMode={setEditMode} />
     } else {
-        let commentData = <p className='comments__data'>{comment.comments}</p>
-
+        commentData = <p className='comments__data'>{comment.comments}</p>
     }
 
     if (identityId == comment.userId) {

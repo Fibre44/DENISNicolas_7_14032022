@@ -1,8 +1,11 @@
-import React from "react";
+import { useState } from "react";
 import { setData } from "./../../api/api"
+import Picker from 'emoji-picker-react';
 
-export function FormComment({ messageId, refreshComment, actifGroup, setCommentPost, identity, method, commentId }) {
 
+export function FormComment({ messageId, refreshComment, actifGroup, setCommentPost, identity, method, commentId, comment, setEditMode }) {
+    const [pickerVisible, setPickerVisible] = useState(false)
+    const [inputStr, setInputStr] = useState(comment);
     let autor = null
     if (method == 'POST') {
         commentId = ''
@@ -15,7 +18,7 @@ export function FormComment({ messageId, refreshComment, actifGroup, setCommentP
         const data = {
             groupId: actifGroup,
             messageId: messageId,
-            comment: e.target.comment.value,
+            comment: inputStr,
             autor: autor
         }
         try {
@@ -23,6 +26,9 @@ export function FormComment({ messageId, refreshComment, actifGroup, setCommentP
             const status = postMessage.status
             refreshComment(() => data.messageId + Date.now())
             setCommentPost(() => false)
+            if (method == 'PUT') {
+                setEditMode(() => false)
+            }
         } catch {
 
             console.error("echec")
@@ -30,9 +36,8 @@ export function FormComment({ messageId, refreshComment, actifGroup, setCommentP
     }
 
     return <form onSubmit={postComments}>
-
         <label htmlFor="comment" ></label>
-        <input type="text" id="comment" name="comment" placeholder="Taper un commentaire ici"></input>
+        <input type="text" id="comment" name="comment" placeholder="Taper un commentaire ici" value={inputStr} onChange={e => setInputStr(e.target.value)}></input>
         <button type="submit">Poster votre commentaire</button>
     </form>
 }

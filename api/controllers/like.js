@@ -8,17 +8,20 @@ exports.create = (req, res, next) => {
             idelement: req.body.idelement
         }
     })
-        .then(() => {
-            db.Like.create({
-                userId: req.userId,
-                ...req.body
-            })
-                .then(() => {
-                    res.status(200).json({ message: 'Like' })
-                }).catch((error) => {
-                    res.status(500).json({ error })
+        .then((like) => {
+            if (like) {
+                res.status(403).json({ message: 'Vous ne pouvez pas like deux fois le même message' })
+            } else {
+                db.Like.create({
+                    userId: req.userId,
+                    ...req.body
                 })
-
+                    .then(() => {
+                        res.status(200).json({ message: 'Like' })
+                    }).catch((error) => {
+                        res.status(500).json({ error })
+                    })
+            }
         })
         .catch((error) => {
             res.status(500).json({ error })

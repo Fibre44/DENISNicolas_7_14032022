@@ -34,8 +34,8 @@ const MyInvite = memo(function ({ invite, refreshInvite }) {
         refreshInvite(() => invite.id)
     }
     return <>
-        <span>{invite.inviteBy} vous invite à rejoindre</span>
-        <span>{invite.groupName}</span>
+        <span className='invite__items__span'>{invite.inviteBy} vous invite à rejoindre</span>
+        <span className='invite__items__span'>{invite.groupName}</span>
         <button className='button button--width' onClick={acceptInvite}>Accepter</button>
         <button className='button button--width' onClick={refuseInvite}>Refuser</button>
 

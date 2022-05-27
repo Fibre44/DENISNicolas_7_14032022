@@ -33,7 +33,7 @@ exports.delete = (req, res, next) => {
         where: {
             id: req.params.idComment,
             userId: req.userId,
-            messageId: req.body.messageId
+            MessageId: req.body.messageId
         }
     })
         .then((comment) => {
@@ -42,7 +42,7 @@ exports.delete = (req, res, next) => {
                     where: {
                         id: req.params.idComment,
                         userId: req.userId,
-                        messageId: req.body.messageId
+                        MessageId: req.body.messageId
                     }
                 }).then(() => {
                     res.status(200).json({ message: 'Suppression du commentaire' })
@@ -72,19 +72,21 @@ exports.edit = (req, res, next) => {
         where: {
             id: req.params.idComment,
             userId: req.userId,
-            messageId: req.body.messageId
+            MessageId: req.body.messageId
         }
     })
         .then((comment) => {
             if (comment) {
-                db.Comment.update({
-                    comments: req.body.comment,
-                    where: {
-                        id: req.params.idComment,
-                        userId: req.userId,
-                        messageId: req.body.messageId
+                db.Comment.update(
+                    { comments: req.body.comment },
+                    {
+                        where: {
+                            id: req.params.idComment,
+                            userId: req.userId,
+                            MessageId: req.body.messageId
+                        }
                     }
-                })
+                )
                 res.status(200).json({ message: 'Mise à jour du commentaire' })
             } else {
                 db.Comment.findOne({

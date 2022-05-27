@@ -4,7 +4,7 @@ import './../../style/formMessage.sass'
 import './../../style/button.sass'
 import Picker from 'emoji-picker-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faIcons, faL } from '@fortawesome/free-solid-svg-icons'
+import { faIcons } from '@fortawesome/free-solid-svg-icons'
 
 
 export function FormMessage({ actifGroup, identity, refreshMessage }) {
