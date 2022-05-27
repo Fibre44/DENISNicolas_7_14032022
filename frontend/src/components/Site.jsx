@@ -16,6 +16,7 @@ import { Invitations } from './invite/Invite';
 export function Site({ credentials, onDisconnect }) {
 
     const [identity, setIdentity] = useState({})
+    const [picture, setPicture] = useState(null)
     const [groups, setGroups] = useState([])
     const [page, setPage] = useState('home')
     const [myGroups, setMyGroups] = useState(null)
@@ -33,6 +34,17 @@ export function Site({ credentials, onDisconnect }) {
             const response = await getData('/users/identity')
             const userIdentity = await response.json()
             setIdentity(userIdentity.user)
+        }
+        fetchData();
+    }, []);
+
+    //récupération de la photo de profil
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/users/picture')
+            const picture = await response
+            setPicture(picture)
+
         }
         fetchData();
     }, []);

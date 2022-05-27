@@ -10,8 +10,9 @@ const adminRoute = require('./routes/admin');
 const likeRoute = require('./routes/like');
 const inviteRoute = require('./routes/invite')
 const path = require('path');
-const multer = require('multer')
-const formData = multer()
+//const multer = require('multer')
+//const formData = multer()
+
 
 
 app.use((req, res, next) => {
@@ -26,8 +27,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 //Gestion des objets form data
-app.use(formData.array())
-app.use(express.static('images'));
+//app.use(formData.array())
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 app.use('/api/v1/users', userRoute);

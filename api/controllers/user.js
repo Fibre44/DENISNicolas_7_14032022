@@ -47,7 +47,6 @@ exports.signup = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    console.log(req.body)
     db.User.findOne({
         where: ({
             email: req.body.email
@@ -174,6 +173,7 @@ exports.picture = (req, res, next) => {
     }).catch((error) => {
         res.status(500).json({ error })
     })
+
 }
 
 exports.getPicture = (req, res, next) => {
@@ -183,6 +183,7 @@ exports.getPicture = (req, res, next) => {
             id: req.userId
         }
     }).then((picture) => {
-        res.status(200)
+
+        res.send(picture.dataValues.picture)
     })
 }

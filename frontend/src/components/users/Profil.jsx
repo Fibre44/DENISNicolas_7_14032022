@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
 import './../../style/profil.sass'
+import './../../style/form.sass'
+
 import { setData, uploadImg } from './../../api/api';
 
 export function Profil({ credentials }) {
@@ -47,8 +49,8 @@ export function Profil({ credentials }) {
     const handleChange = async function (e) {
         e.preventDefault()
         const form = e.target
+        console.log(e.target)
         const data = Object.fromEntries(new FormData(form))
-
 
         //const data = Object.fromEntries(new FormData('picture', blob))
         //setPicture(() => e.target.files[0])
@@ -73,7 +75,7 @@ export function Profil({ credentials }) {
             <img src={picture} alt="" />
         </form>
 
-        <form className='form--witch' onSubmit={handleSubmit} >
+        <form className='form form--witch' onSubmit={handleSubmit} >
             <h2>Changer mon mot de passe</h2>
             <div className='form__field'>
                 <label htmlFor='password'>Mot de passe actuel</label>
