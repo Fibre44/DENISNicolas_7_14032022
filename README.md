@@ -7,7 +7,7 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
 - NodeJS 16
 - MariaDB
 
-## Liste des dependances ##
+## Liste des dépendances ##
 
 ### API ###
 
@@ -53,7 +53,7 @@ Télécharger le code source
 git clone https://github.com/Fibre44/DENISNicolas_7_14032022.git
 ```
 
-Placez  vous dans le répértoire API
+Placez  vous dans le repértoire API
 
 ```bash
 cd api
@@ -107,11 +107,24 @@ Pour créer les tables de dans la base de données
 npx sequelize-cli db:migrate
 ```
 
+Sequelize sauvegarde l'historique des imports dans la table SequelizeMeta
+
+![MariaDB](./doc/migrations.png)
+
 Pour intégrer les seeders
 
 ```bash
   npx sequelize-cli db:seed:all
 ```
+
+```json
+[
+  "20220411192741-group.js",
+  "20220503091218-demo-user.js"
+]
+```
+
+Le seeder group va créer le groupe par default Groupomania et demo-user va insérer le compte utilisateur root.
 
 ### Gestion des variables d'environnement ###
 
@@ -151,15 +164,15 @@ Retour de la commande
 denisnicolas@Mac-mini-de-DENIS api % npm run start
 > api@1.0.0 start
 > node server.js
-```
-
 Listening on port 3001
+
+```
 
 ## Installation du frontend ##
 
 **Le frontend utilise la librairie [React](https://fr.reactjs.org)**
 
-Placez  vous dans le répértoire frontend
+Placez  vous dans le repértoire frontend
 
 ```bash
 cd frontend
@@ -169,6 +182,14 @@ Puis lancer la commande
 
 ```bash
 npm install
+```
+
+## Note dans le package.json utilisation du proxy ##
+
+Dans package.json l'application utilise le proxy de React pour rediriger les requetes vers l'api
+
+```json
+"proxy": "http://localhost:3001"
 ```
 
 Pour lancer le serveur de developpement React
@@ -219,4 +240,29 @@ Find out more about deployment here:
 
 Les sources du projets sont dans frontend/build
 
-## Fonctionnement de l'application ##
+## Description de l'application ##
+
+## Fonctionnalités ##
+
+- Création d'un compte utilisateur
+- Poster des messages et des commentaires
+- Gestion des emojis
+- Gestion de groupe avec possibilité de créer des groupes privés
+- Possibilité d'inviter des utilisateurs à rejoindre un groupe
+
+### Fonctionnement de l'application ###
+
+Sur la page d'accueil s'affiche un formulaire de connexion.
+
+Interface PC/Interface mobile
+![laptopLogin](./doc/laptop_login.png)
+![mobileLogin](./doc/mobile_login.png)
+
+L'utilisateur peut créer un compte depuis le formulaire ci dessous
+Interface mobile
+![mobileLogin](./doc/mobile_register.png)
+Une fois connecté la page d'accueil affiche le fil d'actualité
+Interface PC
+![laptopFeed](./doc/laptop_feed.png)
+Interface PC/Interface mobile
+![mobileFeed](./doc/mobile_feed.png)
