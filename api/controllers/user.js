@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const env = require('dotenv').config()
 const token = process.env.TOKEN
+const envDomain = process.env.DOMAIN
+const envSecure = process.env.SECURE
 
 exports.signup = (req, res, next) => {
     db.User.count({
@@ -63,7 +65,7 @@ exports.login = (req, res, next) => {
                                 { userId: userIdDB },
                                 token,
                                 { expiresIn: '24h' }
-                            ), { httpOnly: true, secure: false, domain: 'localhost' })
+                            ), { httpOnly: true, secure: envSecure, domain: envDomain })
                             //cookie secure passe sur false car ne fonctionne que sur HTTPS pour postman
                             res.status(200).json({
                                 message: 'connexion'

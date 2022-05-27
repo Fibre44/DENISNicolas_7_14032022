@@ -69,7 +69,8 @@ npm install
 
 Pour toute information sur l'ORM sequelize vous pouvez consulter la documentation sur :  [Sequelize](https://sequelize.org).
 
-Dans ~db/config.json.dist~ vous devez editer le fichier **puis le sauvegarde sous config.json**.
+Dans db/config.json.dist~ vous devez editer le fichier **puis le sauvegarder sous config.json**.
+
 Exemple avec mariadb:
 
 ```json
@@ -117,6 +118,8 @@ Pour intégrer les seeders
   npx sequelize-cli db:seed:all
 ```
 
+L'historique de l'intégration des seeders se trouve à la racine du dossier api dans le fichier sequelizeData.json
+
 ```json
 [
   "20220411192741-group.js",
@@ -132,6 +135,31 @@ Afin de sécuriser les tokens d'authentication vous devez éditer le fichier ~.e
 
 ```env
 TOKEN="Ma phrase secrete"
+```
+
+### Note sur les cookies ###
+
+L'api va envoyer un cookie au frontend afin de gérer l'authentification vous pouvez indiquer le domaine du serveur dans la variable d'environnement la valeur par default est "localhost"
+
+```env
+DOMAIN=localhost
+```
+
+Pour faciliter la prise en charge de [Postam](https://learning.postman.com/docs/sending-requests/cookies/) en local l'option secure est sur false
+
+HttpOnly - If present, the cookie won't be accessible to the client-side scripts run on the page (for example, with document.cookie in JavaScript). The cookie will only be added to the cookie header in requests that are made. This field does not have an effect on Postman's behavior.
+
+```env
+SECURE=false
+```
+
+```javascript
+  res.cookie('token', jwt.sign(
+              { userId: userIdDB },
+                token,
+              { expiresIn: '24h' }
+            ), { httpOnly: true, secure: envSecure, domain: envDomain })
+//cookie secure passe sur false car ne fonctionne que sur HTTPS pour postman
 ```
 
 ### Lancement de l'API ###
