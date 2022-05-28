@@ -147,7 +147,7 @@ DOMAIN=localhost
 
 Pour faciliter la prise en charge de [Postam](https://learning.postman.com/docs/sending-requests/cookies/) en local l'option secure est sur false
 
-HttpOnly - If present, the cookie won't be accessible to the client-side scripts run on the page (for example, with document.cookie in JavaScript). The cookie will only be added to the cookie header in requests that are made. This field does not have an effect on Postman's behavior.
+Secure - If present, the cookie is only sent when the URL begins with https:// and won't be sent over an insecure connection.
 
 ```env
 SECURE=false
