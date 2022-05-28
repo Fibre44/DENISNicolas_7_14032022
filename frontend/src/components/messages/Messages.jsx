@@ -7,10 +7,11 @@ import { Comments } from "../comments/Comments";
 import { getData, setData } from './../../api/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import logo from './../../img/icon-left-font-monochrome-black.png'
 
 const items = [];
 
-export function Messages({ messages, refreshMessage, actifGroup, identity, messagesLikes, likesUser }) {
+export function Messages({ messages, refreshMessage, actifGroup, identity, messagesLikes, likesUser, pictures }) {
     if (messages) {
         if (messages.messages.length == 0) {
             return <>
@@ -20,13 +21,13 @@ export function Messages({ messages, refreshMessage, actifGroup, identity, messa
 
             return <div className='messages'>
                 {messages.messages.map(message => <div className='messages__items' key={message.id} data-id={message.id} >
-                    <Message key={message.id} message={message} refreshMessage={refreshMessage} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} likesUser={likesUser.find(like => like.idelement === message.id)} />
+                    <Message key={message.id} message={message} refreshMessage={refreshMessage} actifGroup={actifGroup} identity={identity} messsageLikes={messagesLikes.find(like => like.idelement === message.id)} likesUser={likesUser.find(like => like.idelement === message.id)} picture={pictures.pictures.find(picture => picture.id === message.userId)} />
                 </div>)}
             </div>
         }
     }
 }
-const Message = memo(function ({ message, refreshMessage, actifGroup, identity, messsageLikes, likesUser }) {
+const Message = memo(function ({ message, refreshMessage, actifGroup, identity, messsageLikes, likesUser, picture }) {
 
     let color = 'dark'
     let countLike = null
@@ -37,6 +38,7 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
     let commentsData = null
     const [comments, setComments] = useState(null)
     const [refreshComment, setRefreshComment] = useState(null)
+    const [userPicture, setUserPicture] = useState(picture)
 
     if (likesUser) {
         color = '#1877f2'
@@ -44,6 +46,8 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
     if (messsageLikes) {
         countLike = messsageLikes.count
     }
+
+
     useEffect(async function () {
         const response = await getData('/groups/' + actifGroup.uuid + '/message/' + message.id + '/comments')
         const groupComments = await response.json()
@@ -94,6 +98,7 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
 
     return <>
         <div className='messages__head'>
+            {userPicture.pictureUrl ? <img src={userPicture.pictureUrl} className='messages__picture' alt="Photo de profil" /> : <img src={logo} className='messages__picture' alt="Photo de profil" />}
             <p className='messages__autor'>Auteur {message.autor}</p>
             {icons}
         </div>

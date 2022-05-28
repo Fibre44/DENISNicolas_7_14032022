@@ -14,6 +14,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     const [messages, setMessages] = useState(null)
     const [messagesLikes, setMessagesLikes] = useState(null)
     const [likesUser, setLikesUser] = useState(null)
+    const [pictures, setPictures] = useState(null)
 
     //Récupération des messages
     useEffect(() => {
@@ -45,6 +46,15 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
         fetchData();
     }, [refreshMessage]);
 
+    //Récupération des photos de profils
+    useEffect(() => {
+        async function fetchData() {
+            const response = await getData('/users/pictures')
+            const pictures = await response.json()
+            setPictures(pictures)
+        }
+        fetchData();
+    }, [refreshMessage]);
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 1224px)'
     })
@@ -64,7 +74,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
             <GroupDescription actifGroup={actifGroup} refreshMyGroups={refreshMyGroups} />
             <InviteForm identity={identity} actifGroup={actifGroup} />
             <FormMessage actifGroup={actifGroup} identity={identity} refreshMessage={setRefreshMessage} />
-            <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} />
+            <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} pictures={pictures} />
         </main>
     } else {
         return null

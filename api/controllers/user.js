@@ -199,3 +199,12 @@ exports.getPicture = (req, res, next) => {
         res.status(200).json({ picture })
     })
 }
+
+exports.getAllPictures = (req, res, next) => {
+    db.User.findAll({
+        attributes: ['id', 'pictureUrl'],
+    }).then((pictures) => {
+
+        res.status(200).json({ pictures })
+    })
+}
