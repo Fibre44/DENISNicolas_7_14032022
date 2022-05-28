@@ -69,6 +69,58 @@ npm install
 
 Pour toute information sur l'ORM sequelize vous pouvez consulter la documentation sur :  [Sequelize](https://sequelize.org).
 
+Pour installer Sequelize taper la commande suivante :
+
+Sequelize pour gérer d'autres moteur de base de données pour installer les connecteur
+```bash
+$ npm install --save sequelize
+```
+
+Par default le projet utilise mariadb avec la librairie associé
+```bash
+$ npm install --save mariadb
+```
+Vous pouvez installer un autre moteur de base de données si besoin
+```bash
+$ npm install --save pg pg-hstore
+$ npm install --save mysql 
+$ npm install --save mariadb
+$ npm install --save sqlite3
+$ npm install --save tedious // MSSQL
+```
+
+Création de la BDD attention avec mariadb la commande de création depuis Sequelize Cli ne fonctionne pas
+```bash
+denisnicolas@Mac-mini-de-DENIS api % sequelize db:create
+Sequelize CLI [Node: 16.14.0, CLI: 6.4.1, ORM: 6.19.0]
+Loaded configuration file "config/config.json".
+Using environment "development".
+ERROR: Dialect mariadb does not support db:create / db:drop commands
+denisnicolas@Mac-mini-de-DENIS api % 
+ERROR: Dialect mariadb does not support db:create / db:drop commands
+```
+Pour créer une base de données sous mariadb depuis le compte root
+
+```bash
+mariadb
+CREATE DATABASE tuto;
+```
+
+Créer un utilisateur avec la commande
+```bash
+CREATE USER 'tuto_p7'@'localhost' IDENTIFIED BY 'pwd'
+```
+Puis donner les droits à l'utilisateur d'accéder à la base de données pour l'exemple tuto
+```bash
+GRANT ALL PRIVILEGES ON tuto.* TO 'tuto_p7'@localhost IDENTIFIED BY 'pwd'
+```
+On applique les droits
+```bash
+FLUSH PRIVILEGES;
+```
+L'utilisateur SQL pourra accéder à la base de données
+![MariaDBShow](./doc/mariadb_show.png)
+
 Dans db/config.json.dist~ vous devez editer le fichier **puis le sauvegarder sous config.json**.
 
 Exemple avec mariadb:
@@ -102,7 +154,7 @@ Exemple avec mariadb:
 }
 ```
 
-Pour créer les tables de dans la base de données
+Pour créer les tables dans la base de données
 
 ```bash
 npx sequelize-cli db:migrate
@@ -131,6 +183,31 @@ Le seeder group va créer le groupe par default Groupomania et demo-user va ins�
 
 ### Gestion des variables d'environnement ###
 
+L'application utilise des variables d'environnement pour utiliser les variables avec le deboguer de VS Code il faut créer le fichier .launch.json à la racine de api
+```json
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "name": "nodemon",
+            "program": "${workspaceFolder}/api/server.js",
+            "request": "launch",
+            "restart": true,
+            "runtimeExecutable": "nodemon",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node",
+            "envFile": "${workspaceFolder}/api/.env"
+        },
+    ]
+}
+```
 Afin de sécuriser les tokens d'authentication vous devez éditer le fichier ~.env.dist en .env
 
 ```env
