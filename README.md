@@ -5,7 +5,7 @@
 Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
 
 - NodeJS 16
-- MariaDB
+- Moteur de base de données MariaDB
 
 ## Liste des dépendances ##
 
@@ -69,11 +69,11 @@ npm install
 
 Pour toute information sur l'ORM sequelize vous pouvez consulter la documentation sur :  [Sequelize](https://sequelize.org).
 
-Pour installer Sequelize taper la commande suivante :
+Pour installer Sequelize Cli taper la commande suivante :
 
-Sequelize pour gérer d'autres moteur de base de données pour installer les connecteur
 ```bash
-$ npm install --save sequelize
+# installe la commande sequelize
+$ npm install -g sequelize-cli
 ```
 
 Par default le projet utilise mariadb avec la librairie associé
