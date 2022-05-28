@@ -12,7 +12,8 @@ const inviteRoute = require('./routes/invite')
 const path = require('path');
 //const multer = require('multer')
 //const formData = multer()
-
+//Gestion des objets form data
+//app.use(formData.array())
 
 
 app.use((req, res, next) => {
@@ -26,9 +27,8 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-//Gestion des objets form data
-//app.use(formData.array())
-app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 
 app.use('/api/v1/users', userRoute);

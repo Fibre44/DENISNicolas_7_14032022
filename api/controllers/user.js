@@ -6,6 +6,7 @@ const token = process.env.TOKEN
 const envDomain = process.env.DOMAIN
 const envSecure = process.env.SECURE
 
+
 exports.signup = (req, res, next) => {
     db.User.count({
         where: {
@@ -65,7 +66,7 @@ exports.login = (req, res, next) => {
                                 { userId: userIdDB },
                                 token,
                                 { expiresIn: '24h' }
-                            ), { httpOnly: true, secure: envSecure, domain: envDomain })
+                            ), { httpOnly: true, secure: false, domain: envDomain })
                             //cookie secure passe sur false car ne fonctionne que sur HTTPS pour postman
                             res.status(200).json({
                                 message: 'connexion'
@@ -172,8 +173,9 @@ exports.logout = (req, res, next) => {
         .json({ success: true, message: 'User logged out successfully' })
 }
 exports.picture = (req, res, next) => {
+    console.log(req.body)
     db.User.update(
-        { picture: req.body }, {
+        { pictureUrl: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}` }, {
         where: {
             id: req.userId
         }
@@ -188,12 +190,12 @@ exports.picture = (req, res, next) => {
 
 exports.getPicture = (req, res, next) => {
     db.User.findOne({
-        attributes: ['picture'],
+        attributes: ['pictureUrl'],
         where: {
             id: req.userId
         }
     }).then((picture) => {
 
-        res.send(picture.dataValues.picture)
+        res.status(200).json({ picture })
     })
 }

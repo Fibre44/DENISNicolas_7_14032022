@@ -4,7 +4,7 @@ import './../../style/form.sass'
 import './../../style/button.sass'
 import { Alert } from './../ui/Alert';
 import { Footer } from '../footer/Footer';
-
+import logo from './../../img/groupomania.png'
 export function LoginForm({ onConnect, onClick }) {
 
     const [errorConnexion, setErrorConnexion] = useState(null)
@@ -33,7 +33,7 @@ export function LoginForm({ onConnect, onClick }) {
     return <>
         <div className='conteneur'>
             <div className='conteneur__logo'>
-                <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" />
+                <img src={logo} alt="Groupomia" />
             </div>
             <form action="" id="login" className='form' onSubmit={handleSubmit}>
                 <h2>Formulaire de connexion</h2>

@@ -12,6 +12,7 @@ import { Footer } from './footer/Footer';
 import { Admin } from './admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import { Invitations } from './invite/Invite';
+import { Picture } from './users/Picture';
 
 export function Site({ credentials }) {
 
@@ -42,9 +43,8 @@ export function Site({ credentials }) {
     useEffect(() => {
         async function fetchData() {
             const response = await getData('/users/picture')
-            const picture = await response
+            const picture = await response.json()
             setPicture(picture)
-
         }
         fetchData();
     }, []);
@@ -120,13 +120,13 @@ export function Site({ credentials }) {
     }
 
     return <>
-        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} />
+        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} picture={picture} />
         {content}
         <Footer />
     </>
 }
 
-function NavBar({ identity, onClick, countInvite, onDisconnect }) {
+function NavBar({ identity, onClick, countInvite, picture }) {
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 1224px)'
     })
@@ -137,7 +137,11 @@ function NavBar({ identity, onClick, countInvite, onDisconnect }) {
 
     return <>
         <nav className='nav'>
-            <h1 className='nav__titre'>Bonjour {identity.firstname} {identity.lastname}</h1>
+
+            <div className='nav__user'>
+                <h1 className='nav__titre'>Bonjour {identity.firstname} {identity.lastname}</h1>
+                <Picture picture={picture} />
+            </div>
             {isDesktopOrLaptop &&
                 <>
                     <ul className='nav__items'>
@@ -165,5 +169,7 @@ function NavBar({ identity, onClick, countInvite, onDisconnect }) {
     </>
 
 }
+
+
 
 

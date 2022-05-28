@@ -49,16 +49,11 @@ export function Profil({ credentials }) {
     const handleChange = async function (e) {
         e.preventDefault()
         const form = e.target
-        console.log(e.target)
         const data = Object.fromEntries(new FormData(form))
-
-        //const data = Object.fromEntries(new FormData('picture', blob))
-        //setPicture(() => e.target.files[0])
-        //const data = new FormData()
-        //data.append('file', e.target.files[0])
-
+        var debug = { coucou: "monde" };
+        var blob = new Blob([JSON.stringify(debug, null, 2)], { type: 'application/json' });
         try {
-            const response = await uploadImg('/users/picture', 'PUT', data)
+            const response = await uploadImg('/users/picture', 'PUT', blob)
 
         } catch {
             console.error('Erreur de mise à jour de la photo')
