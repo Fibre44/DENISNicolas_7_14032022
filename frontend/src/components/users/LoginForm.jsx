@@ -4,7 +4,7 @@ import './../../style/form.sass'
 import './../../style/button.sass'
 import { Alert } from './../ui/Alert';
 import { Footer } from '../footer/Footer';
-import logo from './../../img/groupomania.png'
+import logo from './../../img/icon-left-font.png'
 export function LoginForm({ onConnect, onClick }) {
 
     const [errorConnexion, setErrorConnexion] = useState(null)
