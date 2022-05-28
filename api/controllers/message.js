@@ -10,7 +10,9 @@ exports.create = (req, res, next) => {
             group.createMessage({
                 userId: req.userId,
                 message: req.body.message,
-                autor: req.body.autor
+                autor: req.body.autor,
+                imageDescription: req.body.description,
+                imageUrl: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
             })
                 .then((message) => {
                     res.status(200).json({ uuidMessage: message.id })

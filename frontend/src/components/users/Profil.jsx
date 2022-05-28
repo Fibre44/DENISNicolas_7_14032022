@@ -61,11 +61,12 @@ export function Profil({ credentials }) {
     const handleChange = async function (e) {
         e.preventDefault()
         const form = e.target
-        const data = Object.fromEntries(new FormData(form))
-        var debug = { coucou: "monde" };
-        var blob = new Blob([JSON.stringify(debug, null, 2)], { type: 'application/json' });
+        console.log(form)
+        //const data = Object.fromEntries(new FormData(form))
+        const data = new FormData(form)
+        console.log(data)
         try {
-            const response = await uploadImg('/users/picture', 'PUT', blob)
+            const response = await uploadImg('/users/picture', 'PUT', data)
 
         } catch {
             console.error('Erreur de mise à jour de la photo')
@@ -75,11 +76,10 @@ export function Profil({ credentials }) {
     return <div className='profil'>
         <h1>Mon profil</h1>
 
-        <form action="" onSubmit={handleChange} className='profil__form'>
+        <form action="" onSubmit={handleChange} className='profil__form' enctype="multipart/form-data" name='uploadPicture'>
             <label htmlFor='picture'>Publier sa photo</label>
             <input type="file" id='picture' name='picture' />
             <input type="submit" className='button' value='Upload' />
-            <img src={picture} alt="" />
         </form>
 
         <form className='profil__form profil__form--password' onSubmit={handleSubmit} >

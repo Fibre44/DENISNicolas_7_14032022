@@ -72,7 +72,7 @@ export async function uploadImg(endpoint, method, data) {
         headers: {
             'Accept': 'application/json',
             'credentials': 'include',
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data ; boundary=CUSTOM',
         },
         body: JSON.stringify(data)
     });

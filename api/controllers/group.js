@@ -53,7 +53,7 @@ exports.groupMessages = (req, res, next) => {
         .then((group) => {
             if (group) {
                 group.getMessages({
-                    attributes: ['id', 'message', 'userId', 'autor', 'GroupeId', 'updatedAt'],
+                    attributes: ['id', 'message', 'userId', 'autor', 'GroupeId', 'updatedAt', 'imageUrl', 'imageDescription'],
                     order: [
                         ['updatedAt', 'DESC'],
                     ],

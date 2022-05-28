@@ -30,7 +30,15 @@ module.exports = (sequelize, DataTypes) => {
     picture: {
       type: DataTypes.BLOB,
       allowNull: true
-    }
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    imageDescription: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
   }, {
     sequelize,
     tableName: "messages",
