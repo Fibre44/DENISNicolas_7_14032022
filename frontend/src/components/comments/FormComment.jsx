@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { setData } from "./../../api/api"
 import './../../style/button.sass';
-import './../../style/formComment.sass'
+import './../../style/form.sass'
 import Picker from 'emoji-picker-react';
 
 
@@ -37,9 +37,9 @@ export function FormComment({ messageId, refreshComment, actifGroup, setCommentP
         }
     }
 
-    return <form onSubmit={postComments} className='form'>
+    return <form onSubmit={postComments} className='form--comment'>
         <label htmlFor="comment" ></label>
-        <input type="text" id="comment" name="comment" placeholder="Taper un commentaire ici" value={inputStr} onChange={e => setInputStr(e.target.value)}></input>
+        <input type="text" id="comment" name="comment" placeholder="Taper votre commentaire ici" value={inputStr} onChange={e => setInputStr(e.target.value)}></input>
         <button type="submit" className='button'>Poster votre commentaire</button>
     </form>
 }

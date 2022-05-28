@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
 import './../../style/profil.sass'
-import './../../style/form.sass'
+import './../../style/button.sass'
 
 import { setData, uploadImg } from './../../api/api';
 
@@ -63,14 +63,14 @@ export function Profil({ credentials }) {
     return <div className='profil'>
         <h1>Mon profil</h1>
 
-        <form action="" onSubmit={handleChange}>
+        <form action="" onSubmit={handleChange} className='profil__form'>
             <label htmlFor='picture'>Publier sa photo</label>
             <input type="file" id='picture' name='picture' />
             <input type="submit" className='button' value='Upload' />
             <img src={picture} alt="" />
         </form>
 
-        <form className='form form--witch' onSubmit={handleSubmit} >
+        <form className='profil__form profil__form--password' onSubmit={handleSubmit} >
             <h2>Changer mon mot de passe</h2>
             <div className='form__field'>
                 <label htmlFor='password'>Mot de passe actuel</label>
@@ -91,8 +91,7 @@ export function Profil({ credentials }) {
             </div>
         </form>
 
-        <h2>Supprimer mon compte</h2>
-        <button onClick={deleteUser}>Suppression du compte</button>
+        <button onClick={deleteUser} className='button'>Suppression du compte</button>
     </div>
 }
 
