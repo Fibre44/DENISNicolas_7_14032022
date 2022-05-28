@@ -56,9 +56,7 @@ exports.delete = (req, res, next) => {
             .then((group) => {
                 if (group) {
                     group.removeUser(req.userId, { through: { selfGranted: false } })
-
                     res.status(200).json({ message: "Vous avez quitté le groupe" })
-
                 } else {
                     res.status(404).json({ message: "Le groupe n'existe pas" })
                 }

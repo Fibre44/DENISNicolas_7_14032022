@@ -13,6 +13,8 @@ export function Profil({ credentials }) {
     const [errorApi, setErrorAPI] = useState(null)
     const [succes, setSucces] = useState(null)
     const [picture, setPicture] = useState(null)
+    const [errorDelete, setErrorDelete] = useState(null)
+    const [succesDelete, setSuccesDelete] = useState(null)
 
     const handleSubmit = async function (e) {
         e.preventDefault()
@@ -42,8 +44,18 @@ export function Profil({ credentials }) {
         }
     }
     async function deleteUser() {
-        const deleteUser = await setData('/users/' + credentials.userId + '/delete', 'DELETE')
-        const deleteResponse = await deleteUser
+        try {
+            const deleteUser = await setData('/users/delete', 'DELETE')
+            const status = await deleteUser
+            if (status == "200") {
+                setSucces("Le mot de passe a été changé avec succès")
+            } else {
+                setErrorDelete("Erreur lors de la suppression")
+            }
+        } catch {
+            setErrorDelete("Erreur de connexion au serveur")
+
+        }
     }
 
     const handleChange = async function (e) {
@@ -92,6 +104,10 @@ export function Profil({ credentials }) {
         </form>
 
         <button onClick={deleteUser} className='button'>Suppression du compte</button>
+        <div className='alert'>
+            {succes && <Confirmation>{succes}</Confirmation>}
+            {errorDelete && <Alert>{errorDelete}</Alert>}
+        </div>
     </div>
 }
 
