@@ -13,7 +13,7 @@ import { Admin } from './admin/Admin';
 import { useMediaQuery } from 'react-responsive'
 import { Invitations } from './invite/Invite';
 
-export function Site({ credentials, onDisconnect }) {
+export function Site({ credentials }) {
 
     const [identity, setIdentity] = useState({})
     const [picture, setPicture] = useState(null)
@@ -120,7 +120,7 @@ export function Site({ credentials, onDisconnect }) {
     }
 
     return <>
-        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} onDisconnect={onDisconnect} />
+        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} />
         {content}
         <Footer />
     </>
@@ -146,7 +146,7 @@ function NavBar({ identity, onClick, countInvite, onDisconnect }) {
                         <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}>Invitations</a></li>
                         <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Profil</a></li>
                         <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}>Espace admin</a></li>
-                        <li className='nav__item'><a href='#login' onClick={() => onDisconnect('disconnect')}>Se déconnecter</a></li>
+                        <li className='nav__item'><a href='#logout' onClick={() => onClick('disconnect')}>Se déconnecter</a></li>
                     </ul>
                     <span className='nav__item__underline'></span>
                 </>
@@ -158,7 +158,7 @@ function NavBar({ identity, onClick, countInvite, onDisconnect }) {
                     <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}><FontAwesomeIcon icon={faEnvelope} /></a></li>
                     <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser} /></a></li>
                     <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}><FontAwesomeIcon icon={faGhost} /></a></li>
-                    <li className='nav__item'><a href='#login' onClick={() => onDisconnect('disconnect')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
+                    <li className='nav__item'><a href='#logout' onClick={() => onClick('disconnect')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
                 </ul>
             }
         </nav>

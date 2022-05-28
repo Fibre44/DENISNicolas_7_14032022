@@ -162,7 +162,15 @@ exports.updatPassword = (req, res, next) => {
             res.status(500).json({ message: "Erreur serveur ", error })
         })
 }
-
+exports.logout = (req, res, next) => {
+    res.cookie('token', 'none', {
+        expires: new Date(Date.now() + 5 * 1000),
+        httpOnly: true,
+    })
+    res
+        .status(200)
+        .json({ success: true, message: 'User logged out successfully' })
+}
 exports.picture = (req, res, next) => {
     db.User.update(
         { picture: req.body }, {

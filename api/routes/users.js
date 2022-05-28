@@ -13,7 +13,7 @@ router.put('/picture', auth, multer, userCtrl.picture)
 
 router.get('/identity', auth, userCtrl.identity)
 router.get('/picture', auth, userCtrl.getPicture)
-
+router.get('/logout', userCtrl.logout)
 router.delete('/delete', auth, userCtrl.delete)
 
 
