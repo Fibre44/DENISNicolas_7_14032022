@@ -39,6 +39,7 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
     const [comments, setComments] = useState(null)
     const [refreshComment, setRefreshComment] = useState(null)
     const [userPicture, setUserPicture] = useState(picture)
+    const [messageImg, setMessageImg] = useState(message.imageUrl)
 
     if (likesUser) {
         color = '#1877f2'
@@ -103,6 +104,9 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
             {icons}
         </div>
         {messageLayout}
+        <div className='messages__image'>
+            <img src={messageImg} alt={message.imageDescription} />
+        </div>
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>

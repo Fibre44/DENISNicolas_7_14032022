@@ -66,15 +66,15 @@ export async function setData(endpoint, method, data) {
 
 }
 
-export async function uploadImg(endpoint, method, data) {
+export async function formData(endpoint, method, data) {
     const response = await fetch(urlServer + endpoint, {
         method: method,
         headers: {
             'Accept': 'application/json',
             'credentials': 'include',
-            'Content-Type': 'multipart/form-data ; boundary=CUSTOM',
+            'Content-Type': 'multipart/form-data ',
         },
-        body: JSON.stringify(data)
+        body: (data)
     });
     if (response.ok) {
         return response
