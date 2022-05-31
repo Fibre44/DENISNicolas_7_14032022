@@ -5,9 +5,9 @@ import { Confirmation } from '../ui/Confirmation';
 import './../../style/profil.sass'
 import './../../style/button.sass'
 
-import { setData, formData } from './../../api/api';
+import { setData, postFormData } from './../../api/api';
 
-export function Profil({ credentials }) {
+export function Profil() {
 
     const [error, setError] = useState(null)
     const [errorApi, setErrorAPI] = useState(null)
@@ -60,19 +60,17 @@ export function Profil({ credentials }) {
 
     const handleChange = async function (e) {
         e.preventDefault()
-        let formData = new FormData()
-        //formData.append('picture', 'blob', 'image.jpg')
         const form = e.target
-        console.log(form)
-        //const data = Object.fromEntries(new FormData(form))
-        const data = new FormData(form)
-        console.log(data)
+        const formData = new FormData(form)
+
         try {
-            const response = await formData('/users/picture', 'PUT', data)
+            const postPicture = await postFormData('/users/picture', 'PUT', formData)
+            const status = postPicture.status
 
         } catch {
-            console.error('Erreur de mise à jour de la photo')
+            console.error("echec")
         }
+
     }
 
     return <div className='profil'>

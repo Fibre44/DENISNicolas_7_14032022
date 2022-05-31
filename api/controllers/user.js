@@ -222,18 +222,22 @@ exports.logout = (req, res, next) => {
         .json({ success: true, message: 'User logged out successfully' })
 }
 exports.picture = (req, res, next) => {
-    console.log(req.body)
-    db.User.update(
-        { pictureUrl: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}` }, {
-        where: {
-            id: req.userId
+    if (req.file) {
+        db.User.update(
+            { pictureUrl: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}` }, {
+            where: {
+                id: req.userId
+            }
         }
+        ).then(() => {
+            res.status(200).json({ message: 'Mise à jour de la photo de profil' })
+        }).catch((error) => {
+            res.status(500).json({ error })
+        })
+    } else {
+        res.status(400).json({ message: 'Il manque l image' })
     }
-    ).then(() => {
-        res.status(200).json({ message: 'Mise à jour de la photo de profil' })
-    }).catch((error) => {
-        res.status(500).json({ error })
-    })
+
 
 }
 

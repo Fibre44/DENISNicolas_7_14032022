@@ -67,7 +67,7 @@ export function MyGroups({ myGroups, onChange, refreshMessage }) {
         }
 
         return <>
-            <select onChange={setActifGroup} className='groups__select'>
+            <select onChange={setActifGroup} className='groups__select' defaultValue={'Groupomania--Groupomania'}>
                 {myGroups.groups.map(group => <MyGroup key={group.id} group={group} />)}
             </select>
         </>
@@ -80,15 +80,11 @@ export function MyGroups({ myGroups, onChange, refreshMessage }) {
 
 const MyGroup = memo(function ({ group }) {
     //le groupe par default est Groupomania donc on l'indique par default
-    if (group.id === 'Groupomania') {
-        return <>
-            <option value={group.id + '--' + group.title} selected>{group.title} </option>
-        </>
-    } else {
-        return <>
-            <option value={group.id + '--' + group.title}>{group.title}</option>
-        </>
-    }
+
+    return <>
+        <option value={group.id + '--' + group.title}>{group.title}</option>
+    </>
+
 })
 
 export function MyGroupsLaptop({ myGroups, onChange, refreshMessage }) {
