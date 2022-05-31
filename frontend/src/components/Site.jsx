@@ -32,9 +32,14 @@ export function Site({ credentials }) {
     //récupération de l'identité
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/users/identity')
-            const userIdentity = await response.json()
-            setIdentity(userIdentity.user)
+            try {
+                const response = await getData('/users/identity')
+                const userIdentity = await response.json()
+                setIdentity(userIdentity.user)
+            } catch {
+                console.error('Impossible de récupérer l\'identité')
+                setPage(() => 'Error')
+            }
         }
         fetchData();
     }, []);
@@ -63,9 +68,15 @@ export function Site({ credentials }) {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/groups_users')
-            const myGroups = await response.json()
-            setMyGroups(myGroups)
+            try {
+                const response = await getData('/groups_users')
+                const myGroups = await response.json()
+                setMyGroups(myGroups)
+            } catch {
+                console.error('Impossible de récupérer les groupes')
+                setPage(() => 'Error')
+            }
+
         }
         fetchData();
     }, [page, refreshMyGroups]);
@@ -116,6 +127,9 @@ export function Site({ credentials }) {
             break
         case 'disconnect':
             content = <Disconnect />
+            break
+        case 'Error':
+            content = <Error />
             break
     }
 

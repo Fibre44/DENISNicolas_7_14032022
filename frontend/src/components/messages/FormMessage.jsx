@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { postFormData } from "./../../api/api"
 import './../../style/formMessage.sass'
 import './../../style/button.sass'
@@ -10,17 +10,22 @@ import { faIcons } from '@fortawesome/free-solid-svg-icons'
 export function FormMessage({ actifGroup, identity, refreshMessage }) {
     const [pickerVisible, setPickerVisible] = useState(false)
     const [inputStr, setInputStr] = useState('');
+    const form = useRef(null)
 
     const onSubmit = async function (e) {
         e.preventDefault()
-        const form = e.target
-        const formData = new FormData(form)
+        //const form = e.target
+        const formData = new FormData(form.current)
+        //Si on a pas d'image on supprime l'entrée du formulaire sinon erreur du backend voir pour traiter la situation au niveau de l'API
+        if (e.target.image.value == '') {
+            formData.delete('image')
+        }
         formData.append('groupId', actifGroup.uuid)
         formData.append('autor', identity.firstname + ' ' + identity.lastname)
         try {
             const postMessage = await postFormData('/message', 'POST', formData)
             const status = postMessage.status
-            refreshMessage(() => formData.message)
+            refreshMessage(() => Date.now())
             setInputStr(() => '')
         } catch {
             console.error("echec")
@@ -34,7 +39,7 @@ export function FormMessage({ actifGroup, identity, refreshMessage }) {
     };
 
     return <>
-        <form onSubmit={onSubmit} className='formMessage' encType='multipart/form-data'>
+        <form ref={form} onSubmit={onSubmit} className='formMessage' encType='multipart/form-data'>
             <label htmlFor="message" ></label>
             <input type="text" id="message" name="message" placeholder="Taper un message ici" value={inputStr} onChange={e => setInputStr(e.target.value)} className='formMessage__input' required />
             <input type="file" id="image" name="image" />

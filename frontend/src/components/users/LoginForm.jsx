@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { userPost } from '../../api/api';
+import React, { useState, useRef } from 'react';
+import { userPost, postFormData } from '../../api/api';
 import './../../style/form.sass'
 import './../../style/button.sass'
 import { Alert } from './../ui/Alert';
 import { Footer } from '../footer/Footer';
 import logo from './../../img/icon-left-font.png'
 export function LoginForm({ onConnect, onClick }) {
+    const form = useRef(null)
 
     const [errorConnexion, setErrorConnexion] = useState(null)
 
     const handleSubmit = async function (e) {
         e.preventDefault()
-        const form = e.target
-        const data = Object.fromEntries(new FormData(form))
+        const formData = new FormData(form.current)
+
         try {
-            const response = await userPost(data, '/users/login')
+            const response = await postFormData('/users/login', 'POST', formData)
             const status = await response.status
             if (status == "200") {
-                onConnect(response.data)
+                onConnect(true)
             }
             else {
-                setErrorConnexion(response.message)
-                console.log(errorConnexion)
+                setErrorConnexion('Identifiant ou mot de passe invalide')
             }
         }
         catch {
@@ -35,7 +35,7 @@ export function LoginForm({ onConnect, onClick }) {
             <div className='conteneur__logo'>
                 <img src={logo} alt="Groupomia" />
             </div>
-            <form action="" id="login" className='form' onSubmit={handleSubmit}>
+            <form ref={form} action="" id="login" className='form' onSubmit={handleSubmit} encType='multipart/form-data'>
                 <h2>Formulaire de connexion</h2>
                 <div className='form__field'>
                     <label htmlFor="email" >Email</label>

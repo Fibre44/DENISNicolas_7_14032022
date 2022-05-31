@@ -1,4 +1,5 @@
 const db = require('./../lib/models/index.js');
+const fs = require('fs');
 
 exports.create = (req, res, next) => {
     db.Groupe.findOne({
@@ -7,12 +8,16 @@ exports.create = (req, res, next) => {
         }
     })
         .then((group) => {
+            let imageUrl = null
+            if (req.file) {
+                imageUrl = `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
+            }
             group.createMessage({
                 userId: req.userId,
                 message: req.body.message,
                 autor: req.body.autor,
                 imageDescription: req.body.description,
-                imageUrl: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
+                imageUrl: imageUrl
             })
                 .then((message) => {
                     res.status(200).json({ uuidMessage: message.id })
@@ -59,6 +64,7 @@ exports.edit = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
+
     db.Message.findOne({
         where: {
             id: req.params.idMessage,
@@ -66,23 +72,28 @@ exports.delete = (req, res, next) => {
             userId: req.userId
         }
     }).then((message) => {
+
         if (message) {
-            //On supprime les commentaires problème avec la gestion de la cascade de suppression de l'ORM
-            db.Comment.destroy({
-                where: {
-                    messageId: req.params.idMessage
-                }
-            }).then(() => {
-                db.Message.destroy({
+            const filename = message.dataValues.imageUrl
+            fs.unlink(`upload/${filename}`, () => {
+                //On supprime les commentaires problème avec la gestion de la cascade de suppression de l'ORM
+                db.Comment.destroy({
                     where: {
-                        id: req.params.idMessage,
-                        groupeId: req.body.groupId,
-                        userId: req.userId
+                        messageId: req.params.idMessage
                     }
                 }).then(() => {
-                    res.status(200).json({ message: 'Le message a été supprimé et des commentaires' })
+                    db.Message.destroy({
+                        where: {
+                            id: req.params.idMessage,
+                            groupeId: req.body.groupId,
+                            userId: req.userId
+                        }
+                    }).then(() => {
+                        res.status(200).json({ message: 'Le message a été supprimé et des commentaires' })
+                    })
                 })
             })
+
         }
     })
 
