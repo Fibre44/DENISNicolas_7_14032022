@@ -1,0 +1,66 @@
+.loading-prev
+    display: flex
+    flex-direction: row
+    justify-content: flex-start
+    align-items: center
+    position: fixed
+    height: 2600px
+    opacity: 0.7
+    width: 100%
+    background-color: #F2F2EC
+    animation-name: loading-spinner-background
+    animation-fill-mode: both
+    animation-duration: 5000ms
+
+    &__items
+        width: 100px
+        height: 100px
+        border-radius: 180px
+        background-color: aquamarine
+        animation: loading-spinner-items
+        animation-direction: normal
+        animation-fill-mode: both
+        animation-duration: 5000ms
+        position: fixed
+        top: 500px
+
+    &__items-1
+
+        animation-delay: 500ms
+
+    &__items-2
+
+        animation-delay: 400ms
+
+    &__items-3
+
+        animation-delay: 300ms
+
+    &__items-4
+
+        animation-delay: 200ms
+
+    &__items-
+
+        animation-delay: 100ms
+
+    @keyframes loading-spinner-background
+        0%
+            visibility: hidden
+
+        100%
+            visibility: visible
+@keyframes loading-spinner-items
+    0%
+        transform: translateX(0px)
+        transition: transform 1000ms ease-in-out
+        background-color: blue
+
+    50%
+        transform: translateX(400px)
+        transition: transform 1000ms ease-in-out
+
+    100%
+
+        transform: translateX(800px)
+        transition: transform 1000ms ease-in-out

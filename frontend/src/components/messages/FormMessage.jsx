@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { setData } from "./../../api/api"
+import { postFormData } from "./../../api/api"
 import './../../style/formMessage.sass'
 import './../../style/button.sass'
 import Picker from 'emoji-picker-react';
@@ -10,17 +10,17 @@ import { faIcons } from '@fortawesome/free-solid-svg-icons'
 export function FormMessage({ actifGroup, identity, refreshMessage }) {
     const [pickerVisible, setPickerVisible] = useState(false)
     const [inputStr, setInputStr] = useState('');
-    const postMessage = async function (e) {
+
+    const onSubmit = async function (e) {
         e.preventDefault()
-        const data = {
-            groupId: actifGroup.uuid,
-            message: e.target.message.value,
-            autor: identity.firstname + ' ' + identity.lastname
-        }
+        const form = e.target
+        const formData = new FormData(form)
+        formData.append('groupId', actifGroup.uuid)
+        formData.append('autor', identity.firstname + ' ' + identity.lastname)
         try {
-            const postMessage = await setData('/message', 'POST', data)
+            const postMessage = await postFormData('/message', 'POST', formData)
             const status = postMessage.status
-            refreshMessage(() => data.message)
+            refreshMessage(() => formData.message)
             setInputStr(() => '')
         } catch {
             console.error("echec")
@@ -34,14 +34,15 @@ export function FormMessage({ actifGroup, identity, refreshMessage }) {
     };
 
     return <>
-        <form onSubmit={postMessage} className='formMessage'>
+        <form onSubmit={onSubmit} className='formMessage' encType="multipart/form-data">
             <label htmlFor="message" ></label>
             <input type="text" id="message" name="message" placeholder="Taper un message ici" value={inputStr} onChange={e => setInputStr(e.target.value)} className='formMessage__input' required></input>
-            <label htmlFor="img"></label>
-            <input type="file" id="img" name="img" />
+            <input type="file" id="image" name="image" />
+            <label htmlFor="description">Description de l'image</label>
+            <input type="text" id="description" name="description" />
             <div className='formMessage__actions'>
                 <FontAwesomeIcon icon={faIcons} onClick={() => setPickerVisible(true)} />
-                <button type="submit" className='button'>Poster votre message sur {actifGroup.groupName}</button>
+                <input type="submit" className='button' value='Poster votre message'></input>
             </div>
             {pickerVisible ? (<div>
                 {chosenEmoji ? (
@@ -54,4 +55,5 @@ export function FormMessage({ actifGroup, identity, refreshMessage }) {
         </form>
 
     </>
+
 }

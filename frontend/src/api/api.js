@@ -65,14 +65,20 @@ export async function setData(endpoint, method, data) {
     }
 
 }
+/**
+ * 
+ * @param {string} endpoint 
+ * @param {string} method POST/PUT/DELETE
+ * @param {JSON} data
+ */
 
-export async function formData(endpoint, method, data) {
+export async function postFormData(endpoint, method, data) {
     const response = await fetch(urlServer + endpoint, {
         method: method,
         headers: {
             'Accept': 'application/json',
             'credentials': 'include',
-            'Content-Type': 'multipart/form-data ',
+            'Content-Type': 'multipart/form-data;',
         },
         body: (data)
     });

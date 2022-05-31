@@ -45,6 +45,10 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
   },
 ```
 
+## Description de l'API ##
+
+La description de l'API est disponible sur 
+
 ## Installation du projet ##
 
 Télécharger le code source
@@ -53,7 +57,7 @@ Télécharger le code source
 git clone https://github.com/Fibre44/DENISNicolas_7_14032022.git
 ```
 
-Placez  vous dans le repértoire API
+Placez  vous dans le repértoire API [Postman](https://documenter.getpostman.com/view/17641464/Uz5DqHeQ).
 
 ```bash
 cd api

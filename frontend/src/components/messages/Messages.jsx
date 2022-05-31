@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil, faTrash, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import logo from './../../img/icon-left-font-monochrome-black.png'
 
+
 const items = [];
 
 export function Messages({ messages, refreshMessage, actifGroup, identity, messagesLikes, likesUser, pictures }) {

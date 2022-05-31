@@ -7,7 +7,7 @@ import './../style/main.sass'
 import { getData } from '../api/api';
 import { useMediaQuery } from 'react-responsive'
 import { InviteForm } from './invite/InviteForm';
-
+import { Loading } from './ui/Loading'
 
 export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups }) {
     const [refreshMessage, setRefreshMessage] = useState(null)
@@ -15,6 +15,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     const [messagesLikes, setMessagesLikes] = useState(null)
     const [likesUser, setLikesUser] = useState(null)
     const [pictures, setPictures] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     //Récupération des messages
     useEffect(() => {
@@ -32,6 +33,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
             const response = await getData('/like/message/' + actifGroup.uuid)
             const likes = await response.json()
             setMessagesLikes(likes.likes)
+
         }
         fetchData();
     }, [refreshMessage]);
@@ -55,6 +57,16 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
         }
         fetchData();
     }, [refreshMessage]);
+
+    //Quand tout est chargé on supprime le chargement
+    useEffect(() => {
+        async function endLoading() {
+            if (messages && messagesLikes && likesUser) {
+                setLoading(() => false)
+            }
+        }
+        endLoading()
+    }, [messages, messagesLikes, likesUser])
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-width: 1224px)'
     })
@@ -63,8 +75,8 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
     const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
     // on attend que la récupération des éléments pour afficher la page
-    if (messages && messagesLikes && likesUser) {
-        return <main className='main'>
+    return <>
+        {loading ? <Loading /> : <main className='main'>
             {isDesktopOrLaptop &&
                 <MyGroupsLaptop myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroupsLaptop >
             }
@@ -75,10 +87,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
             <InviteForm identity={identity} actifGroup={actifGroup} />
             <FormMessage actifGroup={actifGroup} identity={identity} refreshMessage={setRefreshMessage} />
             <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} pictures={pictures} />
-        </main>
-    } else {
-        return null
-    }
-
+        </main>}
+    </>
 
 }
