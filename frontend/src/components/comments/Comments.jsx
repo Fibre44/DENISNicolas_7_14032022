@@ -62,7 +62,7 @@ function CommentIcons({ commentId, actifGroup, refreshComment, messageId, setEdi
             try {
                 const deleteCommentAPI = await setData('/comment/' + commentId, 'DELETE', data)
                 const status = await deleteCommentAPI.status
-                refreshComment(() => commentId + Date.now())
+                refreshComment(() => Date.now())
 
             } catch {
                 console.error('Erreur au niveau de l\'API')
