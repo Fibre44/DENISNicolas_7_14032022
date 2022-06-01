@@ -106,7 +106,7 @@ export function Profil({ refreshPicture }) {
 
         <button onClick={deleteUser} className='button'>Suppression du compte</button>
         <div className='alert'>
-            {succes && <Confirmation>{succes}</Confirmation>}
+            {succesDelete && <Confirmation>{succesDelete}</Confirmation>}
             {errorDelete && <Alert>{errorDelete}</Alert>}
         </div>
     </div>
