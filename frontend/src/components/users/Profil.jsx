@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 //import { FormChangePassword } from './FormChangePassword';
 import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
@@ -7,7 +7,7 @@ import './../../style/button.sass'
 
 import { setData, postFormData } from './../../api/api';
 
-export function Profil() {
+export function Profil({ refreshPicture }) {
 
     const [error, setError] = useState(null)
     const [errorApi, setErrorAPI] = useState(null)
@@ -15,6 +15,7 @@ export function Profil() {
     const [picture, setPicture] = useState(null)
     const [errorDelete, setErrorDelete] = useState(null)
     const [succesDelete, setSuccesDelete] = useState(null)
+    const formPicture = useRef(null)
 
     const handleSubmit = async function (e) {
         e.preventDefault()
@@ -61,12 +62,12 @@ export function Profil() {
     const handleChange = async function (e) {
         e.preventDefault()
         const form = e.target
-        const formData = new FormData(form)
+        const formData = new FormData(formPicture.current)
 
         try {
             const postPicture = await postFormData('/users/picture', 'PUT', formData)
             const status = postPicture.status
-
+            refreshPicture(() => Date.now())
         } catch {
             console.error("echec")
         }
@@ -76,9 +77,9 @@ export function Profil() {
     return <div className='profil'>
         <h1>Mon profil</h1>
 
-        <form action="" onSubmit={handleChange} className='profil__form' enctype="multipart/form-data" name='uploadPicture'>
-            <label htmlFor='picture'>Publier sa photo</label>
-            <input type="file" id='picture' name='picture' />
+        <form ref={formPicture} action="" onSubmit={handleChange} className='profil__form' encType="multipart/form-data" name='uploadPicture'>
+            <label htmlFor='image'>Publier sa photo</label>
+            <input type="file" id='image' name='image' />
             <input type="submit" className='button' value='Upload' />
         </form>
 

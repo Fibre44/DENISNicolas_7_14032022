@@ -29,6 +29,7 @@ export function Site({ credentials }) {
         groupName: 'Groupomania'
     })
     const [refreshMyGroups, setRefreshMyGroups] = useState(null)
+    const [refreshPicture, setRefreshPicture] = useState(null)
     //récupération de l'identité
     useEffect(() => {
         async function fetchData() {
@@ -52,7 +53,7 @@ export function Site({ credentials }) {
             setPicture(picture)
         }
         fetchData();
-    }, []);
+    }, [refreshPicture]);
 
     //récupération de l'ensemble des groupes
     useEffect(() => {
@@ -108,7 +109,7 @@ export function Site({ credentials }) {
 
     switch (page) {
         case 'profil':
-            content = <Profil credentials={credentials} />
+            content = <Profil refreshPicture={setRefreshPicture} />
             break
         case 'groups':
             content = <Groups groups={groups} />
