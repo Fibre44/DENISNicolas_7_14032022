@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { setData } from "./../../api/api"
+import { useState, useRef } from "react";
+import { postFormData } from "./../../api/api"
 import './../../style/button.sass';
 import './../../style/form.sass'
 import Picker from 'emoji-picker-react';
@@ -15,6 +15,8 @@ export function FormComment({ messageId, refreshComment, actifGroup, identity, m
         setInputStr(prevInput => prevInput + emojiObject.emoji);
         setPickerVisible(() => false)
     };
+    const form = useRef(null)
+
     let autor = null
     if (method == 'POST') {
         commentId = ''
@@ -24,28 +26,27 @@ export function FormComment({ messageId, refreshComment, actifGroup, identity, m
     }
     const postComments = async function (e) {
         e.preventDefault()
-        const data = {
-            groupId: actifGroup,
-            messageId: messageId,
-            comment: inputStr,
-            autor: autor
-        }
+        const formData = new FormData(form.current)
+        formData.append('messageId', messageId)
+        formData.append('groupId', actifGroup)
+        formData.append('autor', identity.firstname + ' ' + identity.lastname)
+
         try {
-            const postMessage = await setData('/comment' + '/' + commentId, method, data)
+            const postMessage = await postFormData('/comment' + '/' + commentId, method, formData)
             const status = postMessage.status
             refreshComment(() => Date.now())
+            setInputStr(() => '')
             if (method == 'PUT') {
                 setEditMode(() => false)
             }
         } catch {
-
-            console.error("echec")
+            console.error('Erreur lors de la mise à jour du commentaire')
         }
     }
 
-    return <form onSubmit={postComments} className='form--comment'>
+    return <form ref={form} onSubmit={postComments} className='form--comment' encType='multipart/form-data'>
         <label htmlFor="comment" ></label>
-        <input type="text" id="comment" name="comment" placeholder="Taper votre commentaire ici" value={inputStr} onChange={e => setInputStr(e.target.value)}></input>
+        <input type="text" id="comment" name="comment" placeholder="Taper votre commentaire ici" value={inputStr} onChange={e => setInputStr(() => e.target.value)}></input>
         <div className='formMessage__actions'>
             <FontAwesomeIcon icon={faIcons} onClick={() => setPickerVisible(true)} />
             <button type="submit" className='button'>Poster votre commentaire</button>
