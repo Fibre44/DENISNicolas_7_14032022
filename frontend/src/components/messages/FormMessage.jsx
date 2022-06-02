@@ -42,9 +42,9 @@ export function FormMessage({ actifGroup, identity, refreshMessage }) {
         <form ref={form} onSubmit={onSubmit} className='formMessage' encType='multipart/form-data'>
             <label htmlFor="message" ></label>
             <input type="text" id="message" name="message" placeholder="Taper un message ici" value={inputStr} onChange={e => setInputStr(e.target.value)} className='formMessage__input' required />
-            <input type="file" id="image" name="image" />
             <label htmlFor="description">Description de l'image</label>
             <input type="text" id="description" name="description" />
+            <input type="file" id="image" name="image" />
             <div className='formMessage__actions'>
                 <FontAwesomeIcon icon={faIcons} onClick={() => setPickerVisible(true)} />
                 <input type="submit" className='button' value='Poster votre message' />
