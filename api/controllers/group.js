@@ -13,9 +13,15 @@ exports.create = (req, res, next) => {
             ...req.body
         }
     }
+    let imageUrl = null
+    if (req.file) {
+        imageUrl = `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
+    }
+    console.log(req.body)
     db.Groupe.create({
+        ...group,
         createBy: req.userId,
-        ...group
+        imageUrl: imageUrl,
     })
         .then((group) => {
             group.addUser(req.userId, { through: { selfGranted: false } })
