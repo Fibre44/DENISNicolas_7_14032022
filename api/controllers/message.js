@@ -63,6 +63,7 @@ exports.edit = (req, res, next) => {
         })
 }
 
+// Pour supprimer un message on doit aussi supprimer les commentaires liés pour éviter les enregistrements orphelins
 exports.delete = (req, res, next) => {
 
     db.Message.findOne({

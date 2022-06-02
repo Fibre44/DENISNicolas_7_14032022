@@ -1,7 +1,8 @@
 const db = require('./../lib/models/index.js');
+const fs = require('fs');
 
 exports.create = (req, res, next) => {
-    //Si on n'active pas la coche sur le frontend alors le champ private est vide mais il est requis coté BDD
+    //Si on n\'existe pas'active pas la coche sur le frontend alors le champ private est vide mais il est requis coté BDD
     let group = null
     if (req.body.private == undefined) {
         group = {
@@ -71,7 +72,7 @@ exports.groupMessages = (req, res, next) => {
                         res.status(500).json({ error })
                     })
             } else {
-                res.status(404).json({ message: 'Le goupe n existe pas' })
+                res.status(404).json({ message: 'Le goupe n\'existe pas existe pas' })
             }
         })
         .catch((error) => {
@@ -105,14 +106,14 @@ exports.groupComments = (req, res, next) => {
                                     if (comments) {
                                         res.status(200).json({ comments })
                                     } else {
-                                        res.status(404).json({ message: 'L\'id message n\'existe pas' })
+                                        res.status(404).json({ message: 'L\'id message n\'existe pas\'existe pas' })
                                     }
                                 })
                                 .catch((error) => {
                                     res.status(500).json({ error })
                                 })
                         } else {
-                            //on verifie si le message existe. Si il existe alors erreur 403 car il n'est pas dans le groupe sinon 404 
+                            //on verifie si le message existe. Si il existe alors erreur 403 car il n\'existe pas'est pas dans le groupe sinon 404 
                             db.Message.findOne({
                                 where: {
                                     id: req.params.idMessage
@@ -121,10 +122,10 @@ exports.groupComments = (req, res, next) => {
                                 .then((message) => {
 
                                     if (message) {
-                                        res.status(403).json({ message: 'Le commentaire n\'est pas associé à ce message' })
+                                        res.status(403).json({ message: 'Le commentaire n\'existe pas\'est pas associé à ce message' })
 
                                     } else {
-                                        res.status(404).json({ message: 'Le message n\'existe pas' })
+                                        res.status(404).json({ message: 'Le message n\'existe pas\'existe pas' })
                                     }
                                 })
                         }
@@ -134,12 +135,12 @@ exports.groupComments = (req, res, next) => {
                     })
 
             } else {
-                res.status(403).json({ message: 'Le message n\'appartient pas à ce groupe' })
+                res.status(403).json({ message: 'Le message n\'existe pas\'appartient pas à ce groupe' })
             }
         })
 
         .catch((error) => {
-            res.status(404).json({ message: 'Le groupe n\(existe pas' })
+            res.status(404).json({ message: 'Le groupe n\'existe pas\(existe pas' })
         })
 
 }
@@ -155,4 +156,58 @@ exports.getGroupeDescription = (req, res, next) => {
     }).catch((error) => {
         res.status(500).json({ error })
     })
+}
+
+//Pour supprimer un groupe on doit supprimer les messages et les commentaires
+
+exports.delete = (req, res, next) => {
+
+    if (req.params.id == 'Groupomania') {
+        res.status(403).json({ message: 'Vous ne pouvez pas supprimer le groupe Groupomania' })
+    } else {
+        db.Groupe.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((group) => {
+            if (group) {
+                group.getMessages()
+                    .then((messages) => {
+                        //On va parcourir le tableau de messages pour supprimer les commentaires
+                        messages.foreach(id =>
+                            db.Comment.destroy({
+                                where: {
+                                    MessageId: id
+                                }
+                            }).then((messages) => {
+
+                                messages.foreach(id => {
+                                    db.Message.findOne({
+                                        where: {
+                                            id: id
+                                        }
+                                    }).then((message) => {
+                                        const filename = message.dataValues.imageUrl
+                                        fs.unlink(`upload/${filename}`, () => {
+                                            db.Message.destroy({
+                                                where: {
+                                                    id: id
+                                                }
+                                            })
+                                        })
+
+                                    })
+                                })
+
+                            })
+                        )
+                    })
+            } else {
+                res.status(404).json({ message: 'Le groupe n\'existe pas' })
+            }
+        }).catch((error) => {
+            res.status(500).json({ error })
+        })
+    }
+
 }

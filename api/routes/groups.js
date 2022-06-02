@@ -12,4 +12,5 @@ router.get('/:id/message/:idMessage/comments', auth, accessControl, groupCtrl.gr
 
 router.post('/', auth, multer, groupCtrl.create)
 
+router.delete('/:id', auth, accessControl, groupCtrl.delete)
 module.exports = router;
