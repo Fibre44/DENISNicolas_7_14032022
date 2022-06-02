@@ -146,7 +146,7 @@ exports.groupComments = (req, res, next) => {
 
 exports.getGroupeDescription = (req, res, next) => {
     db.Groupe.findOne({
-        attributes: ['description'],
+        attributes: ['description', 'imageUrl', 'imageDescription'],
         where: {
             id: req.params.id
         }
