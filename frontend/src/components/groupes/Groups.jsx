@@ -1,8 +1,9 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { setData } from '../../api/api';
 import './../../style/groups.sass'
 import './../../style/button.sass'
 import { FormGroup } from './FormGroup';
+import logo from './../../img/icon-left-font.png'
 
 
 //Optimisation à prévoir revenir à deux composants
@@ -22,6 +23,8 @@ export function Groups({ groups }) {
 }
 
 const Group = memo(function ({ group }) {
+    const [image, setImage] = useState(null)
+    const [imageDescription, setImageDescription] = useState(null)
 
     const handleClick = async function (e) {
         e.preventDefault()
@@ -44,7 +47,7 @@ const Group = memo(function ({ group }) {
         }
     }
     return <>
-        <img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png" alt="Groupomia" className='groups__items__img' />
+        <img src={image ? image : logo} alt={imageDescription ? imageDescription : "Groupomia"} className='groups__items__img groups__items__img--height' />
         <p>Nom du groupe: {group.title}</p>
         <p>Description : {group.description}</p>
         <button type='button' className='button' uuid={group.id} onClick={handleClick}>Rejoindre le groupe</button>

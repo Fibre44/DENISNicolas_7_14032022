@@ -1,11 +1,13 @@
 .groups
     display: grid
-    grid-template-columns: repeat(2,1fr)
+    grid-template-columns: repeat(1,1fr)
     grid-column-gap: 10%
-    grid-row-gap: 15px
+    grid-row-gap: 50px
     width: 90%
 
-    @media all and (max-width : 2560px) and (min-width: 768px)
+    @media all and (max-width : 1024px) and (min-width: 768px)
+        grid-template-columns: repeat(3,1fr)
+    @media all and (max-width : 2560px) and (min-width: 1440px)
         grid-template-columns: repeat(5,1fr)
 
     &__ul
@@ -45,8 +47,9 @@
         justify-content: space-around
         align-items: space-around
         height: 250px
-        border: 1px solid red
+        border: 1px solid #4267b2
         border-radius: 15px
+        margin-bottom: 15px
 
         &__img
             margin-top: 2px
@@ -54,7 +57,10 @@
             max-height: 150px
             object-fit: cover
             border-top-left-radius: 30px
-            border-bottom-left-radius: 30px
+            border-top-right-radius: 30px
+
+            &--height
+                height: 50px
 
         &__button
             width: 100%
