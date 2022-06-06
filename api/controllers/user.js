@@ -6,7 +6,6 @@ const token = process.env.TOKEN
 const envDomain = process.env.DOMAIN
 const envSecure = process.env.SECURE
 
-
 exports.signup = (req, res, next) => {
     db.User.count({
         where: {
@@ -65,6 +64,7 @@ exports.login = (req, res, next) => {
                                 token,
                                 { expiresIn: '24h' }
                             ), { httpOnly: true, secure: false, domain: envDomain })
+                            console.log('Secure : ' + envSecure)
                             //cookie secure passe sur false car ne fonctionne que sur HTTPS pour postman
                             res.status(200).json({
                                 message: 'connexion'

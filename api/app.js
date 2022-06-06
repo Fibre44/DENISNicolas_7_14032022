@@ -12,8 +12,9 @@ const inviteRoute = require('./routes/invite')
 const path = require('path');
 const multer = require('multer')
 const formData = multer()
-//Gestion des objets form data
-//app.use(formData.array())
+const { application } = require('express');
+const env = require('dotenv').config()
+const envHelmet = process.env.HELMET
 
 
 app.use((req, res, next) => {
@@ -23,6 +24,15 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+
+//En local helmet bloque le chargement des images car erreur de politique CORS. Le front est sur localhost=3000 mais les images sont sur localhost:3001
+if (envHelmet === 'true') {
+  const helmet = require('helmet');
+  app.use(helmet())
+  console.log('Attention Helmet est actif sur le serveur')
+} else {
+  console.log('Helmet est inactif')
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))

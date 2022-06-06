@@ -218,6 +218,30 @@ Afin de sécuriser les tokens d'authentication vous devez éditer le fichier ~.e
 TOKEN="Ma phrase secrete"
 ```
 
+### Helmet ###
+
+Conformement aux [recommandations](https://expressjs.com/fr/advanced/best-practice-security.html) de Express l'API utilise la librairie Helmet.
+
+Cependant en local l'utilisation de helmet bloque le chargement des images en raison de la violation de la politique CORS.
+
+Afin d'utiliser de déployer l'API en local la variable d'environnement HELMET est sur false par default
+
+```env
+HELMET=false
+```
+
+```javscript
+const envHelmet = process.env.HELMET
+//En local helmet bloque le chargement des images car erreur de politique CORS. Le front est sur localhost=3000 mais les images sont sur localhost:3001
+if (envHelmet === 'true') {
+  const helmet = require('helmet');
+  app.use(helmet())
+  console.log('Attention Helmet est actif sur le serveur')
+} else {
+  console.log('Helmet est inactif')
+}
+```
+
 ### Note sur les cookies ###
 
 L'api va envoyer un cookie au frontend afin de gérer l'authentification vous pouvez indiquer le domaine du serveur dans la variable d'environnement la valeur par default est "localhost"
