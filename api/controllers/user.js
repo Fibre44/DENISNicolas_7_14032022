@@ -5,6 +5,7 @@ const env = require('dotenv').config()
 const token = process.env.TOKEN
 const envDomain = process.env.DOMAIN
 const envSecure = process.env.SECURE
+const fs = require('fs');
 
 exports.signup = (req, res, next) => {
     db.User.count({
@@ -109,64 +110,77 @@ exports.identity = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
 
-    const deleteStep = {
-        like: false,
-        comments: false,
-        messages: false,
-        invite: false,
-        groups: false
-    }
-
-    db.Like.destroy({
+    db.Message.findAll({
         where: {
             userId: req.userId
         }
-    }).then(() => {
-        deleteStep.like == true
-    }).then((deleteStep) => {
-        db.Comment.destroy({
-            where: {
-                userId: req.userId
-            }
-        }).then((deleteStep) => {
-            deleteStep.comments == true
-        }).then((deleteStep) => {
-            db.Message.destroy({
+    }).then((messages) => {
+
+        if (messages) {
+            //Etape 1 on supprime les messages de l'utilisateur avec ses commentaires
+            messages.forEach(message =>
+                fs.unlink(`upload/${message.imageUrl}`, () => {
+                    //On supprime les commentaires problème avec la gestion de la cascade de suppression de l'ORM
+                    db.Comment.destroy({
+                        where: {
+                            messageId: message.id
+                        }
+                    }).then(() => {
+                        db.Message.destroy({
+                            where: {
+                                id: message.id
+                            }
+                        })
+                    })
+                })
+            )//Fin de la boucle forEach
+            //Etape 2 on supprime les commentaires de l'utilisteur
+            db.Comment.destroy({
                 where: {
                     userId: req.userId
-
                 }
-            })
-        }).then((deleteStep) => {
-            //deleteStep.messages == true
-        }).then((deleteStep) => {
-            db.User.findOne({
-                where: {
-                    id: req.userId
-                }
-            }).then((user) => {
-                //Suppression des affectations aux groupes
-                user.getGroupes()
-                    .then((userGroups) => {
-                        for (let i = 0; i < userGroups.length; i++) {
-                            console.log(userGroups[i].dataValues.id)
-                            user.removeGroupe(userGroups[i].id, { through: { selfGranted: false } })
-                        }
-                    })
             }).then(() => {
-                db.User.destroy({
+                //Etape 3 on supprime les likes de l'utilisateur
+                db.Like.destroy({
+                    where: {
+                        userId: req.userId
+                    }
+                })
+            }).then(() => {
+                //Etape 4 on récupére la liste des groupes de l'utilisateur et on supprime les affectations
+                db.User.findOne({
                     where: {
                         id: req.userId
                     }
+                }).then((user) => {
+                    user.getGroupes()
+                        .then((groupes) => {
+                            groupes.forEach(groupe =>
+                                groupe.removeUser(req.userId, { through: { selfGranted: false } })
+                            )
+                        }).then(() => {
+                            //Etape 5 on supprime l'utilisteur
+                            db.User.destroy({
+                                where: {
+                                    id: req.userId
+                                }
+                            }).then(() => {
+                                res.status(200).json({ message: 'Suppression de l utilisateur' })
+                            })
+                        }).catch((error) => {
+                            res.status(500).json({ error })
+                        })
                 })
             })
-                .then((user) => user ? res.status(200).json({ deleteStep }) : res.status(404).json({ error: "L'utilisateur n'existe pas" }))
-                .catch((error) => {
-                    res.status(500).json({ error })
-                })
-        })
-    })
 
+
+        } else {
+            res.status(500).json({ message: 'Erreur de récupération des messages' })
+        }
+    }).catch((errror) => {
+        res.status(500).json({ errror })
+
+    })
 
 }
 

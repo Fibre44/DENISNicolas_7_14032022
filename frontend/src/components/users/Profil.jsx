@@ -4,7 +4,7 @@ import { Alert } from '../ui/Alert';
 import { Confirmation } from '../ui/Confirmation';
 import './../../style/profil.sass'
 import './../../style/button.sass'
-
+import { Disconnect } from '../Disconnect';
 import { setData, postFormData } from './../../api/api';
 
 export function Profil({ refreshPicture }) {
@@ -47,9 +47,10 @@ export function Profil({ refreshPicture }) {
     async function deleteUser() {
         try {
             const deleteUser = await setData('/users/delete', 'DELETE')
-            const status = await deleteUser
+            const status = await deleteUser.status
             if (status == "200") {
-                setSucces("Le mot de passe a été changé avec succès")
+                setSuccesDelete("Suppression de l'utilisateur")
+
             } else {
                 setErrorDelete("Erreur lors de la suppression")
             }
