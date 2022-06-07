@@ -12,14 +12,15 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
 ### API ###
 
 ```json
- "dependencies": {
+  "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "helmet": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^3.0.0",
-    "multer": "^1.4.4",
+    "multer": "^1.4.5-lts.1",
     "sequelize": "^6.17.0"
   }
 ```
@@ -31,18 +32,17 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.2.0",
     "emoji-picker-react": "^3.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-paginate": "^8.1.3",
     "react-responsive": "^9.0.0-beta.6",
-    "react-scripts": "5.0.0",
-    "sass": "^1.49.9",
+    "react-scripts": "5.0.1",
+    "sass": "^1.52.2",
     "web-vitals": "^2.1.4"
-  },
+  }
 ```
 
 ## Description de l'API ##
