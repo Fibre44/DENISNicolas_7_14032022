@@ -20,9 +20,14 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     //Récupération des messages
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/groups/' + actifGroup.uuid + '/messages')
-            const groupMessages = await response.json()
-            setMessages(groupMessages)
+            try {
+                const response = await getData('/groups/' + actifGroup.uuid + '/messages')
+                const groupMessages = await response.json()
+                setMessages(groupMessages)
+            } catch {
+                console.error('Erreur de récupération des messages')
+            }
+
         }
         fetchData();
     }, [refreshMessage]);
@@ -30,10 +35,13 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     //Récupération des likes messages
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/like/message/' + actifGroup.uuid)
-            const likes = await response.json()
-            setMessagesLikes(likes.likes)
-
+            try {
+                const response = await getData('/like/message/' + actifGroup.uuid)
+                const likes = await response.json()
+                setMessagesLikes(likes.likes)
+            } catch {
+                console.error('Erreur de récupération les likes messages')
+            }
         }
         fetchData();
     }, [refreshMessage]);
@@ -41,9 +49,14 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     //Récupération des likes de l'utilisateur
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/like/message/' + actifGroup.uuid + '/user')
-            const likesUser = await response.json()
-            setLikesUser(likesUser.likes)
+            try {
+                const response = await getData('/like/message/' + actifGroup.uuid + '/user')
+                const likesUser = await response.json()
+                setLikesUser(likesUser.likes)
+            } catch {
+                console.error('Erreur de récupération les likes')
+
+            }
         }
         fetchData();
     }, [refreshMessage]);
@@ -51,9 +64,13 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     //Récupération des photos de profils
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/users/pictures')
-            const pictures = await response.json()
-            setPictures(pictures)
+            try {
+                const response = await getData('/users/pictures')
+                const pictures = await response.json()
+                setPictures(pictures)
+            } catch {
+                console.error('Erreur de récupération de la photo de profil')
+            }
         }
         fetchData();
     }, [refreshMessage]);

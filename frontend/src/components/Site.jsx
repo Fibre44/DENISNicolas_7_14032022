@@ -37,6 +37,7 @@ export function Site({ credentials }) {
                 const response = await getData('/users/identity')
                 const userIdentity = await response.json()
                 setIdentity(userIdentity.user)
+
             } catch {
                 console.error('Impossible de récupérer l\'identité')
                 setPage(() => 'Error')
@@ -48,9 +49,15 @@ export function Site({ credentials }) {
     //récupération de la photo de profil
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/users/picture')
-            const picture = await response.json()
-            setPicture(picture)
+            try {
+                const response = await getData('/users/picture')
+                const picture = await response.json()
+                setPicture(picture)
+            } catch {
+                console.error('Impossible de récupérer la photo de profil')
+                setPage(() => 'Error')
+            }
+
         }
         fetchData();
     }, [refreshPicture]);
@@ -58,9 +65,14 @@ export function Site({ credentials }) {
     //récupération de l'ensemble des groupes
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/groups')
-            const groups = await response.json()
-            setGroups(groups)
+            try {
+                const response = await getData('/groups')
+                const groups = await response.json()
+                setGroups(groups)
+            } catch {
+                console.error('Impossible de récupérer les groupes')
+                setPage(() => 'Error')
+            }
         }
         fetchData();
     }, []);
@@ -86,9 +98,15 @@ export function Site({ credentials }) {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/invite')
-            const myInvitation = await response.json()
-            setInvitations(myInvitation)
+            try {
+                const response = await getData('/invite')
+                const myInvitation = await response.json()
+                setInvitations(myInvitation)
+            } catch {
+                console.error('Impossible de récupérer les invitations')
+                setPage(() => 'Error')
+            }
+
         }
         fetchData();
     }, [page, refreshInvite]);
@@ -96,14 +114,19 @@ export function Site({ credentials }) {
     //récupération du nombre d'invitation
     useEffect(() => {
         async function fetchData() {
-            const response = await getData('/invite/count')
-            const count = await response.json()
-            setCountInvite(count)
+            try {
+                const response = await getData('/invite/count')
+                const count = await response.json()
+                setCountInvite(count)
+            } catch {
+                console.error('Impossible de récupérer le nombre des invitations')
+                setPage(() => 'Error')
+            }
+
             // ...
         }
         fetchData();
     }, [page, refreshInvite]);
-
 
     let content = null
 

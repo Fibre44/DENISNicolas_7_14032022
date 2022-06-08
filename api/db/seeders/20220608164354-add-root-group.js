@@ -11,14 +11,9 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    return queryInterface.bulkInsert('Users', [{
-      id: 'root',
-      email: 'admin@goupomania.fr',
-      password: '$2b$10$Y2G4kNKzLrTYYDk46kQcI.vJn4MLU/RUlSpVAEv9ZbC9vnPnQYvGK',
-      firstname: 'root',
-      lastname: 'root',
-      role: 'Administrator',
-      picture: null,
+    return queryInterface.bulkInsert('User_Groupe', [{
+      UserId: 'root',
+      GroupeId: 'Groupomania',
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

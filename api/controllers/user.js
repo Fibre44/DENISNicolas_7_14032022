@@ -94,7 +94,7 @@ exports.login = (req, res, next) => {
 exports.identity = (req, res, next) => {
 
     db.User.findOne({
-        attributes: ['id', 'firstname', 'lastname'],
+        attributes: ['id', 'firstname', 'lastname', 'role'],
 
         where: {
             id: req.userId

@@ -55,3 +55,26 @@ exports.deleteComment = (req, res, next) => {
         })
 
 }
+
+exports.addAdmin = (req, res, next) => {
+
+    db.User.findOne({
+        where: {
+            email: req.body.email
+        }
+    }).then((user) => {
+        if (user) {
+            db.User.update({ role: 'Administrator' },
+                { where: { email: req.body.email } }
+            ).then(() => {
+                res.status(200).json({ message: 'Mise à jour du role' })
+            })
+        } else {
+            res.status(404).json({ message: 'Utilisateur inexistant' })
+        }
+    }).catch((error) => {
+        res.status(500).json({ error })
+    })
+
+
+}
