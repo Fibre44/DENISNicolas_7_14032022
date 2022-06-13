@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     inviteBy: DataTypes.STRING
   }, {
     sequelize,
-    tableName: "invites",
+    tableName: "Invites",
 
     modelName: 'Invite',
   });
