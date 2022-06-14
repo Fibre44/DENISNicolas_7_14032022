@@ -15,6 +15,7 @@ const formData = multer()
 const { application } = require('express');
 const env = require('dotenv').config()
 const envHelmet = process.env.HELMET
+const envSecure = process.env.SECURE
 
 
 app.use((req, res, next) => {
@@ -33,6 +34,7 @@ if (envHelmet === 'true') {
 } else {
   console.log('Helmet est inactif')
 }
+console.log('La variable Secure est sur la valeur : ' + envSecure)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))

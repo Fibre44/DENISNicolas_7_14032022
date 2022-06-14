@@ -278,12 +278,15 @@ Pour démarrer l'API lancer une des commandes suivantes :
 Retour de la commande
 
 ```bash
-denisnicolas@Mac-mini-de-DENIS api % nodemon server
+Debugger attached.
 [nodemon] 2.0.15
 [nodemon] to restart at any time, enter `rs`
 [nodemon] watching path(s): *.*
 [nodemon] watching extensions: js,mjs,json
-[nodemon] starting `node server.js`
+[nodemon] starting `node ./api/server.js`
+Debugger attached.
+Helmet est inactif
+La variable Secure est sur la valeur : true
 Listening on port 3001
 ```
 
