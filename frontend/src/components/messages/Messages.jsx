@@ -107,7 +107,7 @@ const Message = memo(function ({ message, refreshMessage, actifGroup, identity, 
         <div className='messages__footer'>
             <div className='messages__date'>Publié : {message.updatedAt}</div>
             <div className='messages__footer__icons'>
-                {likesUser ? (<span className='messages__like'>{countLike}</span>) : <span></span>}
+                {countLike ? (<span className='messages__like'>{countLike}</span>) : <span></span>}
                 <FontAwesomeIcon icon={faThumbsUp} onClick={addLike} color={color} />
             </div>
         </div>
