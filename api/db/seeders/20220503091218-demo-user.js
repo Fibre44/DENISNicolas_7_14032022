@@ -19,8 +19,10 @@ module.exports = {
       lastname: 'root',
       role: 'Administrator',
       picture: null,
+      pictureUrl: null,
       createdAt: new Date(),
       updatedAt: new Date()
+
     }]);
   },
 

@@ -72,7 +72,7 @@ export async function postFormData(endpoint, method, data) {
         headers: {
             'Accept': 'application/json',
             'credentials': 'include',
-            //'Content-Type': 'multipart/form-data;'
+            // 'Content-Type': 'multipart/form-data;charset=utf-8'
         },
         body: (data)
     });
