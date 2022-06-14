@@ -229,6 +229,7 @@ exports.logout = (req, res, next) => {
     res.cookie('token', 'none', {
         expires: new Date(Date.now() + 5 * 1000),
         httpOnly: true,
+        domain: envDomain
     })
     res
         .status(200)
