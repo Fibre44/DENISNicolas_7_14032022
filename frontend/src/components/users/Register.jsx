@@ -108,7 +108,7 @@ export function Register({ onClick }) {
             <div className='alert'>
                 {errorPassword && <Alert>{errorPassword}</Alert>}
                 {errorAPI && <Alert>{errorAPI}</Alert>}
-                {errorPasswordFormat && <Alert>Votre mot de passe doit conntenir une minuscule, une majuscule, un nombre et un caractère spécial</Alert>}
+                {errorPasswordFormat && <Alert>Votre mot de passe doit contenir une minuscule, une majuscule, un nombre et un caractère spécial</Alert>}
                 {errorEmail && <Alert>L'email n'est pas valide</Alert>}
             </div>
         </div>

@@ -8,6 +8,7 @@ import { getData } from '../api/api';
 import { useMediaQuery } from 'react-responsive'
 import { InviteForm } from './invite/InviteForm';
 import { Loading } from './ui/Loading'
+import { Error } from './ui/Error'
 
 export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups }) {
     const [refreshMessage, setRefreshMessage] = useState(null)
@@ -16,6 +17,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     const [likesUser, setLikesUser] = useState(null)
     const [pictures, setPictures] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
 
     //Récupération des messages
     useEffect(() => {
@@ -26,6 +28,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
                 setMessages(groupMessages)
             } catch {
                 console.error('Erreur de récupération des messages')
+                setError(() => true)
             }
 
         }
@@ -41,6 +44,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
                 setMessagesLikes(likes.likes)
             } catch {
                 console.error('Erreur de récupération les likes messages')
+                setError(() => true)
             }
         }
         fetchData();
@@ -55,7 +59,7 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
                 setLikesUser(likesUser.likes)
             } catch {
                 console.error('Erreur de récupération les likes')
-
+                setError(() => true)
             }
         }
         fetchData();
@@ -93,18 +97,19 @@ export function Feed({ actifGroup, identity, myGroups, onChange, refreshMyGroups
     const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' })
     // on attend que la récupération des éléments pour afficher la page
     return <>
-        {loading ? <Loading /> : <main className='main'>
-            {isDesktopOrLaptop &&
-                <MyGroupsLaptop myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroupsLaptop >
-            }
-            {isTabletOrMobile &&
-                <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
-            }
-            <GroupDescription actifGroup={actifGroup} refreshMyGroups={refreshMyGroups} />
-            <InviteForm identity={identity} actifGroup={actifGroup} />
-            <FormMessage actifGroup={actifGroup} identity={identity} refreshMessage={setRefreshMessage} />
-            <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} pictures={pictures} />
-        </main>}
+        {error ? <Error /> :
+            loading ? <Loading /> : <main className='main'>
+                {isDesktopOrLaptop &&
+                    <MyGroupsLaptop myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroupsLaptop >
+                }
+                {isTabletOrMobile &&
+                    <MyGroups myGroups={myGroups} onChange={onChange} refreshMessage={setRefreshMessage}></MyGroups>
+                }
+                <GroupDescription actifGroup={actifGroup} refreshMyGroups={refreshMyGroups} />
+                <InviteForm identity={identity} actifGroup={actifGroup} />
+                <FormMessage actifGroup={actifGroup} identity={identity} refreshMessage={setRefreshMessage} />
+                <Messages messages={messages} refreshMessage={setRefreshMessage} actifGroup={actifGroup} identity={identity} messagesLikes={messagesLikes} likesUser={likesUser} pictures={pictures} />
+            </main>}
     </>
 
 }
