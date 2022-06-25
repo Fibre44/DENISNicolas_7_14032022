@@ -7,12 +7,14 @@ import { Alert } from './../ui/Alert';
 export function Register({ onClick }) {
     const [errorAPI, setErrorAPI] = useState(null)
     const [errorPassword, setErrorPassword] = useState(null)
+    const [errorPasswordFormat, setErrorPasswordFormat] = useState(null)
     const [errorEmail, setErrorEmail] = useState(null)
     const handleSubmit = async function (e) {
         setErrorPassword(null)
         setErrorAPI(null)
+        setErrorEmail(() => false)
+        setErrorPasswordFormat(() => false)
         e.preventDefault()
-
         /**
          * 
          * @param {string} email 
@@ -40,20 +42,26 @@ export function Register({ onClick }) {
             }
         }
 
+        async function validationPassword(password) {
+            let passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,10}$", "g")
+            let testPassword = passwordRegex.test(password)
+            return testPassword
+        }
+
         if (e.target.password.value == e.target.passwordConfirm.value) {
             const form = e.target
             const data = Object.fromEntries(new FormData(form))
             const testEmail = await validationEmail(e.target.email.value)
-            setErrorEmail(() => false)
+            const testPassword = await validationPassword(e.target.password.value)
+            if (testPassword != true) {
+                setErrorPasswordFormat(() => true)
+            }
             if (testEmail) {
                 try {
                     const userRegister = await userPost(data, '/users/signup')
                     const status = await userRegister.status
                     if (status == "200") {
                         onClick('login')
-                    } else {
-                        console.log(userRegister.message)
-                        setErrorAPI("L'email existe déjà si vous avez déjà un compte vous pouvez utiliser la fonction mot de passe oublié")
                     }
                 }
                 catch (error) {
@@ -78,11 +86,11 @@ export function Register({ onClick }) {
                 </div>
                 <div className='form__field'>
                     <label htmlFor="password" >Mot de passe</label>
-                    <input type="password" name="password" id="password" required></input>
+                    <input type="password" name="password" id="password" minLength="8" maxLength="10" required></input>
                 </div>
                 <div className='form__field'>
                     <label htmlFor="passwordConfirm" >Confirmer le mot de passe</label>
-                    <input type="password" name="passwordConfirm" id="passwordConfirm" required></input>
+                    <input type="password" name="passwordConfirm" id="passwordConfirm" minLength="8" maxLength="10" required></input>
                 </div>
                 <div className='form__field'>
                     <label htmlFor="firstname" >Prénom </label>
@@ -100,6 +108,7 @@ export function Register({ onClick }) {
             <div className='alert'>
                 {errorPassword && <Alert>{errorPassword}</Alert>}
                 {errorAPI && <Alert>{errorAPI}</Alert>}
+                {errorPasswordFormat && <Alert>Votre mot de passe doit conntenir une minuscule, une majuscule, un nombre et un caractère spécial</Alert>}
                 {errorEmail && <Alert>L'email n'est pas valide</Alert>}
             </div>
         </div>
