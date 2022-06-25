@@ -132,9 +132,9 @@ Exemple avec mariadb:
 ```json
 {
   "development": {
-    "username": "user",
-    "password": "password",
-    "database": "database",
+    "username": "tuto_p7",
+    "password": "pwd",
+    "database": "tuto",
     "host": "127.0.0.1",
     "dialect": "mariadb",
     "seederStorage": "json",
@@ -187,31 +187,6 @@ Le seeder group va créer le groupe par default Groupomania et demo-user va ins�
 
 ### Gestion des variables d'environnement ###
 
-L'application utilise des variables d'environnement pour utiliser les variables avec le deboguer de VS Code il faut créer le fichier .launch.json à la racine de api
-```json
-{
-    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
-    // Pointez pour afficher la description des attributs existants.
-    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "name": "nodemon",
-            "program": "${workspaceFolder}/api/server.js",
-            "request": "launch",
-            "restart": true,
-            "runtimeExecutable": "nodemon",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "node",
-            "envFile": "${workspaceFolder}/api/.env"
-        },
-    ]
-}
-```
 Afin de sécuriser les tokens d'authentication vous devez éditer le fichier ~.env.dist en .env
 
 ```env
