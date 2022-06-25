@@ -14,7 +14,7 @@ export async function userPost(data, endpoint) {
         const responseData = await response.json()
         return { data: responseData, status: response.status };
     } else {
-        return { message: "Identifiant ou mot de passe invalide" }
+        return { message: response }
     }
 }
 

@@ -52,6 +52,7 @@ export function Register({ onClick }) {
                     if (status == "200") {
                         onClick('login')
                     } else {
+                        console.log(userRegister.message)
                         setErrorAPI("L'email existe déjà si vous avez déjà un compte vous pouvez utiliser la fonction mot de passe oublié")
                     }
                 }

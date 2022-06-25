@@ -6,8 +6,11 @@ const token = process.env.TOKEN
 const envDomain = process.env.DOMAIN
 const envSecure = process.env.SECURE
 const fs = require('fs');
+const passwordValidator = require('password-validator');
+
 
 exports.signup = (req, res, next) => {
+
     db.User.count({
         where: {
             email: req.body.email
@@ -16,6 +19,23 @@ exports.signup = (req, res, next) => {
         .then((user) => {
             //Si l'email n'existe pas
             if (user == 0) {
+
+                //On est que le champ mot de passe est confirme à la politique de sécurité
+                const schema = new passwordValidator();
+                schema
+                    .is().min(8)                                    // Minimum length 8
+                    .is().max(100)                                  // Maximum length 100
+                    .has().uppercase()                              // Must have uppercase letters
+                    .has().lowercase()                              // Must have lowercase letters
+                    .has().digits(2)                                // Must have at least 2 digits
+                    .has().not().spaces()                           // Should not have spaces
+                    .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
+
+                const testPassword = schema.validate(req.body.password)
+                if (testPassword != true) {
+                    res.status(403).json({ message: 'Le mode de passe ne répond pas aux critères de securité' })
+                }
+
                 bcrypt.hash(req.body.password, 10)
                     .then(hash => {
                         db.User.create({
@@ -29,7 +49,7 @@ exports.signup = (req, res, next) => {
                             .then(function (user) {
                                 user.addGroupe('Groupomania', { through: { selfGranted: false } })
                                     .then((user) => {
-                                        res.json({ message: "Création de l'utilisateur", userId: user.id })
+                                        res.json({ message: "Création de l'utilisateur", userId: user.id, test: testPassword })
                                     })
                             })
                             .catch((error) => {
