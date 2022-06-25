@@ -32,11 +32,7 @@ export function Register({ onClick }) {
             //Exemple test@test.test => test == test donc vrai
             //Exemple test@test.fr => test != fr donc faux
             let testDomain = emailDomainRegex.test(emailSplit2[0])
-            console.log("email contient " + emailSplit);
-            console.log("regex contient : " + emailDomain[1] + " " + emailSplit2[0]);
-            console.log('testEmail : ' + testEmail)
-            console.log("testDomain " + testDomain);
-            console.log(testEmail);
+
             if (testEmail == true && testDomain == false && emailSplit2 != undefined) {
                 return true
             } else {
@@ -48,6 +44,7 @@ export function Register({ onClick }) {
             const form = e.target
             const data = Object.fromEntries(new FormData(form))
             const testEmail = await validationEmail(e.target.email.value)
+            setErrorEmail(() => false)
             if (testEmail) {
                 try {
                     const userRegister = await userPost(data, '/users/signup')
@@ -96,7 +93,7 @@ export function Register({ onClick }) {
                     <input type="text" name="lastname" id="lastname" required></input>
                 </div>
                 <div className='form__field'>
-                    <button type="submit" className='button'>Inscription</button>
+                    <button type="submit" className='button' aria-label="Envoyer">Inscription</button>
                 </div>
             </form>
             <div className='alert'>

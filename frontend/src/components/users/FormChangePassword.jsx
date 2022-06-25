@@ -25,7 +25,7 @@ export function FormChangePassword() {
                 <label htmlFor="newPasswordConfirm">Confirmer votre nouveau mot de passe</label>
                 <input htmlFor='newPasswordConfirm' name='newPasswordConfirm' type='password' placeholder='Saisir de nouveau votre nouveau mot de passe' required></input>
             </div>
-            <button type="submit">Mettre à jour le mot de passe</button>
+            <button type="submit" aria-label="Envoyer">Mettre à jour le mot de passe</button>
 
         </form>
 

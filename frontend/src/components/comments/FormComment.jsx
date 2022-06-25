@@ -49,7 +49,7 @@ export function FormComment({ messageId, refreshComment, actifGroup, identity, m
         <input type="text" id="comment" name="comment" placeholder="Taper votre commentaire ici" value={inputStr} onChange={e => setInputStr(() => e.target.value)}></input>
         <div className='formMessage__actions'>
             <FontAwesomeIcon icon={faIcons} onClick={() => setPickerVisible(true)} />
-            <button type="submit" className='button'>Poster votre commentaire</button>
+            <button type="submit" className='button' aria-label="Envoyer">Poster votre commentaire</button>
         </div>
         {pickerVisible ? (<div>
             {chosenEmoji ? (
