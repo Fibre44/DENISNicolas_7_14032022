@@ -7,6 +7,105 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
 - NodeJS 16
 - Moteur de base de données MariaDB
 
+## Procédure d'installation ##
+
+Télécharger le code source
+
+```bash
+git clone https://github.com/Fibre44/DENISNicolas_7_14032022.git
+```
+
+Placez  vous dans le repértoire API.
+
+```bash
+cd api
+```
+
+Puis lancer la commande
+
+```bash
+npm install
+```
+Installer Sequelize CLI
+
+```bash
+# installe la commande sequelize
+$ npm install -g sequelize-cli
+```
+
+Créer la base de données
+
+```bash
+mariadb
+CREATE DATABASE tuto;
+```
+Créer un utilisateur avec la commande
+```bash
+CREATE USER 'tuto_p7'@'localhost' IDENTIFIED BY 'pwd'
+```
+Puis donner les droits à l'utilisateur d'accéder à la base de données pour l'exemple tuto
+```bash
+GRANT ALL PRIVILEGES ON tuto.* TO 'tuto_p7'@localhost IDENTIFIED BY 'pwd'
+```
+On applique les droits
+```bash
+FLUSH PRIVILEGES;
+```
+Le fichier config.json.dist est déjà configurer avec les éléments de connexion.
+```bash
+cp ./config/config.json.dist ./config/config.json 
+```
+
+Pour créer les tables dans la base de données
+
+```bash
+npx sequelize-cli db:migrate
+```
+
+Sequelize sauvegarde l'historique des imports dans la table SequelizeMeta
+
+![MariaDB](./doc/migrations.png)
+
+Pour intégrer les seeders
+
+```bash
+  npx sequelize-cli db:seed:all
+```
+
+Pour recopier les variables d'environnements
+
+```bash
+  cp ./.env.dist ./.env
+```
+
+Lancer l'API
+
+```bash
+  nodemon server
+```
+
+## Installation du frontend ##
+
+**Le frontend utilise la librairie [React](https://fr.reactjs.org)**
+
+Placez  vous dans le repértoire frontend
+
+```bash
+cd frontend
+```
+
+Puis lancer la commande
+
+```bash
+npm install
+```
+
+Lancer le serveur React avec la commande
+
+```bash
+  npm run start
+```
+
 ## Liste des dépendances ##
 
 ### API ###
@@ -49,141 +148,6 @@ Pour le bon fonctionnement de l'application vous devez disposer des prérequis :
 
 La description de l'API est disponible sur [Postman](https://documenter.getpostman.com/view/17641464/Uz5DqHeQ).
 
-## Installation du projet ##
-
-Télécharger le code source
-
-```bash
-git clone https://github.com/Fibre44/DENISNicolas_7_14032022.git
-```
-
-Placez  vous dans le repértoire API.
-
-```bash
-cd api
-```
-
-Puis lancer la commande
-
-```bash
-npm install
-```
-
-### Configuration de Sequelize ##
-
-Pour toute information sur l'ORM sequelize vous pouvez consulter la documentation sur :  [Sequelize](https://sequelize.org).
-
-Pour installer Sequelize Cli taper la commande suivante :
-
-```bash
-# installe la commande sequelize
-$ npm install -g sequelize-cli
-```
-
-Par default le projet utilise mariadb avec la librairie associé
-```bash
-$ npm install --save mariadb
-```
-Vous pouvez installer un autre moteur de base de données si besoin
-```bash
-$ npm install --save pg pg-hstore
-$ npm install --save mysql 
-$ npm install --save mariadb
-$ npm install --save sqlite3
-$ npm install --save tedious // MSSQL
-```
-
-Création de la BDD attention avec mariadb la commande de création depuis Sequelize Cli ne fonctionne pas
-```bash
-denisnicolas@Mac-mini-de-DENIS api % sequelize db:create
-Sequelize CLI [Node: 16.14.0, CLI: 6.4.1, ORM: 6.19.0]
-Loaded configuration file "config/config.json".
-Using environment "development".
-ERROR: Dialect mariadb does not support db:create / db:drop commands
-denisnicolas@Mac-mini-de-DENIS api % 
-ERROR: Dialect mariadb does not support db:create / db:drop commands
-```
-Pour créer une base de données sous mariadb depuis le compte root
-
-```bash
-mariadb
-CREATE DATABASE tuto;
-```
-
-Créer un utilisateur avec la commande
-```bash
-CREATE USER 'tuto_p7'@'localhost' IDENTIFIED BY 'pwd'
-```
-Puis donner les droits à l'utilisateur d'accéder à la base de données pour l'exemple tuto
-```bash
-GRANT ALL PRIVILEGES ON tuto.* TO 'tuto_p7'@localhost IDENTIFIED BY 'pwd'
-```
-On applique les droits
-```bash
-FLUSH PRIVILEGES;
-```
-L'utilisateur SQL pourra accéder à la base de données
-![MariaDBShow](./doc/mariadb_show.png)
-
-Dans db/config.json.dist~ vous devez editer le fichier **puis le sauvegarder sous config.json**.
-
-Exemple avec mariadb:
-
-```json
-{
-  "development": {
-    "username": "tuto_p7",
-    "password": "pwd",
-    "database": "tuto",
-    "host": "127.0.0.1",
-    "dialect": "mariadb",
-    "seederStorage": "json",
-    "seederStoragePath": "sequelizeData.json",
-    "seederStorageTableName": "sequelize_data"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}
-```
-
-Pour créer les tables dans la base de données
-
-```bash
-npx sequelize-cli db:migrate
-```
-
-Sequelize sauvegarde l'historique des imports dans la table SequelizeMeta
-
-![MariaDB](./doc/migrations.png)
-
-Pour intégrer les seeders
-
-```bash
-  npx sequelize-cli db:seed:all
-```
-
-L'historique de l'intégration des seeders se trouve à la racine du dossier api dans le fichier sequelizeData.json
-
-```json
-[
-  "20220411192741-group.js",
-  "20220503091218-demo-user.js"
-]
-```
-
-Le seeder group va créer le groupe par default Groupomania et demo-user va insérer le compte utilisateur root.
 
 ### Gestion des variables d'environnement ###
 
@@ -279,22 +243,6 @@ Listening on port 3001
 
 ```
 
-## Installation du frontend ##
-
-**Le frontend utilise la librairie [React](https://fr.reactjs.org)**
-
-Placez  vous dans le repértoire frontend
-
-```bash
-cd frontend
-```
-
-Puis lancer la commande
-
-```bash
-npm install
-```
-
 ## Note dans le package.json utilisation du proxy ##
 
 Dans package.json l'application utilise le proxy de React pour rediriger les requetes vers l'api
@@ -302,33 +250,9 @@ Dans package.json l'application utilise le proxy de React pour rediriger les req
 ```json
 "proxy": "http://localhost:3001"
 ```
+## Création d'une version de production ##
 
-Pour lancer le serveur de developpement React
-
-```bash
-  npm run start
-```
-
-Retour de la commande
-
-```bash
-  Local:            <http://localhost:3000>
-  On Your Network:  <http://192.168.1.16:3000>
-
-Note that the development build is not optimized.
-To create a production build, use npm run build.
-
-assets by path static/js/*.js 3.7 MiB
-  asset static/js/bundle.js 3.69 MiB [emitted] (name: main) 1 related asset
-  asset static/js/node_modules_web-vitals_dist_web-vitals_js.chunk.js 6.92 KiB [emitted] 1 related asset
-asset index.html 1.62 KiB [emitted]
-asset asset-manifest.json 458 bytes [emitted]
-cached modules 3.23 MiB [cached] 173 modules
-runtime modules 31.6 KiB 15 modules
-webpack 5.72.0 compiled successfully in 1725 ms
-```
-
-Pour build une version à destination d'un environnement de production vous pouvez lancer la commande suivante
+Lancer la commande
 
 ```bash
   npm run build
