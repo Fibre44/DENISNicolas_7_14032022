@@ -8,7 +8,6 @@ const envSecure = process.env.SECURE
 const fs = require('fs');
 const passwordValidator = require('password-validator');
 
-
 exports.signup = (req, res, next) => {
 
     db.User.count({
@@ -19,7 +18,6 @@ exports.signup = (req, res, next) => {
         .then((user) => {
             //Si l'email n'existe pas
             if (user == 0) {
-
                 //On est que le champ mot de passe est confirme à la politique de sécurité
                 const schema = new passwordValidator();
                 schema
@@ -34,29 +32,30 @@ exports.signup = (req, res, next) => {
                 const testPassword = schema.validate(req.body.password)
                 if (testPassword != true) {
                     res.status(403).json({ message: 'Le mode de passe ne répond pas aux critères de securité' })
+                } else {
+                    bcrypt.hash(req.body.password, 10)
+                        .then(hash => {
+                            db.User.create({
+                                email: req.body.email,
+                                password: hash,
+                                firstname: req.body.firstname,
+                                lastname: req.body.lastname,
+                                role: 'Employee',
+                                picture: ''
+                            })
+                                .then(function (user) {
+                                    user.addGroupe('Groupomania', { through: { selfGranted: false } })
+                                        .then((user) => {
+                                            res.status(200).json({ message: "Création de l'utilisateur", userId: user.id, test: testPassword })
+                                        })
+                                })
+                                .catch((error) => {
+                                    res.status(500).json({ error })
+                                })
+                        })
+                        .catch(error => res.status(403).json({ error }));
                 }
 
-                bcrypt.hash(req.body.password, 10)
-                    .then(hash => {
-                        db.User.create({
-                            email: req.body.email,
-                            password: hash,
-                            firstname: req.body.firstname,
-                            lastname: req.body.lastname,
-                            role: 'Employee',
-                            picture: ''
-                        })
-                            .then(function (user) {
-                                user.addGroupe('Groupomania', { through: { selfGranted: false } })
-                                    .then((user) => {
-                                        res.json({ message: "Création de l'utilisateur", userId: user.id, test: testPassword })
-                                    })
-                            })
-                            .catch((error) => {
-                                res.status(500).json({ error })
-                            })
-                    })
-                    .catch(error => res.status(403).json({ error }));
             } else {
                 res.status(403).json({ error: "L'email existe déjà dans la base" })
             }
