@@ -7,6 +7,6 @@ const multer = require('./../middleware/multer-config');
 
 router.post('/', auth, multer, accessControl, commentCtrl.create)
 router.delete('/:idComment', auth, accessControl, commentCtrl.delete)
-router.put('/:idComment', auth, accessControl, commentCtrl.edit)
+router.put('/:idComment', auth, multer, accessControl, commentCtrl.edit)
 
 module.exports = router;
