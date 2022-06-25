@@ -7,27 +7,62 @@ import { Alert } from './../ui/Alert';
 export function Register({ onClick }) {
     const [errorAPI, setErrorAPI] = useState(null)
     const [errorPassword, setErrorPassword] = useState(null)
+    const [errorEmail, setErrorEmail] = useState(null)
     const handleSubmit = async function (e) {
         setErrorPassword(null)
         setErrorAPI(null)
         e.preventDefault()
 
+        /**
+         * 
+         * @param {string} email 
+         * @returns true si email valide false si email invalide
+         */
+
+        async function validationEmail(email) {
+            let emailRegex = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+            //On split l'email pour extraire pour controler que un email comme test@test.test ne puisse pas passer
+            //attention si l'utilisateur  saisie uniquement "test" erreur dans la console mais au niveau HTML le formulaire est bloqué car l'input n'est pas bon
+            let emailSplit = email.split("@");
+            let emailSplit2 = emailSplit[1].split(".");
+            let emailDomain = email.split(".");
+            let emailDomainRegex = new RegExp('^' + emailDomain[1] + '\w{0,10}', 'g')
+            let testEmail = emailRegex.test(email);
+            //la logique est inversée le test va donner vrai si la chaine de carctère après le @ = le domaine
+            //Exemple test@test.test => test == test donc vrai
+            //Exemple test@test.fr => test != fr donc faux
+            let testDomain = emailDomainRegex.test(emailSplit2[0])
+            console.log("email contient " + emailSplit);
+            console.log("regex contient : " + emailDomain[1] + " " + emailSplit2[0]);
+            console.log('testEmail : ' + testEmail)
+            console.log("testDomain " + testDomain);
+            console.log(testEmail);
+            if (testEmail == true && testDomain == false && emailSplit2 != undefined) {
+                return true
+            } else {
+                return false
+            }
+        }
+
         if (e.target.password.value == e.target.passwordConfirm.value) {
             const form = e.target
             const data = Object.fromEntries(new FormData(form))
-
-            try {
-                const userRegister = await userPost(data, '/users/signup')
-                const status = await userRegister.status
-                if (status == "200") {
-                    onClick('login')
-                } else {
-                    setErrorAPI("L'email existe déjà si vous avez déjà un compte vous pouvez utiliser la fonction mot de passe oublié")
+            const testEmail = await validationEmail(e.target.email.value)
+            if (testEmail) {
+                try {
+                    const userRegister = await userPost(data, '/users/signup')
+                    const status = await userRegister.status
+                    if (status == "200") {
+                        onClick('login')
+                    } else {
+                        setErrorAPI("L'email existe déjà si vous avez déjà un compte vous pouvez utiliser la fonction mot de passe oublié")
+                    }
                 }
-            }
-            catch (error) {
-                console.error(error)
-
+                catch (error) {
+                    console.error(error)
+                }
+            } else {
+                setErrorEmail(() => true)
             }
         } else {
             setErrorPassword("Le mot de passe et la confirmation sont different")
@@ -67,6 +102,7 @@ export function Register({ onClick }) {
             <div className='alert'>
                 {errorPassword && <Alert>{errorPassword}</Alert>}
                 {errorAPI && <Alert>{errorAPI}</Alert>}
+                {errorEmail && <Alert>L'email n'est pas valide</Alert>}
             </div>
         </div>
     </>
