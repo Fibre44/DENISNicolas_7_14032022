@@ -200,7 +200,7 @@ function NavBar({ identity, onClick, countInvite, picture, onDisconnect }) {
                         <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}>Invitations</a></li>
                         <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Profil</a></li>
                         <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}>Espace admin</a></li>
-                        <li className='nav__item'><a href='#logout'>Se déconnecter</a></li>
+                        <li className='nav__item'><a href='#logout' onClick={() => onDisconnect(() => '')}>Se déconnecter</a></li>
                     </ul>
                     <span className='nav__item__underline'></span>
                 </>
