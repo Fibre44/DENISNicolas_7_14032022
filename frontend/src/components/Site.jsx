@@ -170,7 +170,7 @@ export function Site({ credentials }) {
     }
 
     return <>
-        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} picture={picture} onDisconnect={setDisconnect} />
+        <NavBar identity={identity} onClick={setPage} countInvite={countInvite} picture={picture} onDisconnect={credentials} />
         {content}
         <Footer />
     </>
@@ -200,7 +200,7 @@ function NavBar({ identity, onClick, countInvite, picture, onDisconnect }) {
                         <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}>Invitations</a></li>
                         <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}>Profil</a></li>
                         <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}>Espace admin</a></li>
-                        <li className='nav__item'><a href='#logout' onClick={() => onClick('disconnect')}>Se déconnecter</a></li>
+                        <li className='nav__item'><a href='#logout'>Se déconnecter</a></li>
                     </ul>
                     <span className='nav__item__underline'></span>
                 </>
@@ -212,7 +212,7 @@ function NavBar({ identity, onClick, countInvite, picture, onDisconnect }) {
                     <li className='nav__item'><a href="#invite" onClick={() => onClick('invite')}><FontAwesomeIcon icon={faEnvelope} /></a></li>
                     <li className='nav__item'><a href="#profil" onClick={() => onClick('profil')}><FontAwesomeIcon icon={faUser} /></a></li>
                     <li className='nav__item'><a href="#admin" onClick={() => onClick('admin')}><FontAwesomeIcon icon={faGhost} /></a></li>
-                    <li className='nav__item'><a href='#logout' onClick={() => onDisconnect(true)}><FontAwesomeIcon icon={faPowerOff} /></a></li>
+                    <li className='nav__item'><a href='#logout' onClick={() => onDisconnect(() => '')}><FontAwesomeIcon icon={faPowerOff} /></a></li>
                 </ul>
             }
         </nav>

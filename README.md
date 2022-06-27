@@ -21,29 +21,31 @@ Placez  vous dans le repértoire API.
 cd api
 ```
 
-Puis lancer la commande
+Puis lancer la commande.
 
 ```bash
 npm install
 ```
-Installer Sequelize CLI
+Installer Sequelize CLI.
 
 ```bash
 # installe la commande sequelize
 $ npm install -g sequelize-cli
 ```
 
-Créer la base de données
+Créer la base de données.
 
 ```bash
 mariadb
 CREATE DATABASE tuto;
 ```
-Créer un utilisateur avec la commande
+Créer un utilisateur avec la commande.
+
 ```bash
 CREATE USER 'tuto_p7'@'localhost' IDENTIFIED BY 'pwd'
 ```
-Puis donner les droits à l'utilisateur d'accéder à la base de données pour l'exemple tuto
+Puis donner les droits à l'utilisateur d'accéder à la base de données pour l'exemple tuto.
+
 ```bash
 GRANT ALL PRIVILEGES ON tuto.* TO 'tuto_p7'@localhost IDENTIFIED BY 'pwd'
 ```
@@ -51,7 +53,8 @@ On applique les droits
 ```bash
 FLUSH PRIVILEGES;
 ```
-Le fichier config.json.dist est déjà configurer avec les éléments de connexion.
+Le fichier config.json.dist est déjà configuré avec les éléments de connexion.
+
 ```bash
 cp ./config/config.json.dist ./config/config.json 
 ```
